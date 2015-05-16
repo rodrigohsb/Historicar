@@ -1,0 +1,46 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/app_background"
+                android:padding="@dimen/activity_vertical_margin"
+                tools:context=".HomeActivity">
+
+    <ImageView
+        android:id="@+id/information"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_information"/>
+
+    <ListView
+        android:id="@+id/homeList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/information"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="57dp"
+        android:layout_marginRight="57dp"
+        android:layout_marginTop="10dp"
+        android:divider="@color/app_background"
+        android:dividerHeight="10dp"/>
+
+    <ImageView
+        android:id="@+id/newPlate"
+        android:layout_marginTop="40dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/homeList"
+        android:src="@drawable/ic_new_plate"/>
+
+    <TextView
+        android:id="@+id/valid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/homeActivityValidOnly"
+        android:textColor="#ffffff"/>
+
+</RelativeLayout>
