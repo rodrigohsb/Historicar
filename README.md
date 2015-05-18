@@ -9,8 +9,8 @@ Este aplicativo foi desenvolvido de forma independente, não tendo nenhum tipo d
 
 <br/>
 
-#####Página inicial com placa cadastrada:
-<img src="https://lh5.googleusercontent.com/-3x-oKYivI54/VVo28QOlGoI/AAAAAAAAFZk/uNnSTm9T0ek/w469-h833-no/Screenshot_2015-05-18-15-57-21%255B1%255D.png" width="200px"/>
+#####Página inicial com placas cadastradas:
+<img src="https://lh3.googleusercontent.com/-0XFmRZ_onK0/VVo-DXDyu_I/AAAAAAAAFaU/xkZiOneKmB4/w469-h833-no/Screenshot_2015-05-18-16-29-36.png" width="200px"/>
 
 <br/>
 
