@@ -74,7 +74,7 @@ public class ListAdapter extends BaseAdapter
     @Override
     public int getViewTypeCount ()
     {
-        return 3;
+        return multas.size();
     }
 
     @Override
