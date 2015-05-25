@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -137,7 +136,7 @@ public class HomeActivity extends ActionBarActivity
             public boolean onQueryTextSubmit (String s)
             {
 
-                if (!isOnline())
+                if (!ValidateUtils.isOnline(ctx))
                 {
                     DialogInterface.OnClickListener button = new DialogInterface.OnClickListener()
                     {
@@ -201,12 +200,6 @@ public class HomeActivity extends ActionBarActivity
         });
 
         return true;
-    }
-
-    private boolean isOnline ()
-    {
-        ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isAvailable();
     }
 
     @Override

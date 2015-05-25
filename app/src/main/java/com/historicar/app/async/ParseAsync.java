@@ -25,7 +25,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,7 +109,7 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
         return multaList;
     }
 
-    private Multa convert (Element tBody) throws ParseException
+    private Multa convert (Element tBody)
     {
 
         Elements trs = tBody.select("tr");

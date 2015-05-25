@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteQueryBuilder;
 
 import com.historicar.app.bean.Carro;
 
@@ -111,11 +110,6 @@ public class Repository extends SQLiteOpenHelper
         {
             db.close();
         }
-    }
-
-    private Cursor query (SQLiteQueryBuilder queryBuilder, String[] projection, String selection, String[] selectionArgs, String groupBy, String having, String orderBy)
-    {
-        return queryBuilder.query(this.db, projection, selection, selectionArgs, groupBy, having, orderBy);
     }
 
     @Override

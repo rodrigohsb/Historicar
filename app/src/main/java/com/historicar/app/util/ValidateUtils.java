@@ -1,5 +1,8 @@
 package com.historicar.app.util;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,5 +35,11 @@ public class ValidateUtils
         Matcher matcher = pattern.matcher(numeros);
 
         return (matcher.matches());
+    }
+
+    public static boolean isOnline (Context ctx)
+    {
+        ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isAvailable();
     }
 }

@@ -27,11 +27,11 @@
 
     <ImageView
         android:id="@+id/newPlate"
-        android:layout_marginTop="40dp"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/homeList"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
         android:src="@drawable/ic_new_plate"/>
 
     <TextView

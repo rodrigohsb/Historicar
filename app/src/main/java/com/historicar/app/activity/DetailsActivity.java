@@ -44,7 +44,7 @@ public class DetailsActivity extends ActionBarActivity
         infracaoValueTextView.setTextAppearance(this, android.R.style.TextAppearance_Large);
         rl.addView(infracaoValueTextView);
 
-        RelativeLayout.LayoutParams llp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx(2));
+        RelativeLayout.LayoutParams llp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx());
         llp.addRule(RelativeLayout.BELOW, infracaoValueTextView.getId());
         llp.setMargins(0, 10, 0, 10);
 
@@ -87,7 +87,7 @@ public class DetailsActivity extends ActionBarActivity
 
             rl.addView(typeValueTextView);
 
-            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx(2));
+            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx());
             llp3.addRule(RelativeLayout.BELOW, typeValueTextView.getId());
             llp3.setMargins(0, 10, 0, 10);
 
@@ -129,7 +129,7 @@ public class DetailsActivity extends ActionBarActivity
 
             rl.addView(autoInfracaoValueTextView);
 
-            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx(2));
+            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx());
             llp3.addRule(RelativeLayout.BELOW, autoInfracaoValueTextView.getId());
             llp3.setMargins(0, 10, 0, 10);
 
@@ -172,7 +172,7 @@ public class DetailsActivity extends ActionBarActivity
 
             rl.addView(dataHoraInfracaoValueTextView);
 
-            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx(2));
+            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx());
             llp3.addRule(RelativeLayout.BELOW, dataHoraInfracaoValueTextView.getId());
             llp3.setMargins(0, 10, 0, 10);
 
@@ -215,7 +215,7 @@ public class DetailsActivity extends ActionBarActivity
 
             rl.addView(pontoGravidadeValueTextView);
 
-            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx(2));
+            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx());
             llp3.addRule(RelativeLayout.BELOW, pontoGravidadeValueTextView.getId());
             llp3.setMargins(0, 10, 0, 10);
 
@@ -257,7 +257,7 @@ public class DetailsActivity extends ActionBarActivity
 
             rl.addView(localInfracaoValueTextView);
 
-            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx(2));
+            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx());
             llp3.addRule(RelativeLayout.BELOW, localInfracaoValueTextView.getId());
             llp3.setMargins(0, 10, 0, 10);
 
@@ -299,7 +299,7 @@ public class DetailsActivity extends ActionBarActivity
 
             rl.addView(velocidadePermitidaValueTextView);
 
-            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx(2));
+            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx());
             llp3.addRule(RelativeLayout.BELOW, velocidadePermitidaValueTextView.getId());
             llp3.setMargins(0, 10, 0, 10);
 
@@ -341,7 +341,7 @@ public class DetailsActivity extends ActionBarActivity
 
             rl.addView(velocidadeAferidaValueTextView);
 
-            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx(2));
+            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx());
             llp3.addRule(RelativeLayout.BELOW, velocidadeAferidaValueTextView.getId());
             llp3.setMargins(0, 10, 0, 10);
 
@@ -384,7 +384,7 @@ public class DetailsActivity extends ActionBarActivity
 
             rl.addView(situacaoInfracaoValueTextView);
 
-            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx(2));
+            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx());
             llp3.addRule(RelativeLayout.BELOW, situacaoInfracaoValueTextView.getId());
             llp3.setMargins(0, 10, 0, 10);
 
@@ -426,7 +426,7 @@ public class DetailsActivity extends ActionBarActivity
 
             rl.addView(numeroNotificacaoAutuacaoValueTextView);
 
-            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx(2));
+            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx());
             llp3.addRule(RelativeLayout.BELOW, numeroNotificacaoAutuacaoValueTextView.getId());
             llp3.setMargins(0, 10, 0, 10);
 
@@ -468,7 +468,7 @@ public class DetailsActivity extends ActionBarActivity
 
             rl.addView(numeroArAutuacaoValueTextView);
 
-            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx(2));
+            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx());
             llp3.addRule(RelativeLayout.BELOW, numeroArAutuacaoValueTextView.getId());
             llp3.setMargins(0, 10, 0, 10);
 
@@ -510,7 +510,7 @@ public class DetailsActivity extends ActionBarActivity
 
             rl.addView(dataPostagemAutuacaoValueTextView);
 
-            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx(2));
+            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx());
             llp3.addRule(RelativeLayout.BELOW, dataPostagemAutuacaoValueTextView.getId());
             llp3.setMargins(0, 10, 0, 10);
 
@@ -552,7 +552,7 @@ public class DetailsActivity extends ActionBarActivity
 
             rl.addView(situacaoArAutuacaoValueTextView);
 
-            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx(2));
+            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx());
             llp3.addRule(RelativeLayout.BELOW, situacaoArAutuacaoValueTextView.getId());
             llp3.setMargins(0, 10, 0, 10);
 
@@ -594,7 +594,7 @@ public class DetailsActivity extends ActionBarActivity
 
             rl.addView(numeroNotificacaoPenalidadeValueTextView);
 
-            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx(2));
+            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx());
             llp3.addRule(RelativeLayout.BELOW, numeroNotificacaoPenalidadeValueTextView.getId());
             llp3.setMargins(0, 10, 0, 10);
 
@@ -636,7 +636,7 @@ public class DetailsActivity extends ActionBarActivity
 
             rl.addView(numeroArPenalidadeValueTextView);
 
-            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx(2));
+            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx());
             llp3.addRule(RelativeLayout.BELOW, numeroArPenalidadeValueTextView.getId());
             llp3.setMargins(0, 10, 0, 10);
 
@@ -679,7 +679,7 @@ public class DetailsActivity extends ActionBarActivity
 
             rl.addView(dataPostagemPenalidadeValueTextView);
 
-            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx(2));
+            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx());
             llp3.addRule(RelativeLayout.BELOW, dataPostagemPenalidadeValueTextView.getId());
             llp3.setMargins(0, 10, 0, 10);
 
@@ -722,7 +722,7 @@ public class DetailsActivity extends ActionBarActivity
 
             rl.addView(dataVencimentoValueTextView);
 
-            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx(2));
+            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx());
             llp3.addRule(RelativeLayout.BELOW, dataVencimentoValueTextView.getId());
             llp3.setMargins(0, 10, 0, 10);
 
@@ -765,7 +765,7 @@ public class DetailsActivity extends ActionBarActivity
 
             rl.addView(valorPagoValueTextView);
 
-            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx(2));
+            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx());
             llp3.addRule(RelativeLayout.BELOW, valorPagoValueTextView.getId());
             llp3.setMargins(0, 10, 0, 10);
 
@@ -808,7 +808,7 @@ public class DetailsActivity extends ActionBarActivity
 
             rl.addView(dataDoPagamentoValueTextView);
 
-            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx(2));
+            RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx());
             llp3.addRule(RelativeLayout.BELOW, dataDoPagamentoValueTextView.getId());
             llp3.setMargins(0, 10, 0, 10);
 
@@ -880,10 +880,10 @@ public class DetailsActivity extends ActionBarActivity
         }
     }
 
-    private int getPx (int dimensionDp)
+    private int getPx ()
     {
         float density = getResources().getDisplayMetrics().density;
-        return (int) (dimensionDp * density + 0.5f);
+        return (int) (2 * density + 0.5f);
     }
 
     @Override

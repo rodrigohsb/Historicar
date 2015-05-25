@@ -15,3 +15,12 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-keep class com.historicar.app.** { *; }
+-keep class android.support.v7.** { *; }
+-keep class org.jsoup.** { *; }
+-keep class org.apache.commons.lang3.text.** { *; }
+
+-dontwarn org.apache.commons.lang3.text.**
+-dontwarn org.jsoup.**
+
