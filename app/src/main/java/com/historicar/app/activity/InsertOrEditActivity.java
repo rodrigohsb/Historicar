@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,15 +13,17 @@ import android.widget.TextView;
 
 import com.historicar.app.R;
 import com.historicar.app.bean.Carro;
-import com.historicar.app.contants.Constants;
 import com.historicar.app.persistence.Repository;
 import com.historicar.app.util.AlertUtils;
 import com.historicar.app.util.ValidateUtils;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by Rodrigo on 29/04/15.
  */
-public class InsertOrEditActivity extends ActionBarActivity
+public class InsertOrEditActivity extends AppCompatActivity
 {
 
     private AlertDialog alertDialog;
@@ -32,35 +34,36 @@ public class InsertOrEditActivity extends ActionBarActivity
 
     private Repository repository;
 
+    @Bind(R.id.insertOrEditTitle) protected TextView textView;
+    @Bind(R.id.insertOrEditPlacaDescriptionValue) protected EditText descriptionValue;
+    @Bind(R.id.insertOrEditPlacaLetras) protected EditText placaLetras;
+    @Bind(R.id.insertOrEditPlacaNumeros) protected EditText placaNumeros;
+    @Bind(R.id.saveButton) protected Button saveButton;
+    @Bind(R.id.deleteButton) protected Button deleteButton;
+
     @Override
     protected void onCreate (Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert_or_edit);
+        ButterKnife.bind(this);
 
         ctx = this;
 
         repository = new Repository(ctx);
 
-        final Bundle bundle = getIntent().getExtras();
-
-        TextView textView = (TextView) findViewById(R.id.insertOrEditTitle);
-        final EditText descriptionValue = (EditText) findViewById(R.id.insertOrEditPlacaDescriptionValue);
-        final EditText placaLetras = (EditText) findViewById(R.id.insertOrEditPlacaLetras);
-        final EditText placaNumeros = (EditText) findViewById(R.id.insertOrEditPlacaNumeros);
-        Button saveButton = (Button) findViewById(R.id.saveButton);
-        Button deleteButton = (Button) findViewById(R.id.deleteButton);
+        Bundle bundle = getIntent().getExtras();
 
         if (bundle == null)
         {
-            textView.setText("Nova Placa");
+            textView.setText(R.string.newPlateText);
             deleteButton.setVisibility(View.GONE);
         }
         else
         {
-            saveButton.setText("Atualizar");
+            saveButton.setText(R.string.updatePlateText);
 
-            carro = (Carro) bundle.getSerializable(Constants.CARRO);
+            carro = (Carro) bundle.getSerializable(getString(R.string.carro));
 
             descriptionValue.setText(carro.getDescription());
 
@@ -86,7 +89,7 @@ public class InsertOrEditActivity extends ActionBarActivity
                             dialog.dismiss();
                         }
                     };
-                    alertDialog = new AlertUtils(ctx).getAlertDialog(Constants.INVALID_DESCRIPTION, button);
+                    alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_description), button);
                     alertDialog.show();
                 }
                 else if (!isValidPlacaLetras(placaLetras.getText().toString()))
@@ -98,7 +101,7 @@ public class InsertOrEditActivity extends ActionBarActivity
                             dialog.dismiss();
                         }
                     };
-                    alertDialog = new AlertUtils(ctx).getAlertDialog(Constants.INVALID_PLACA_LETRAS, button);
+                    alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_plate), button);
                     alertDialog.show();
                 }
                 else if (!isValidPlacaNumeros(placaNumeros.getText().toString()))
@@ -110,7 +113,7 @@ public class InsertOrEditActivity extends ActionBarActivity
                             dialog.dismiss();
                         }
                     };
-                    alertDialog = new AlertUtils(ctx).getAlertDialog(Constants.INVALID_PLACA_NUMEROS, button);
+                    alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_plate_number), button);
                     alertDialog.show();
                 }
                 else
@@ -128,10 +131,10 @@ public class InsertOrEditActivity extends ActionBarActivity
                         carroAux.setId(carro.getId());
                         repository.update(carroAux);
                         it.putExtra("old", carro);
-                        it.putExtra("update",true);
+                        it.putExtra("update", true);
                     }
                     
-                    it.putExtra(Constants.CARRO, carroAux);
+                    it.putExtra(getString(R.string.carro), carroAux);
                     setResult(RESULT_OK, it);
                     finish();
                 }
@@ -150,8 +153,8 @@ public class InsertOrEditActivity extends ActionBarActivity
                         dialog.dismiss();
                         repository.delete(carro);
                         Intent it = new Intent(ctx, HomeActivity.class);
-                        it.putExtra(Constants.CARRO, carro);
-                        it.putExtra("delete",true);
+                        it.putExtra(getString(R.string.carro), carro);
+                        it.putExtra("delete", true);
                         setResult(RESULT_OK, it);
                         finish();
                     }
@@ -163,7 +166,7 @@ public class InsertOrEditActivity extends ActionBarActivity
                         dialog.dismiss();
                     }
                 };
-                alertDialog = new AlertUtils(ctx).getAlertDialog(Constants.ARE_YOU_SURE + carro.getPlaca() + " ?", positiveButton, negativeButton);
+                alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.are_you_sure) + carro.getPlaca() + " ?", positiveButton, negativeButton);
                 alertDialog.show();
             }
         });

@@ -17,10 +17,12 @@ public class Connection
 
     private static final int RETRIES = 3;
 
+    private static final String ULR = "http://www2.rio.rj.gov.br/multas/A516C.asp";
+
+    private static final String USER_AGENT = "Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; fr) Presto/2.9.168 Version/11.52";
+
     public static Document getContent (String placa)
     {
-
-        Document doc = null;
 
         int i = 0;
 
@@ -29,20 +31,16 @@ public class Connection
 
             try
             {
-                long starTime = System.currentTimeMillis();
-                doc = Jsoup.connect(Constants.ULR).data(Constants.PLACA_KEY, placa).userAgent(Constants.USER_AGENT).timeout(TIME_OUT).post();
-                System.out.println("Tempo do request = " + (System.currentTimeMillis() - starTime));
-
-                break;
-            } catch (IOException e)
+                return Jsoup.connect(ULR).data(Constants.PLACA_KEY, placa).userAgent(USER_AGENT).timeout(TIME_OUT).post();
+            }
+            catch (IOException e)
             {
                 e.printStackTrace();
             }
-            System.out.println("Tentando mais uma vez...");
             i++;
         }
 
-        return doc;
+        return null;
     }
 
 }

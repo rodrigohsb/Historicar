@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
 import com.historicar.app.R;
 import com.historicar.app.activity.DetailsActivity;
 import com.historicar.app.activity.ErrorActivity;
@@ -21,11 +24,14 @@ import com.historicar.app.contants.Constants;
 import com.historicar.app.util.EncodeUtils;
 
 import org.apache.commons.lang3.text.WordUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -38,55 +44,33 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
 
     private ProgressDialog dialog;
 
-    private ListView list;
-    private ListAdapter adapter;
-
     private final String placa;
 
-    public ParseAsync (Context ctx, ListView list, ListAdapter adapter, String placa)
+    public ParseAsync (Context ctx, String placa)
     {
         this.ctx = ctx;
-        this.list = list;
-        this.adapter = adapter;
         this.placa = placa;
     }
 
-    private List<Multa> getMultas (String placa)
+    private List<Multa> getMultas ()
     {
 
-        long starTime = System.currentTimeMillis();
+        Document doc = Connection.getContent(placa);
 
-        List<Multa> multas = new ArrayList<>();
-
-        try
+        if (doc != null)
         {
+            Elements allTables = doc.select("form table[border=1]");
 
-            Document doc = Connection.getContent(placa);
-
-            if (doc != null)
+            if (!allTables.isEmpty())
             {
-                Elements allTables = doc.select("form table[border=1]");
-
-                if (!allTables.isEmpty())
-                    multas = convertTablesToMultas(allTables);
+                return convertTablesToMultas(allTables);
             }
-            else
-            {
-                multas = null;
-            }
-        } catch (Exception e)
-        {
-            e.printStackTrace();
         }
-
-        System.out.println("getMultas [" + (System.currentTimeMillis() - starTime) + "]ms");
-        return multas;
+        return null;
     }
 
     private List<Multa> convertTablesToMultas (Elements elements)
     {
-
-        long starTime = System.currentTimeMillis();
 
         List<Multa> multaList = new ArrayList<>();
 
@@ -99,13 +83,13 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
                 try
                 {
                     multaList.add(convert(tBody));
-
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
+                    //continue
                 }
             }
         }
-        System.out.println("convertTablesToMultas [" + (System.currentTimeMillis() - starTime) + "]ms");
         return multaList;
     }
 
@@ -316,15 +300,24 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
     @Override
     protected List<Multa> doInBackground (String... params)
     {
-        List<Multa> multaList = new ArrayList<>();
+        List<Multa> multaList;
 
         try
         {
-            multaList = getMultas(placa);
+            multaList = getMultas();
 
-        } catch (Exception e)
+            if(multaList == null)
+            {
+                multaList = recoverFromCache();
+            }
+            else
+            {
+                saveInCache(multaList);
+            }
+        }
+        catch (Exception e)
         {
-            System.out.println(e.toString());
+           multaList = recoverFromCache();
         }
 
         return multaList;
@@ -339,15 +332,15 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
         {
             if (!multaList.isEmpty())
             {
-                adapter = new ListAdapter(ctx, multaList);
+                ListAdapter adapter = new ListAdapter(ctx, multaList);
 
-                list = (ListView) ((Activity) ctx).findViewById(R.id.list);
+                ListView list = (ListView) ((Activity) ctx).findViewById(R.id.list);
                 list.setAdapter(adapter);
 
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener()
                 {
                     @Override
-                    public void onItemClick (AdapterView<?> parent, View view, int position, long id)
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
                     {
 
                         Multa multa = multaList.get(position);
@@ -375,5 +368,20 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
         }
 
         dialog.dismiss();
+    }
+
+    private List<Multa> recoverFromCache()
+    {
+        String json = PreferenceManager.getDefaultSharedPreferences(ctx).getString(placa, null);
+        if(json != null)
+        {
+            return Arrays.asList(new Gson().fromJson(json, Multa[].class));
+        }
+        return null;
+    }
+
+    private void saveInCache(List<Multa> multaList)
+    {
+        PreferenceManager.getDefaultSharedPreferences(ctx).edit().putString(placa,new Gson().toJson(multaList)).commit();
     }
 }

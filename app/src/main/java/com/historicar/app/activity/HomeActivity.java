@@ -6,7 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Rodrigo on 16/04/15.
  */
-public class HomeActivity extends ActionBarActivity
+public class HomeActivity extends AppCompatActivity
 {
 
     private AlertDialog alertDialog;
@@ -112,6 +112,7 @@ public class HomeActivity extends ActionBarActivity
                 carros.clear();
                 carros.addAll(carrosRepo);
 
+
                 list.setVisibility(View.VISIBLE);
                 newPlateView.setVisibility(View.GONE);
                 list.setOnItemClickListener(new ItemClickListener());
@@ -145,7 +146,7 @@ public class HomeActivity extends ActionBarActivity
                             dialog.dismiss();
                         }
                     };
-                    alertDialog = new AlertUtils(ctx).getAlertDialog(Constants.INVALID_CONNECTION, button);
+                    alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_connection), button);
                     alertDialog.show();
                     return false;
                 }
@@ -158,7 +159,7 @@ public class HomeActivity extends ActionBarActivity
                             dialog.dismiss();
                         }
                     };
-                    alertDialog = new AlertUtils(ctx).getAlertDialog(Constants.INVALID_PLACA, button);
+                    alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_plate), button);
                     alertDialog.show();
                     return false;
                 }
@@ -249,7 +250,7 @@ public class HomeActivity extends ActionBarActivity
         public boolean onItemLongClick (AdapterView<?> parent, View view, int position, long id)
         {
             Intent myIntent = new Intent(ctx, InsertOrEditActivity.class);
-            myIntent.putExtra(Constants.CARRO, carros.get(position));
+            myIntent.putExtra(getString(R.string.carro), carros.get(position));
             startActivityForResult(myIntent, Constants.REQUEST_FOR_UPDATE_PLATE);
             return true;
         }

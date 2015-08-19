@@ -41,8 +41,6 @@ public class Repository extends SQLiteOpenHelper
         values.put(Carro.CarDB.DESCRIPTION, carro.getDescription());
         values.put(Carro.CarDB.PLATE, carro.getPlaca().toUpperCase());
 
-        System.out.println("[save] Description [" + carro.getDescription() + "], Placa [" + carro.getPlaca() + "].");
-
         db.insert(TABLE_NAME, null, values);
         close();
     }
@@ -53,7 +51,7 @@ public class Repository extends SQLiteOpenHelper
 
         List<Carro> carros = new ArrayList<>();
 
-        if (c.moveToFirst())
+        if (c!= null && c.moveToFirst())
         {
             int idxId = c.getColumnIndex(Carro.CarDB._ID);
             int idxDescription = c.getColumnIndex(Carro.CarDB.DESCRIPTION);
@@ -79,8 +77,6 @@ public class Repository extends SQLiteOpenHelper
 
         values.put(Carro.CarDB.DESCRIPTION, carro.getDescription());
         values.put(Carro.CarDB.PLATE, carro.getPlaca().toUpperCase());
-
-        System.out.println("[update] Description [" + carro.getDescription() + "], Placa [" + carro.getPlaca() + "]. _ID [" + carro.getId() + "]");
 
         db.update(TABLE_NAME, values, "_id " + "=" + carro.getId(), null);
         close();

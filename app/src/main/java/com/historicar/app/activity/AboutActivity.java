@@ -6,7 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +19,7 @@ import com.historicar.app.util.ValidateUtils;
 /**
  * Created by Rodrigo on 29/04/15.
  */
-public class AboutActivity extends ActionBarActivity
+public class AboutActivity extends AppCompatActivity
 {
     private AlertDialog alertDialog;
 
@@ -30,9 +30,7 @@ public class AboutActivity extends ActionBarActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-
         ctx = this;
-
     }
 
     @Override
@@ -42,7 +40,7 @@ public class AboutActivity extends ActionBarActivity
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setQueryHint("EX: AAA1234");
+        searchView.setQueryHint(getString(R.string.hint_example));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
         {
@@ -59,7 +57,7 @@ public class AboutActivity extends ActionBarActivity
                             dialog.dismiss();
                         }
                     };
-                    alertDialog = new AlertUtils(ctx).getAlertDialog(Constants.INVALID_CONNECTION, button);
+                    alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_connection), button);
                     alertDialog.show();
                     return false;
                 }
@@ -72,7 +70,7 @@ public class AboutActivity extends ActionBarActivity
                             dialog.dismiss();
                         }
                     };
-                    alertDialog = new AlertUtils(ctx).getAlertDialog(Constants.INVALID_PLACA, button);
+                    alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_plate), button);
                     alertDialog.show();
                     return false;
                 }
@@ -96,20 +94,17 @@ public class AboutActivity extends ActionBarActivity
             }
         });
 
-        // When using the support library, the setOnActionExpandListener() method is static and accepts the MenuItem object as an argument
         MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener()
         {
             @Override
             public boolean onMenuItemActionCollapse (MenuItem item)
             {
-                // Do something when collapsed
                 return true;
             }
 
             @Override
             public boolean onMenuItemActionExpand (MenuItem item)
             {
-                // Do something when expanded
                 return true;
             }
         });
@@ -120,14 +115,10 @@ public class AboutActivity extends ActionBarActivity
     @Override
     public boolean onOptionsItemSelected (MenuItem item)
     {
-        // Handle action bar item clicks here.
-        // The action bar will automatically handle clicks on the Home/Up button, so long as you specify a parent activity in AndroidManifest.xml.
-
         switch (item.getItemId())
         {
             case R.id.action_insert_or_edit:
-                Intent intent = new Intent(ctx, InsertOrEditActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(ctx, InsertOrEditActivity.class));
                 finish();
                 break;
         }
