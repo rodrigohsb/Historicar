@@ -35,4 +35,9 @@ public class Constants
     public static final String INVALID_CONNECTION = "Por favor, verifique sua conexão.";
 
     public static final String ARE_YOU_SURE = "Tem certeza que deseja deletar a placa ";
+
+    public static final int REQUEST_FOR_UPDATE_PLATE = 1000;
+
+    public static final int REQUEST_FOR_CREATE_PLATE = 2000;
+
 }

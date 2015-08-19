@@ -25,6 +25,9 @@ import com.historicar.app.util.ValidateUtils;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by Rodrigo on 16/04/15.
  */
@@ -35,90 +38,87 @@ public class HomeActivity extends ActionBarActivity
 
     private Context ctx;
 
+    private HomeAdapter adapter;
+
+    private List<Carro> carros;
+
+    @Bind(R.id.information)
+    protected ImageView informationView;
+
+    @Bind(R.id.homeList)
+    protected ListView list;
+
+    @Bind(R.id.newPlate)
+    protected ImageView newPlateView;
+
     @Override
     protected void onCreate (final Bundle bundle)
     {
         super.onCreate(bundle);
         setContentView(R.layout.activity_home);
+        ButterKnife.bind(this);
 
         ctx = this;
 
-        Repository repository = new Repository(ctx);
+        carros = new Repository(ctx).getAll();
 
-        final List<Carro> carros = repository.getAll();
+        adapter = new HomeAdapter(ctx, carros);
 
-        ListView list = (ListView) findViewById(R.id.homeList);
-
-        ImageView newPlateView1 = (ImageView) findViewById(R.id.newPlate);
+        list.setAdapter(adapter);
 
         if (carros.isEmpty())
         {
-            list.setVisibility(View.GONE);
+            newPlateView.setVisibility(View.VISIBLE);
         }
         else
         {
 
-            newPlateView1.setVisibility(View.GONE);
-
-            HomeAdapter adapter = new HomeAdapter(ctx, carros);
-
-            list.setAdapter(adapter);
-
-            list.setOnItemClickListener(new AdapterView.OnItemClickListener()
-            {
-                @Override
-                public void onItemClick (AdapterView<?> parent, View view, int position, long id)
-                {
-
-                    Carro carro = carros.get(position);
-
-                    Intent myIntent = new Intent(ctx, ResultActivity.class);
-                    myIntent.putExtra(Constants.PLACA_KEY, carro.getPlaca().replaceAll(" - ", ""));
-                    startActivity(myIntent);
-                }
-            });
-            list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
-            {
-                @Override
-                public boolean onItemLongClick (AdapterView<?> parent, View view, int position, long id)
-                {
-                    Carro carro = carros.get(position);
-
-                    Intent myIntent = new Intent(ctx, InsertOrEditActivity.class);
-                    myIntent.putExtra(Constants.CARRO, carro);
-                    startActivity(myIntent);
-                    return true;
-                }
-            });
+            list.setVisibility(View.VISIBLE);
+            list.setOnItemClickListener(new ItemClickListener());
+            list.setOnItemLongClickListener(new ItemLongClickListener());
         }
-
-
-        ImageView informationView = (ImageView) findViewById(R.id.information);
 
         informationView.setOnClickListener(new View.OnClickListener()
         {
-
             @Override
             public void onClick (View v)
             {
-                Intent intent = new Intent(ctx, AboutActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(ctx, AboutActivity.class));
             }
         });
 
-        ImageView newPlateView = (ImageView) findViewById(R.id.newPlate);
+        newPlateView.setOnClickListener(new ImageClickListener());
 
-        newPlateView.setOnClickListener(new View.OnClickListener()
+    }
+
+    @Override
+    protected void onActivityResult (int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if ((requestCode == Constants.REQUEST_FOR_CREATE_PLATE || requestCode == Constants.REQUEST_FOR_UPDATE_PLATE) && resultCode == RESULT_OK)
         {
 
-            @Override
-            public void onClick (View v)
-            {
-                Intent intent = new Intent(ctx, InsertOrEditActivity.class);
-                startActivity(intent);
-            }
-        });
+            List<Carro> carrosRepo = new Repository(ctx).getAll();
 
+            if (carrosRepo == null || carrosRepo.isEmpty())
+            {
+                list.setVisibility(View.GONE);
+                newPlateView.setVisibility(View.VISIBLE);
+                newPlateView.setOnClickListener(new ImageClickListener());
+            }
+            else
+            {
+                carros.clear();
+                carros.addAll(carrosRepo);
+
+                list.setVisibility(View.VISIBLE);
+                newPlateView.setVisibility(View.GONE);
+                list.setOnItemClickListener(new ItemClickListener());
+                list.setOnItemLongClickListener(new ItemLongClickListener());
+                adapter.notifyDataSetChanged();
+            }
+        }
     }
 
     @Override
@@ -205,14 +205,10 @@ public class HomeActivity extends ActionBarActivity
     @Override
     public boolean onOptionsItemSelected (MenuItem item)
     {
-        // Handle action bar item clicks here. 
-        // The action bar will automatically handle clicks on the Home/Up button, so long as you specify a parent activity in AndroidManifest.xml.
-
         switch (item.getItemId())
         {
             case R.id.action_insert_or_edit:
-                Intent intent = new Intent(ctx, InsertOrEditActivity.class);
-                startActivity(intent);
+                startActivityForResult(new Intent(ctx, InsertOrEditActivity.class), Constants.REQUEST_FOR_CREATE_PLATE);
                 break;
         }
 
@@ -222,5 +218,41 @@ public class HomeActivity extends ActionBarActivity
     @Override
     public void onBackPressed ()
     {
+        finish();
     }
+
+    private class ImageClickListener implements View.OnClickListener
+    {
+        @Override
+        public void onClick (View v)
+        {
+            startActivityForResult(new Intent(ctx, InsertOrEditActivity.class), Constants.REQUEST_FOR_CREATE_PLATE);
+        }
+    }
+
+    private class ItemClickListener implements AdapterView.OnItemClickListener
+    {
+
+        @Override
+        public void onItemClick (AdapterView<?> parent, View view, int position, long id)
+        {
+            Intent myIntent = new Intent(ctx, ResultActivity.class);
+            myIntent.putExtra(Constants.PLACA_KEY, carros.get(position).getPlaca().replaceAll(" - ", ""));
+            startActivity(myIntent);
+        }
+    }
+
+    private class ItemLongClickListener implements AdapterView.OnItemLongClickListener
+    {
+
+        @Override
+        public boolean onItemLongClick (AdapterView<?> parent, View view, int position, long id)
+        {
+            Intent myIntent = new Intent(ctx, InsertOrEditActivity.class);
+            myIntent.putExtra(Constants.CARRO, carros.get(position));
+            startActivityForResult(myIntent, Constants.REQUEST_FOR_UPDATE_PLATE);
+            return true;
+        }
+    }
+
 }

@@ -115,9 +115,10 @@ public class InsertOrEditActivity extends ActionBarActivity
                 }
                 else
                 {
-
                     Carro carroAux = new Carro(placaLetras.getText().toString() + " - " + placaNumeros.getText().toString(), descriptionValue.getText().toString());
 
+                    Intent it = new Intent(ctx, HomeActivity.class);
+                    
                     if (carro == null)
                     {
                         repository.save(carroAux);
@@ -126,10 +127,12 @@ public class InsertOrEditActivity extends ActionBarActivity
                     {
                         carroAux.setId(carro.getId());
                         repository.update(carroAux);
+                        it.putExtra("old", carro);
+                        it.putExtra("update",true);
                     }
-
-                    Intent myIntent = new Intent(ctx, HomeActivity.class);
-                    startActivity(myIntent);
+                    
+                    it.putExtra(Constants.CARRO, carroAux);
+                    setResult(RESULT_OK, it);
                     finish();
                 }
             }
@@ -146,8 +149,10 @@ public class InsertOrEditActivity extends ActionBarActivity
                     {
                         dialog.dismiss();
                         repository.delete(carro);
-                        Intent myIntent = new Intent(ctx, HomeActivity.class);
-                        startActivity(myIntent);
+                        Intent it = new Intent(ctx, HomeActivity.class);
+                        it.putExtra(Constants.CARRO, carro);
+                        it.putExtra("delete",true);
+                        setResult(RESULT_OK, it);
                         finish();
                     }
                 };

@@ -63,7 +63,8 @@
                 android:inputType="text"
                 android:maxLength="3"
                 android:maxLines="1"
-                android:singleLine="true"/>
+                android:singleLine="true"
+                android:textAllCaps="true"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -78,7 +79,8 @@
                 android:inputType="number"
                 android:maxLength="4"
                 android:maxLines="1"
-                android:singleLine="true"/>
+                android:singleLine="true"
+                android:textAllCaps="true"/>
 
 
         </LinearLayout>
