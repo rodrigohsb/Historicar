@@ -237,9 +237,24 @@ public class HomeActivity extends AppCompatActivity
         @Override
         public void onItemClick (AdapterView<?> parent, View view, int position, long id)
         {
-            Intent myIntent = new Intent(ctx, ResultActivity.class);
-            myIntent.putExtra(Constants.PLACA_KEY, carros.get(position).getPlaca().replaceAll(" - ", ""));
-            startActivity(myIntent);
+            if (!ValidateUtils.isOnline(ctx))
+            {
+                DialogInterface.OnClickListener button = new DialogInterface.OnClickListener()
+                {
+                    public void onClick (DialogInterface dialog, int id)
+                    {
+                        dialog.dismiss();
+                    }
+                };
+                alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_connection), button);
+                alertDialog.show();
+            }
+            else
+            {
+                Intent myIntent = new Intent(ctx, ResultActivity.class);
+                myIntent.putExtra(Constants.PLACA_KEY, carros.get(position).getPlaca().replaceAll(" - ", ""));
+                startActivity(myIntent);
+            }
         }
     }
 

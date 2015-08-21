@@ -63,7 +63,13 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
 
             if (!allTables.isEmpty())
             {
+                //Tem multas
                 return convertTablesToMultas(allTables);
+            }
+            else if(doc.select("form table[border=0]") != null && doc.select("form table[border=0]").size() > 0)
+            {
+                //Não Tem multas
+                return new ArrayList<>();
             }
         }
         return null;
@@ -377,7 +383,7 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
         {
             return Arrays.asList(new Gson().fromJson(json, Multa[].class));
         }
-        return null;
+        return new ArrayList<>();
     }
 
     private void saveInCache(List<Multa> multaList)
