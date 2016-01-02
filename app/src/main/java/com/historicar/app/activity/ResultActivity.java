@@ -11,11 +11,14 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.appodeal.ads.Appodeal;
 import com.historicar.app.R;
 import com.historicar.app.async.ParseAsync;
 import com.historicar.app.contants.Constants;
 import com.historicar.app.util.AlertUtils;
 import com.historicar.app.util.ValidateUtils;
+
+import butterknife.ButterKnife;
 
 /**
  * Created by Rodrigo on 17/04/15.
@@ -23,22 +26,25 @@ import com.historicar.app.util.ValidateUtils;
 public class ResultActivity extends AppCompatActivity
 {
 
-    private AlertDialog alertDialog;
     private Context ctx;
 
     @Override
     protected void onCreate (Bundle savedInstanceState)
     {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+        ButterKnife.bind(this);
+
+        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.INTERSTITIAL | Appodeal.BANNER);
+        Appodeal.show(this, Appodeal.BANNER_BOTTOM);
+        Appodeal.setTesting(true);
 
         ctx = this;
 
-        Bundle bundle = getIntent().getExtras();
-        String placa = bundle.getString(Constants.PLACA_KEY);
+        String placa = getIntent().getExtras().getString(Constants.PLACA_KEY);
 
-        new ParseAsync(ctx, placa).execute();
-
+        new ParseAsync(this, placa).execute();
     }
 
     @Override
@@ -48,7 +54,7 @@ public class ResultActivity extends AppCompatActivity
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setQueryHint("EX: AAA1234");
+        searchView.setQueryHint(getString(R.string.hint_example));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
         {
@@ -65,7 +71,7 @@ public class ResultActivity extends AppCompatActivity
                             dialog.dismiss();
                         }
                     };
-                    alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_connection), button);
+                    AlertDialog alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_connection), button);
                     alertDialog.show();
                     return false;
                 }
@@ -78,7 +84,7 @@ public class ResultActivity extends AppCompatActivity
                             dialog.dismiss();
                         }
                     };
-                    alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_plate), button);
+                    AlertDialog alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_plate), button);
                     alertDialog.show();
                     return false;
                 }
@@ -102,23 +108,6 @@ public class ResultActivity extends AppCompatActivity
             }
         });
 
-        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener()
-        {
-            @Override
-            public boolean onMenuItemActionCollapse (MenuItem item)
-            {
-                // Do something when collapsed
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionExpand (MenuItem item)
-            {
-                // Do something when expanded
-                return true;
-            }
-        });
-
         return true;
     }
 
@@ -128,8 +117,7 @@ public class ResultActivity extends AppCompatActivity
         switch (item.getItemId())
         {
             case R.id.action_insert_or_edit:
-                Intent intent = new Intent(ctx, InsertOrEditActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(ctx, InsertOrEditActivity.class));
                 finish();
                 break;
         }
@@ -138,8 +126,9 @@ public class ResultActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed ()
+    protected void onResume ()
     {
-        finish();
+        super.onResume();
+        Appodeal.onResume(this, Appodeal.BANNER);
     }
 }

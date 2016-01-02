@@ -6,16 +6,18 @@
     <!-- Home Activity-->
     <string name="homeActivityconfirmButton">Buscar</string>
     <string name="homeActivityTitle">Digite a placa do veículo</string>
-    <string name="homeActivityPlacaHint">EX: AAA1234</string>
-    <string name="homeActivityValidOnly">Válido para a cidade do Rio de Janeiro.</string>
+    <string name="homeActivityValidOnly">Válido somente para veículos da cidade do Rio de Janeiro.</string>
 
     <!-- About Activity-->
+    <string name="aboutActivityTitle">Sobre:</string>
     <string name="aboutActivityDescription">O Historicar é um app onde você pode consultar multas de todos os veículos da Cidade do Rio de Janeiro.</string>
     <string name="aboutActivityDescriptionPS">Este app foi desenvolvido de forma independente.</string>
+    <string name="aboutActivitySubtitleTitle">Legenda:</string>
     <string name="aboutActivityMultaPaga">Multa paga.</string>
     <string name="aboutActivityMultaNaoPaga">Multa não paga.</string>
     <string name="aboutActivityDevelopertitle">Desenvolvedor:</string>
     <string name="aboutActivityDeveloperValue">Rodrigo Haus Bacellar - rodrigo.haus@gmail.com</string>
+    <string name="aboutActivityAppVersion">Versão 1.1.0</string>
 
     <!-- No Multa Activity -->
     <string name="noMultaActivityCidadeAgradece">A cidade agradece.</string>
@@ -37,6 +39,11 @@
     <string name="nao">Nao</string>
     <string name="plate_key">placa</string>
     <string name="carro">carro</string>
+
     <string name="hint_example">EX: AAA1234</string>
+    <string name="hint_plate_name">Meu Carro</string>
+    <string name="hint_plate_value">LSL - 4317</string>
+
+    <string name="appodeal_key">956e7c37b94eca6578c05d461500d0daaeea94463c52ddbd</string>
 
 </resources>

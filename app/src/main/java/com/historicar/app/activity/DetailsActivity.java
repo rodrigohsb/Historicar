@@ -1,15 +1,29 @@
 package com.historicar.app.activity;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.appodeal.ads.Appodeal;
 import com.historicar.app.R;
 import com.historicar.app.bean.Multa;
 import com.historicar.app.contants.Constants;
+import com.historicar.app.util.AlertUtils;
+import com.historicar.app.util.ValidateUtils;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by Rodrigo on 19/04/15.
@@ -17,29 +31,43 @@ import com.historicar.app.contants.Constants;
 public class DetailsActivity extends AppCompatActivity
 {
 
+    private Context ctx;
+
+    @Bind(R.id.detailsRelativeLayoutLayout)
+    protected RelativeLayout rl;
+
     private int id = 1;
+
+    private int lastId;
 
     @Override
     protected void onCreate (Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_details);
+        ButterKnife.bind(this);
+
+        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.INTERSTITIAL | Appodeal.BANNER);
+        Appodeal.show(this, Appodeal.BANNER_BOTTOM);
+        Appodeal.setTesting(true);
+
+        ctx = this;
+
 
         Bundle bundle = getIntent().getExtras();
         Multa multa = (Multa) bundle.getSerializable(Constants.MULTA);
-
-        RelativeLayout rl = (RelativeLayout) findViewById(R.id.detailsRelativeLayoutLayout);
 
         RelativeLayout.LayoutParams llp0 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         llp0.addRule(RelativeLayout.CENTER_HORIZONTAL);
         llp0.setMargins(0, 0, 0, 10);
 
+        /** DADOS DO VEÍCULO E INFRAÇÃO **/
+
         /** INFRACAO **/
         TextView infracaoValueTextView = new TextView(this);
         infracaoValueTextView.setLayoutParams(llp0);
         infracaoValueTextView.setId(id);
-        infracaoValueTextView.setText(multa.getInfracao());
+        infracaoValueTextView.setText(multa.getDescricao());
         infracaoValueTextView.setTypeface(Typeface.DEFAULT_BOLD);
         infracaoValueTextView.setTextAppearance(this, android.R.style.TextAppearance_Large);
         rl.addView(infracaoValueTextView);
@@ -50,125 +78,241 @@ public class DetailsActivity extends AppCompatActivity
 
         View hrView = new View(this);
         hrView.setId(++id);
-        hrView.setBackgroundColor(getResources().getColor(R.color.app_background));
+        hrView.setBackgroundColor(getResources().getColor(R.color.actionbar_background));
         hrView.setLayoutParams(llp);
 
         rl.addView(hrView);
 
-        int lastId = hrView.getId();
+        lastId = hrView.getId();
 
         /** TIPO **/
-        if (multa.getType() != null)
+        if (multa.getType() != null && !multa.getType().contains("---"))
         {
-            lastId = createRow(rl, "Tipo:", multa.getType(), lastId);
+            createRow("Tipo:", multa.getType());
         }
 
         /** AUTO DE INFRAÇÃO **/
-        if (multa.getAutoInfracao() != null)
+        if (multa.getAuto() != null && !multa.getAuto().contains("---"))
         {
-            lastId = createRow(rl, "Auto de Infração:", multa.getAutoInfracao(), lastId);
+            createRow("Auto de Infração:", multa.getAuto());
+        }
+
+        /** CÓDIGO DETRAN **/
+        if (multa.getCodDetran() != null && !multa.getCodDetran().contains("---"))
+        {
+            createRow("Código Detran:", multa.getCodDetran());
         }
 
         /** DATA E HORA DA INFRACAO **/
-        if (multa.getDateInfracao() != null)
+        if (multa.getDataAutuacao() != null && !multa.getDataAutuacao().contains("---"))
         {
-            lastId = createRow(rl, "Data/Hora da Infração:", multa.getDateInfracao(), lastId);
+            createRow("Data/Hora da Infração:", multa.getDataHoraInfracao());
         }
 
-        /** PONTO / GRAVIDADE **/
-        if (multa.getPontosGravidade() != null)
-        {
-            lastId = createRow(rl, "Pontos-Gravidade:", multa.getPontosGravidade(), lastId);
-        }
         /** LOCAL DA INFRACAO **/
-        if (multa.getLocal() != null)
+        if (multa.getLocal() != null && !multa.getLocal().contains("---"))
         {
-            lastId = createRow(rl, "Local de Infração:", multa.getLocal(), lastId);
+            createRow("Local de Infração:", multa.getLocal());
         }
-        /** VELOCIDADE PERMITIDA **/
-        if (multa.getVelocidadeMax() != null)
+
+        /** COD INFRACAO **/
+        if (multa.getCodInfracao() != null && !multa.getCodInfracao().contains("---"))
         {
-            lastId = createRow(rl, "Velocidade Permitida:", multa.getVelocidadeMax() + " Km/h", lastId);
+            createRow("Código da Infração:", multa.getCodInfracao());
+        }
+
+        /** PONTOS **/
+        if (multa.getPontos() != null && !multa.getPontos().contains("---"))
+        {
+            createRow("Pontos:", multa.getPontos());
+        }
+
+        /** GRAVIDADE **/
+        if (multa.getGravidade() != null && !multa.getGravidade().contains("---"))
+        {
+            createRow("Gravidade:", multa.getGravidade());
         }
 
         /** VELOCIDADE AFERIDA **/
-        if (multa.getVelocidadeAferida() != null)
+        if (multa.getVelocidadeAferida() != null && !multa.getVelocidadeAferida().contains("---"))
         {
-            lastId = createRow(rl, "Velocidade Aferida:", multa.getVelocidadeAferida() + " Km/h", lastId);
+            createRow("Velocidade Aferida:", multa.getVelocidadeAferida());
         }
-        /** SITUACAO INFRACAO **/
-        if (multa.getSituacaoInfracao() != null)
+
+        /** VELOCIDADE PERMITIDA **/
+        if (multa.getVelocidadeMax() != null && !multa.getVelocidadeMax().contains("---"))
         {
-            lastId = createRow(rl, "Situação Infração:", multa.getSituacaoInfracao(), lastId);
+            createRow("Velocidade Permitida:", multa.getVelocidadeMax());
+        }
+
+        /** EQUIPAMENTO **/
+        if (multa.getEquipamento() != null && !multa.getEquipamento().contains("---"))
+        {
+            createRow("Equipamento:", multa.getEquipamento());
+        }
+
+        /** AFERIDO CERTIFICADO **/
+        if (multa.getAferidoCertificado() != null && !multa.getAferidoCertificado().contains("---"))
+        {
+            createRow("Aferido/Certificado:", multa.getAferidoCertificado());
+        }
+
+        /** STATUS **/
+        if (multa.getStatus() != null && !multa.getStatus().contains("---"))
+        {
+            createRow("Status:", multa.getStatus());
+        }
+
+        /** AUTUAÇÃO **/
+        if (multa.getAutuacao() != null && !multa.getAutuacao().contains("---"))
+        {
+            createRow("Autuação:", multa.getAutuacao());
         }
 
         /** NUMERO NOTIFICACAO AUTUACAO **/
-        if (multa.getNumeroNotificacaoAutuacao() != null)
+        if (multa.getNotificacaoAutuacao() != null && !multa.getNotificacaoAutuacao().contains("---"))
         {
-            lastId = createRow(rl, "Número da Notificação Autuação:", multa.getNumeroNotificacaoAutuacao(), lastId);
+            createRow("Notificação:", multa.getNotificacaoAutuacao());
         }
 
-        /** NUMERO AR AUTUACAO **/
-        if (multa.getNumeroArAutuacao() != null)
+        /** DATA AUTUACAO **/
+        if (multa.getDataAutuacao() != null && !multa.getDataAutuacao().contains("---"))
         {
-            lastId = createRow(rl, "Número AR Autuação:", multa.getNumeroArAutuacao(), lastId);
+            createRow("Data:", multa.getDataAutuacao());
         }
 
         /** DATA POSTAGEM AUTUACAO **/
-        if (multa.getDataPostagemAutuacao() != null)
+        if (multa.getPostagemAutuacao() != null && !multa.getPostagemAutuacao().contains("---"))
         {
-            lastId = createRow(rl, "Data de Postagem Autuacao:", multa.getDataPostagemAutuacao(), lastId);
+            createRow("Postagem:", multa.getPostagemAutuacao());
         }
 
         /** SITUACAO AR AUTUACAO **/
-        if (multa.getSituacaoArAutuacao() != null)
+        if (multa.getPublicDomRJAutuacao() != null && !multa.getPublicDomRJAutuacao().contains("---"))
         {
-            lastId = createRow(rl, "Situação AR Autuação:", multa.getSituacaoArAutuacao(), lastId);
+            createRow("Public.dom RJ:", multa.getPublicDomRJAutuacao());
         }
 
         /** NUMERO NOTIFICACAO PENALIDADE **/
-        if (multa.getNumeroNotificacaoPenalidade() != null)
+        if (multa.getNumeroARAutuacao() != null && !multa.getNumeroARAutuacao().contains("---"))
         {
-            lastId = createRow(rl, "Numero da Notificacao Penalidade:", multa.getNumeroNotificacaoPenalidade(), lastId);
+            createRow("Número do AR:", multa.getNumeroARAutuacao());
         }
 
         /** NUMERO AR PENALIDADE **/
-        if (multa.getNumeroArPenalidade() != null)
+        if (multa.getSituacaoARAutuacao() != null && !multa.getSituacaoARAutuacao().contains("---"))
         {
-            lastId = createRow(rl, "Número AR Penalidade:", multa.getNumeroArPenalidade(), lastId);
+            createRow("Situação do AR:", multa.getSituacaoARAutuacao());
         }
-        /** DATA POSTAGEM PENALIDADE **/
-        if (multa.getDataPostagemPenalidade() != null)
+
+        if(multa.isHasRecurso())
         {
-            lastId = createRow(rl, "Data de Postagem Penalidade:", multa.getDataPostagemPenalidade(), lastId);
+            /** NUMERO AR PENALIDADE **/
+            if (multa.getRecurso() != null && !multa.getRecurso().contains("---"))
+            {
+                createRow("Recurso:", multa.getRecurso());
+            }
+
+            /** NUMERO AR PENALIDADE **/
+            if (multa.getProcessoData() != null && !multa.getProcessoData().contains("---"))
+            {
+                createRow("Processo (Real infrator) - Data:", multa.getProcessoData());
+            }
+
+            /** NUMERO AR PENALIDADE **/
+            if (multa.getProcessoSituacao() != null && !multa.getProcessoSituacao().contains("---"))
+            {
+                createRow("Processo (Real infrator) - Situação:", multa.getProcessoSituacao());
+            }
+        }
+
+        /** DATA POSTAGEM PENALIDADE **/
+        if (multa.getPenalidade() != null && !multa.getPenalidade().contains("---"))
+        {
+            createRow("Penalidade:", multa.getPenalidade());
         }
 
         /** DATA VENCIMENTO **/
-        if (multa.getVencimento() != null)
+        if (multa.getNotificacaoPenalidade() != null && !multa.getNotificacaoPenalidade().contains("---"))
         {
-            lastId = createRow(rl, "Data Vencimento:", multa.getVencimento(), lastId);
+            createRow("Notificação:", multa.getNotificacaoPenalidade());
         }
 
         /** VALOR PAGO **/
-        if (multa.getValorPago() != null)
+        if (multa.getDataPenalidade() != null && !multa.getDataPenalidade().contains("---"))
         {
-            lastId = createRow(rl, "Valor Pago:", multa.getValorPago(), lastId);
+            createRow("Data:", multa.getDataPenalidade());
+        }
+
+        /** DATA VENCIMENTO **/
+        if (multa.getPostagemPenalidade() != null && !multa.getPostagemPenalidade().contains("---"))
+        {
+            createRow("Postagem:", multa.getPostagemPenalidade());
         }
 
         /** DATA DO PAGAMENTO **/
-        if (multa.getDataPagamento() != null)
+        if (multa.getPublicDomRJPenalidade() != null && !multa.getPublicDomRJPenalidade().contains("---"))
         {
-            lastId = createRow(rl, "Data do Pagamento:", multa.getDataPagamento(), lastId);
+            createRow("Public.dom RJ:", multa.getPublicDomRJPenalidade());
         }
 
         /** SITUACAO PAGAMENTO **/
-        if (multa.getSituacaoPagamento() != null)
+        if (multa.getNumeroARPenalidade() != null && !multa.getNumeroARPenalidade().contains("---"))
         {
-            createRow(rl, "Situação do Pagamento:", multa.getSituacaoPagamento(), lastId);
+            createRow("AR:", multa.getNumeroARPenalidade());
         }
+
+        /** LOTE **/
+        if (multa.getLote() != null && !multa.getLote().contains("---"))
+        {
+            createRow("IDOBJ./LOTE:", multa.getLote());
+        }
+
+        /** SITUACAO PAGAMENTO **/
+        if (multa.getSituacaoARPenalidade() != null && !multa.getSituacaoARPenalidade().contains("---"))
+        {
+            createRow("Situação da Postagem:", multa.getSituacaoARPenalidade());
+        }
+
+        /** SITUACAO PAGAMENTO **/
+        if (multa.getDadosParaPagamento() != null && !multa.getDadosParaPagamento().contains("---"))
+        {
+            createRow("Dados para pagamento:", multa.getDadosParaPagamento());
+        }
+
+        /** SITUACAO PAGAMENTO **/
+        if (multa.getVencimento() != null && !multa.getVencimento().contains("---"))
+        {
+            createRow("Vencimento:", multa.getVencimento());
+        }
+
+        /** SITUACAO PAGAMENTO **/
+        if (multa.getValorAPagar() != null && !multa.getValorAPagar().contains("---"))
+        {
+            createRow("Valor até o vencimento:", multa.getValorAPagar());
+        }
+
+        /** SITUACAO PAGAMENTO **/
+        if (multa.getDataDoPagamento() != null && !multa.getDataDoPagamento().contains("---"))
+        {
+            createRow("Pagamento:", multa.getDataDoPagamento());
+        }
+
+        /** SITUACAO PAGAMENTO **/
+        if (multa.getValorPago() != null && !multa.getValorPago().contains("---"))
+        {
+            createRow("Valor Pago:", multa.getValorPago());
+        }
+
+        /** SITUACAO PAGAMENTO **/
+        if (multa.getSituacaoDoPagamento() != null && !multa.getSituacaoDoPagamento().contains("---"))
+        {
+            createRow("Situação do Pagamento:", multa.getSituacaoDoPagamento());
+        }
+
     }
 
-    private int createRow(RelativeLayout rl, String typeText, String typeTextValue, int lastId)
+    private void createRow(String typeText, String typeTextValue)
     {
         RelativeLayout.LayoutParams llp1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         llp1.addRule(RelativeLayout.BELOW, lastId);
@@ -201,14 +345,12 @@ public class DetailsActivity extends AppCompatActivity
 
         View hrView3 = new View(this);
         hrView3.setId(++id);
-        hrView3.setBackgroundColor(getResources().getColor(R.color.app_background));
+        hrView3.setBackgroundColor(getResources().getColor(R.color.actionbar_background));
         hrView3.setLayoutParams(llp3);
 
         rl.addView(hrView3);
 
         lastId = hrView3.getId();
-
-        return lastId;
     }
 
     private int getPx ()
@@ -218,9 +360,87 @@ public class DetailsActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed ()
+    public boolean onCreateOptionsMenu (Menu menu)
     {
-        finish();
-        super.onBackPressed();
+        getMenuInflater().inflate(R.menu.menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setQueryHint(getString(R.string.hint_example));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+        {
+            @Override
+            public boolean onQueryTextSubmit (String s)
+            {
+
+                if (!ValidateUtils.isOnline(ctx))
+                {
+                    DialogInterface.OnClickListener button = new DialogInterface.OnClickListener()
+                    {
+                        public void onClick (DialogInterface dialog, int id)
+                        {
+                            dialog.dismiss();
+                        }
+                    };
+                    AlertDialog alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_connection), button);
+                    alertDialog.show();
+                    return false;
+                }
+                else if (!ValidateUtils.validatePlate(s))
+                {
+                    DialogInterface.OnClickListener button = new DialogInterface.OnClickListener()
+                    {
+                        public void onClick (DialogInterface dialog, int id)
+                        {
+                            dialog.dismiss();
+                        }
+                    };
+                    AlertDialog alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_plate), button);
+                    alertDialog.show();
+                    return false;
+                }
+
+                Intent myIntent = new Intent(ctx, ResultActivity.class);
+                myIntent.putExtra(Constants.PLACA_KEY, s);
+                startActivity(myIntent);
+                finish();
+                return true;
+
+            }
+
+            @Override
+            public boolean onQueryTextChange (String s)
+            {
+                if (s.length() > 7)
+                {
+                    searchView.setQuery(s.substring(0, 7), false);
+                }
+                return false;
+            }
+        });
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected (MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.action_insert_or_edit:
+                startActivity(new Intent(ctx, InsertOrEditActivity.class));
+                finish();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume ()
+    {
+        super.onResume();
+        Appodeal.onResume(this, Appodeal.BANNER);
     }
 }

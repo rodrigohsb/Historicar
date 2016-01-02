@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="actionbar_background" type="color">#698296</item>
-    <item name="app_background" type="color">#8095a6</item>
-
-    <item name="black" type="color">#000000</item>
 </resources>

@@ -5,4 +5,12 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="Result.RecyclerView.Style" parent="android:Widget.ListView">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:cacheColorHint">#00000000</item>
+        <item name="android:divider">@drawable/result_row_divider</item>
+        <item name="android:dividerHeight">1px</item>
+        <item name="android:drawSelectorOnTop">false</item>
+    </style>
+
 </resources>

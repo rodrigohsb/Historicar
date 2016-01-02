@@ -11,25 +11,32 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.appodeal.ads.Appodeal;
 import com.historicar.app.R;
 import com.historicar.app.contants.Constants;
 import com.historicar.app.util.AlertUtils;
 import com.historicar.app.util.ValidateUtils;
+
+import butterknife.ButterKnife;
 
 /**
  * Created by Rodrigo on 29/04/15.
  */
 public class AboutActivity extends AppCompatActivity
 {
-    private AlertDialog alertDialog;
-
     private Context ctx;
-
+    
     @Override
     protected void onCreate (Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+        ButterKnife.bind(this);
+
+        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.INTERSTITIAL | Appodeal.BANNER);
+        Appodeal.show(this, Appodeal.BANNER_BOTTOM);
+        Appodeal.setTesting(true);
+
         ctx = this;
     }
 
@@ -57,7 +64,7 @@ public class AboutActivity extends AppCompatActivity
                             dialog.dismiss();
                         }
                     };
-                    alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_connection), button);
+                    AlertDialog alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_connection), button);
                     alertDialog.show();
                     return false;
                 }
@@ -70,7 +77,7 @@ public class AboutActivity extends AppCompatActivity
                             dialog.dismiss();
                         }
                     };
-                    alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_plate), button);
+                    AlertDialog alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_plate), button);
                     alertDialog.show();
                     return false;
                 }
@@ -94,21 +101,6 @@ public class AboutActivity extends AppCompatActivity
             }
         });
 
-        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener()
-        {
-            @Override
-            public boolean onMenuItemActionCollapse (MenuItem item)
-            {
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionExpand (MenuItem item)
-            {
-                return true;
-            }
-        });
-
         return true;
     }
 
@@ -127,9 +119,9 @@ public class AboutActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed ()
+    protected void onResume ()
     {
-        finish();
-        super.onBackPressed();
+        super.onResume();
+        Appodeal.onResume(this, Appodeal.BANNER);
     }
 }

@@ -7,55 +7,96 @@ import java.io.Serializable;
  */
 public class Multa implements Serializable
 {
-
-    private Carro carro;
-
+    //6
     private String type;
-
-    private String autoInfracao;
-    private String dateInfracao;
-
-    private String infracao;
-    private String pontosGravidade;
-
+    //7
+    private String auto;
+    //8
+    private String codDetran;
+    //9
+    private String renainf;
+    //10
+    private String nic;
+    //11
+    private String dataHoraInfracao;
+    //12
     private String local;
-
+    //13
+    private String codInfracao;
+    //14
+    private String descricao;
+    //15
+    private String pontos;
+    //16
+    private String gravidade;
+    //17
     private String velocidadeAferida;
+    //17
     private String velocidadeMax;
+    //18
+    private String equipamento;
+    //19
+    private String aferidoCertificado;
+    //20
+    private String status;
 
-    private String situacaoInfracao;
+    //21 AUTUAÇÃO - data limite para recurso:
+    private String autuacao;
+    //22
+    private String notificacaoAutuacao;
+    //23
+    private String dataAutuacao;
+    //24
+    private String postagemAutuacao;
+    //25
+    private String publicDomRJAutuacao;
+    //26
+    private String numeroARAutuacao;
+    //27
+    private String situacaoARAutuacao;
 
-    private String numeroNotificacaoAutuacao;
-    private String numeroArAutuacao;
 
-    private String dataPostagemAutuacao;
-    private String situacaoArAutuacao;
+    //28 - RECURSO (Defesa Prévia / Real Infrator)
+    private String recurso;
+    //29
+    private String processoData;
+    //30
+    private String processoSituacao;
 
-    private String numeroNotificacaoPenalidade;
-    private String numeroArPenalidade;
 
-    private String dataPostagemPenalidade;
-    private String situacaoArPenalidade;
+    //31 - PENALIDADE - data limite para recurso:
+    private String penalidade;
+    //32
+    private String notificacaoPenalidade;
+    //33
+    private String dataPenalidade;
+    //34
+    private String postagemPenalidade;
+    //35
+    private String publicDomRJPenalidade;
+    //36
+    private String numeroARPenalidade;
+    //36
+    private String lote;
+    //37
+    private String situacaoARPenalidade;
 
+
+    //38 DADOS PARA PAGAMENTO
+    private String dadosParaPagamento;
+    //39
     private String vencimento;
-
-    private String valorPago;
-
+    //40
+    //TODO valorAPagar?
     private String valorAPagar;
+    //41
+    private String dataDoPagamento;
+    //42
+    private String valorPago;
+    //43
+    private String situacaoDoPagamento;
 
-    private String dataPagamento;
-
-    private String situacaoPagamento;
-
-    public Carro getCarro ()
-    {
-        return carro;
-    }
-
-    public void setCarro (Carro carro)
-    {
-        this.carro = carro;
-    }
+    private boolean hasRecurso;
 
     public String getType ()
     {
@@ -67,44 +108,54 @@ public class Multa implements Serializable
         this.type = type;
     }
 
-    public String getAutoInfracao ()
+    public String getAuto ()
     {
-        return autoInfracao;
+        return auto;
     }
 
-    public void setAutoInfracao (String autoInfracao)
+    public void setAuto (String auto)
     {
-        this.autoInfracao = autoInfracao;
+        this.auto = auto;
     }
 
-    public String getDateInfracao ()
+    public String getCodDetran ()
     {
-        return dateInfracao;
+        return codDetran;
     }
 
-    public void setDateInfracao (String dateInfracao)
+    public void setCodDetran (String codDetran)
     {
-        this.dateInfracao = dateInfracao;
+        this.codDetran = codDetran;
     }
 
-    public String getInfracao ()
+    public String getRenainf ()
     {
-        return infracao;
+        return renainf;
     }
 
-    public void setInfracao (String infracao)
+    public void setRenainf (String renainf)
     {
-        this.infracao = infracao;
+        this.renainf = renainf;
     }
 
-    public String getPontosGravidade ()
+    public String getNic ()
     {
-        return pontosGravidade;
+        return nic;
     }
 
-    public void setPontosGravidade (String pontosGravidade)
+    public void setNic (String nic)
     {
-        this.pontosGravidade = pontosGravidade;
+        this.nic = nic;
+    }
+
+    public String getDataHoraInfracao ()
+    {
+        return dataHoraInfracao;
+    }
+
+    public void setDataHoraInfracao (String dataHoraInfracao)
+    {
+        this.dataHoraInfracao = dataHoraInfracao;
     }
 
     public String getLocal ()
@@ -115,6 +166,46 @@ public class Multa implements Serializable
     public void setLocal (String local)
     {
         this.local = local;
+    }
+
+    public String getCodInfracao ()
+    {
+        return codInfracao;
+    }
+
+    public void setCodInfracao (String codInfracao)
+    {
+        this.codInfracao = codInfracao;
+    }
+
+    public String getDescricao ()
+    {
+        return descricao;
+    }
+
+    public void setDescricao (String descricao)
+    {
+        this.descricao = descricao;
+    }
+
+    public String getPontos ()
+    {
+        return pontos;
+    }
+
+    public void setPontos (String pontos)
+    {
+        this.pontos = pontos;
+    }
+
+    public String getGravidade ()
+    {
+        return gravidade;
+    }
+
+    public void setGravidade (String gravidade)
+    {
+        this.gravidade = gravidade;
     }
 
     public String getVelocidadeAferida ()
@@ -137,94 +228,224 @@ public class Multa implements Serializable
         this.velocidadeMax = velocidadeMax;
     }
 
-    public String getSituacaoInfracao ()
+    public String getEquipamento ()
     {
-        return situacaoInfracao;
+        return equipamento;
     }
 
-    public void setSituacaoInfracao (String situacaoInfracao)
+    public void setEquipamento (String equipamento)
     {
-        this.situacaoInfracao = situacaoInfracao;
+        this.equipamento = equipamento;
     }
 
-    public String getNumeroNotificacaoAutuacao ()
+    public String getAferidoCertificado ()
     {
-        return numeroNotificacaoAutuacao;
+        return aferidoCertificado;
     }
 
-    public void setNumeroNotificacaoAutuacao (String numeroNotificacaoAutuacao)
+    public void setAferidoCertificado (String aferidoCertificado)
     {
-        this.numeroNotificacaoAutuacao = numeroNotificacaoAutuacao;
+        this.aferidoCertificado = aferidoCertificado;
     }
 
-    public String getNumeroArAutuacao ()
+    public String getStatus ()
     {
-        return numeroArAutuacao;
+        return status;
     }
 
-    public void setNumeroArAutuacao (String numeroArAutuacao)
+    public void setStatus (String status)
     {
-        this.numeroArAutuacao = numeroArAutuacao;
+        this.status = status;
     }
 
-    public String getDataPostagemAutuacao ()
+    public String getAutuacao ()
     {
-        return dataPostagemAutuacao;
+        return autuacao;
     }
 
-    public void setDataPostagemAutuacao (String dataPostagemAutuacao)
+    public void setAutuacao (String autuacao)
     {
-        this.dataPostagemAutuacao = dataPostagemAutuacao;
+        this.autuacao = autuacao;
     }
 
-    public String getSituacaoArAutuacao ()
+    public String getNotificacaoAutuacao ()
     {
-        return situacaoArAutuacao;
+        return notificacaoAutuacao;
     }
 
-    public void setSituacaoArAutuacao (String situacaoArAutuacao)
+    public void setNotificacaoAutuacao (String notificacaoAutuacao)
     {
-        this.situacaoArAutuacao = situacaoArAutuacao;
+        this.notificacaoAutuacao = notificacaoAutuacao;
     }
 
-    public String getNumeroNotificacaoPenalidade ()
+    public String getDataAutuacao ()
     {
-        return numeroNotificacaoPenalidade;
+        return dataAutuacao;
     }
 
-    public void setNumeroNotificacaoPenalidade (String numeroNotificacaoPenalidade)
+    public void setDataAutuacao (String dataAutuacao)
     {
-        this.numeroNotificacaoPenalidade = numeroNotificacaoPenalidade;
+        this.dataAutuacao = dataAutuacao;
     }
 
-    public String getNumeroArPenalidade ()
+    public String getPostagemAutuacao ()
     {
-        return numeroArPenalidade;
+        return postagemAutuacao;
     }
 
-    public void setNumeroArPenalidade (String numeroArPenalidade)
+    public void setPostagemAutuacao (String postagemAutuacao)
     {
-        this.numeroArPenalidade = numeroArPenalidade;
+        this.postagemAutuacao = postagemAutuacao;
     }
 
-    public String getDataPostagemPenalidade ()
+    public String getPublicDomRJAutuacao ()
     {
-        return dataPostagemPenalidade;
+        return publicDomRJAutuacao;
     }
 
-    public void setDataPostagemPenalidade (String dataPostagemPenalidade)
+    public void setPublicDomRJAutuacao (String publicDomRJAutuacao)
     {
-        this.dataPostagemPenalidade = dataPostagemPenalidade;
+        this.publicDomRJAutuacao = publicDomRJAutuacao;
     }
 
-    public String getSituacaoArPenalidade ()
+    public String getNumeroARAutuacao ()
     {
-        return situacaoArPenalidade;
+        return numeroARAutuacao;
     }
 
-    public void setSituacaoArPenalidade (String situacaoArPenalidade)
+    public void setNumeroARAutuacao (String numeroARAutuacao)
     {
-        this.situacaoArPenalidade = situacaoArPenalidade;
+        this.numeroARAutuacao = numeroARAutuacao;
+    }
+
+    public String getSituacaoARAutuacao ()
+    {
+        return situacaoARAutuacao;
+    }
+
+    public void setSituacaoARAutuacao (String situacaoARAutuacao)
+    {
+        this.situacaoARAutuacao = situacaoARAutuacao;
+    }
+
+    public String getRecurso ()
+    {
+        return recurso;
+    }
+
+    public void setRecurso (String recurso)
+    {
+        this.recurso = recurso;
+    }
+
+    public String getProcessoData ()
+    {
+        return processoData;
+    }
+
+    public void setProcessoData (String processoData)
+    {
+        this.processoData = processoData;
+    }
+
+    public String getProcessoSituacao ()
+    {
+        return processoSituacao;
+    }
+
+    public void setProcessoSituacao (String processoSituacao)
+    {
+        this.processoSituacao = processoSituacao;
+    }
+
+    public String getPenalidade ()
+    {
+        return penalidade;
+    }
+
+    public void setPenalidade (String penalidade)
+    {
+        this.penalidade = penalidade;
+    }
+
+    public String getNotificacaoPenalidade ()
+    {
+        return notificacaoPenalidade;
+    }
+
+    public void setNotificacaoPenalidade (String notificacaoPenalidade)
+    {
+        this.notificacaoPenalidade = notificacaoPenalidade;
+    }
+
+    public String getDataPenalidade ()
+    {
+        return dataPenalidade;
+    }
+
+    public void setDataPenalidade (String dataPenalidade)
+    {
+        this.dataPenalidade = dataPenalidade;
+    }
+
+    public String getPostagemPenalidade ()
+    {
+        return postagemPenalidade;
+    }
+
+    public void setPostagemPenalidade (String postagemPenalidade)
+    {
+        this.postagemPenalidade = postagemPenalidade;
+    }
+
+    public String getPublicDomRJPenalidade ()
+    {
+        return publicDomRJPenalidade;
+    }
+
+    public void setPublicDomRJPenalidade (String publicDomRJPenalidade)
+    {
+        this.publicDomRJPenalidade = publicDomRJPenalidade;
+    }
+
+    public String getNumeroARPenalidade ()
+    {
+        return numeroARPenalidade;
+    }
+
+    public void setNumeroARPenalidade (String numeroARPenalidade)
+    {
+        this.numeroARPenalidade = numeroARPenalidade;
+    }
+
+    public String getLote ()
+    {
+        return lote;
+    }
+
+    public void setLote (String lote)
+    {
+        this.lote = lote;
+    }
+
+    public String getSituacaoARPenalidade ()
+    {
+        return situacaoARPenalidade;
+    }
+
+    public void setSituacaoARPenalidade (String situacaoARPenalidade)
+    {
+        this.situacaoARPenalidade = situacaoARPenalidade;
+    }
+
+    public String getDadosParaPagamento ()
+    {
+        return dadosParaPagamento;
+    }
+
+    public void setDadosParaPagamento (String dadosParaPagamento)
+    {
+        this.dadosParaPagamento = dadosParaPagamento;
     }
 
     public String getVencimento ()
@@ -237,16 +458,6 @@ public class Multa implements Serializable
         this.vencimento = vencimento;
     }
 
-    public String getValorPago ()
-    {
-        return valorPago;
-    }
-
-    public void setValorPago (String valorPago)
-    {
-        this.valorPago = valorPago;
-    }
-
     public String getValorAPagar ()
     {
         return valorAPagar;
@@ -257,53 +468,91 @@ public class Multa implements Serializable
         this.valorAPagar = valorAPagar;
     }
 
-    public String getDataPagamento ()
+    public String getDataDoPagamento ()
     {
-        return dataPagamento;
+        return dataDoPagamento;
     }
 
-    public void setDataPagamento (String dataPagamento)
+    public void setDataDoPagamento (String dataDoPagamento)
     {
-        this.dataPagamento = dataPagamento;
+        this.dataDoPagamento = dataDoPagamento;
     }
 
-    public String getSituacaoPagamento ()
+    public String getValorPago ()
     {
-        return situacaoPagamento;
+        return valorPago;
     }
 
-    public void setSituacaoPagamento (String situacaoPagamento)
+    public void setValorPago (String valorPago)
     {
-        this.situacaoPagamento = situacaoPagamento;
+        this.valorPago = valorPago;
+    }
+
+    public String getSituacaoDoPagamento ()
+    {
+        return situacaoDoPagamento;
+    }
+
+    public void setSituacaoDoPagamento (String situacaoDoPagamento)
+    {
+        this.situacaoDoPagamento = situacaoDoPagamento;
+    }
+
+    public boolean isHasRecurso ()
+    {
+        return hasRecurso;
+    }
+
+    public void setHasRecurso (boolean hasRecurso)
+    {
+        this.hasRecurso = hasRecurso;
     }
 
     @Override
     public String toString ()
     {
         return "Multa{" +
-                "carro=" + carro +
-                ", type='" + type + '\'' +
-                ", autoInfracao='" + autoInfracao + '\'' +
-                ", dateInfracao=" + dateInfracao +
-                ", infracao='" + infracao + '\'' +
-                ", pontosGravidade='" + pontosGravidade + '\'' +
+                "type='" + type + '\'' +
+                ", auto='" + auto + '\'' +
+                ", codDetran='" + codDetran + '\'' +
+                ", renainf='" + renainf + '\'' +
+                ", nic='" + nic + '\'' +
+                ", dataHoraInfracao='" + dataHoraInfracao + '\'' +
                 ", local='" + local + '\'' +
+                ", codInfracao='" + codInfracao + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", pontos='" + pontos + '\'' +
+                ", gravidade='" + gravidade + '\'' +
                 ", velocidadeAferida='" + velocidadeAferida + '\'' +
                 ", velocidadeMax='" + velocidadeMax + '\'' +
-                ", situacaoInfracao='" + situacaoInfracao + '\'' +
-                ", numeroNotificacaoAutuacao='" + numeroNotificacaoAutuacao + '\'' +
-                ", numeroArAutuacao='" + numeroArAutuacao + '\'' +
-                ", dataPostagemAutuacao=" + dataPostagemAutuacao +
-                ", situacaoArAutuacao='" + situacaoArAutuacao + '\'' +
-                ", numeroNotificacaoPenalidade='" + numeroNotificacaoPenalidade + '\'' +
-                ", numeroArPenalidade='" + numeroArPenalidade + '\'' +
-                ", dataPostagemPenalidade=" + dataPostagemPenalidade +
-                ", situacaoArPenalidade='" + situacaoArPenalidade + '\'' +
-                ", vencimento=" + vencimento +
+                ", equipamento='" + equipamento + '\'' +
+                ", aferidoCertificado='" + aferidoCertificado + '\'' +
+                ", status='" + status + '\'' +
+                ", autuacao='" + autuacao + '\'' +
+                ", notificacaoAutuacao='" + notificacaoAutuacao + '\'' +
+                ", dataAutuacao='" + dataAutuacao + '\'' +
+                ", postagemAutuacao='" + postagemAutuacao + '\'' +
+                ", publicDomRJAutuacao='" + publicDomRJAutuacao + '\'' +
+                ", numeroARAutuacao='" + numeroARAutuacao + '\'' +
+                ", situacaoARAutuacao='" + situacaoARAutuacao + '\'' +
+                ", recurso='" + recurso + '\'' +
+                ", processoData='" + processoData + '\'' +
+                ", processoSituacao='" + processoSituacao + '\'' +
+                ", penalidade='" + penalidade + '\'' +
+                ", notificacaoPenalidade='" + notificacaoPenalidade + '\'' +
+                ", dataPenalidade='" + dataPenalidade + '\'' +
+                ", postagemPenalidade='" + postagemPenalidade + '\'' +
+                ", publicDomRJPenalidade='" + publicDomRJPenalidade + '\'' +
+                ", numeroARPenalidade='" + numeroARPenalidade + '\'' +
+                ", lote='" + lote + '\'' +
+                ", situacaoARPenalidade='" + situacaoARPenalidade + '\'' +
+                ", dadosParaPagamento='" + dadosParaPagamento + '\'' +
+                ", vencimento='" + vencimento + '\'' +
+                ", valorAPagar='" + valorAPagar + '\'' +
+                ", dataDoPagamento='" + dataDoPagamento + '\'' +
                 ", valorPago='" + valorPago + '\'' +
-                ", dataPagamento=" + dataPagamento +
-                ", situacaoPagamento='" + situacaoPagamento + '\'' +
+                ", situacaoDoPagamento='" + situacaoDoPagamento + '\'' +
+                ", hasRecurso=" + hasRecurso +
                 '}';
     }
-
 }

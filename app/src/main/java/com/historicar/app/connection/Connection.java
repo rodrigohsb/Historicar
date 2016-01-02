@@ -17,7 +17,7 @@ public class Connection
 
     private static final int RETRIES = 3;
 
-    private static final String ULR = "http://www2.rio.rj.gov.br/multas/A516C.asp";
+    private static final String ULR = "http://www2.rio.rj.gov.br/multas/consulta_a519c.asp";
 
     private static final String USER_AGENT = "Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; fr) Presto/2.9.168 Version/11.52";
 
@@ -42,5 +42,4 @@ public class Connection
 
         return null;
     }
-
 }

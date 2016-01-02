@@ -5,7 +5,7 @@
     <corners
         android:radius="10dp"/>
 
-    <solid android:color="@color/app_background"/>
+    <solid android:color="@color/actionbar_background"/>
 
     <padding
         android:bottom="5dp"
@@ -15,5 +15,5 @@
 
     <stroke
         android:width="2dp"
-        android:color="@color/black"/>
+        android:color="@android:color/black"/>
 </shape>

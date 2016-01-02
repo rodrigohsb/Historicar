@@ -1,48 +1,58 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/app_background"
-                android:padding="@dimen/activity_vertical_margin"
-                tools:context=".HomeActivity">
+                tools:context=".HomeActivity"
+                android:background="@color/actionbar_background">
 
-    <ImageView
-        android:id="@+id/information"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/ic_information"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp">
 
-    <ListView
-        android:id="@+id/homeList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/information"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="57dp"
-        android:layout_marginRight="57dp"
-        android:layout_marginTop="10dp"
-        android:divider="@color/app_background"
-        android:dividerHeight="10dp"
-        android:visibility="gone"/>
+        <ImageView
+            android:id="@+id/information"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_information"/>
 
-    <ImageView
-        android:id="@+id/newPlate"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_below="@id/homeList"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:src="@drawable/ic_new_plate"
-        android:visibility="gone"/>
+        <ListView
+            android:id="@+id/homeList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="88dp"
+            android:layout_marginRight="88dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="24dp"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="8dp"
+            android:scrollbars="none"
+            android:visibility="visible"/>
 
-    <TextView
-        android:id="@+id/valid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/homeActivityValidOnly"
-        android:textColor="#ffffff"/>
+        <ImageView
+            android:id="@+id/newPlate"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_below="@id/homeList"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/ic_new_plate"
+            android:visibility="gone"/>
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/validText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/homeActivityValidOnly"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:paddingBottom="6dp"/>
+    </RelativeLayout>
+</LinearLayout>
