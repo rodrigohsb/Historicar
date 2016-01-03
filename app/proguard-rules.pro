@@ -19,12 +19,23 @@
 -keep class com.historicar.app.** { *; }
 -keep class android.support.v7.** { *; }
 -keep class org.jsoup.** { *; }
--keep class org.apache.commons.lang3.text.** { *; }
 
--dontwarn org.apache.commons.lang3.text.**
 -dontwarn org.jsoup.**
 
+#butterknife
+-keep class butterknife.** { *; }
+-dontwarn butterknife.internal.**
+-keep class **$$ViewBinder { *; }
 
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
+}
+
+#appodeal
   -keep class com.appodeal.** { *; }
   -keep class com.amazon.** { *; }
   -keep class com.mopub.** { *; }
