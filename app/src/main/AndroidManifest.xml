@@ -31,7 +31,6 @@
         </activity>
         <activity
             android:name=".activity.ResultActivity"
-            android:parentActivityName=".activity.HomeActivity"
             android:screenOrientation="portrait"/>
 
         <activity
@@ -40,28 +39,23 @@
 
         <activity
             android:name=".activity.NoMultaActivity"
-            android:parentActivityName=".activity.HomeActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait">
+        </activity>
 
         <activity
             android:name=".activity.ErrorActivity"
-            android:parentActivityName=".activity.HomeActivity"
             android:screenOrientation="portrait"/>
 
         <activity
             android:name=".activity.AboutActivity"
-            android:parentActivityName=".activity.HomeActivity"
             android:screenOrientation="portrait"/>
 
         <activity
             android:name=".activity.InsertOrEditActivity"
-            android:parentActivityName=".activity.HomeActivity"
             android:screenOrientation="portrait"/>
 
+
         <!--APPODEAL CONF-->
-
-
-
         <meta-data android:name="com.appodeal.framework" android:value="android" />
         <activity android:name="com.appodeal.ads.InterstitialActivity"
                   android:configChanges="orientation|screenSize"

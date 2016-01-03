@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 
 import com.appodeal.ads.Appodeal;
 import com.historicar.app.R;
@@ -80,6 +81,12 @@ public class AboutActivity extends AppCompatActivity
                     AlertDialog alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_plate), button);
                     alertDialog.show();
                     return false;
+                }
+
+                if(AboutActivity.this.getCurrentFocus() != null)
+                {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(AboutActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 
                 Intent myIntent = new Intent(ctx, ResultActivity.class);

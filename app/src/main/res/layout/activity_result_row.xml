@@ -11,7 +11,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/result_row_bg"
+        android:background="@android:color/white"
         android:paddingLeft="8dp"
         android:paddingTop="2dp"
         android:paddingBottom="2dp">
@@ -20,11 +20,10 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_marginTop="2dp"
             android:text="Descricao da multa"
             android:textColor="@android:color/black"
-            android:textSize="16dip"
+            android:textSize="16sp"
             android:textStyle="bold"/>
 
         <TextView
@@ -33,8 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/title"
             android:text="Pontos : 5"
-            android:textColor="@android:color/black"
-            android:textSize="12dip"/>
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/gravidade"
@@ -42,8 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/points"
             android:text="Gravidade : Leve"
-            android:textColor="@android:color/black"
-            android:textSize="12dip"/>
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/date"
@@ -51,8 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/gravidade"
             android:text="Data : 21/02/2015 12h56"
-            android:textColor="@android:color/black"
-            android:textSize="12dip"/>
+            android:textSize="12sp"/>
 
         <ImageView
             android:id="@+id/status"
@@ -71,7 +67,6 @@
             android:layout_below="@id/date"
             android:layout_marginBottom="3dp"
             android:text="Preço : R$ 45,45"
-            android:textColor="@android:color/black"
-            android:textSize="12dip"/>
+            android:textSize="12sp"/>
     </RelativeLayout>
 </android.support.v7.widget.CardView>

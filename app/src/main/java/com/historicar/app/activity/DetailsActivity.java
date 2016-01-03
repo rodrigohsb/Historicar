@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +11,8 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appodeal.ads.Appodeal;
@@ -33,12 +33,123 @@ public class DetailsActivity extends AppCompatActivity
 
     private Context ctx;
 
-    @Bind(R.id.detailsRelativeLayoutLayout)
-    protected RelativeLayout rl;
 
-    private int id = 1;
+    // COMMON_SECTION_XML
+    @Bind(R.id.detailsSectionCommonTitle)
+    protected TextView description;
 
-    private int lastId;
+    @Bind(R.id.detailsSectionCommonPoints)
+    protected TextView points;
+
+    @Bind(R.id.detailsSectionCommonGravidade)
+    protected TextView gravidade;
+
+    @Bind(R.id.detailsSectionCommonLocal)
+    protected TextView local;
+
+    @Bind(R.id.detailsSectionCommonInfracao)
+    protected TextView infracao;
+
+    @Bind(R.id.detailsSectionCommonCodigoDetran)
+    protected TextView codDetran;
+
+    @Bind(R.id.detailsSectionCommonCodInfracao)
+    protected TextView codInfracao;
+
+    @Bind(R.id.detailsSectionCommonType)
+    protected TextView type;
+
+    @Bind(R.id.detailsSectionCommonDateHour)
+    protected TextView dateHour;
+
+    @Bind(R.id.detailsSectionCommonStatus)
+    protected TextView status;
+
+    @Bind(R.id.detailsSectionCommonVelocidade)
+    protected LinearLayout velocidadeLinearLayout;
+    
+    @Bind(R.id.detailsSectionCommonVelocidadeAferida)
+    protected TextView velocAferica;
+
+    @Bind(R.id.detailsSectionCommonVelocidadeMax)
+    protected TextView velocMax;
+
+
+    // AUTUACAO_SECTION_XML
+    @Bind(R.id.detailsAutuacaoSectionNotificacao)
+    protected TextView autuacaoNotificacao;
+
+    @Bind(R.id.detailsAutuacaoSectionDate)
+    protected TextView autuacaoDate;
+
+    @Bind(R.id.detailsAutuacaoSectionPostagemLinearLayout)
+    protected LinearLayout autuacaoPostagemLinearLayout;
+
+    @Bind(R.id.detailsAutuacaoSectionPostagem)
+    protected TextView autuacaoPostagem;
+
+    @Bind(R.id.detailsAutuacaoSectionAR)
+    protected TextView autuacaoAr;
+
+    @Bind(R.id.detailsAutuacaoSectionSituacaoPostagem)
+    protected TextView autuacaoSituacaoPostagem;
+
+
+    // RECURSO_SECTION_XML
+    @Bind(R.id.detailsRecursoSectionSubtitle)
+    protected TextView recursoSubtitle;
+
+    @Bind(R.id.detailsRecursoSectionProcessAndDate)
+    protected TextView recursoProcessAndDate;
+
+    @Bind(R.id.detailsRecursoSectionSituationLinearLayout)
+    protected LinearLayout recursoSituationLinerLayout;
+
+    @Bind(R.id.detailsRecursoSectionSituation)
+    protected TextView recursoSituation;
+
+    // PENALIDADE_SECTION_XML
+    @Bind(R.id.detailsSectionPenalidadeNotificacao)
+    protected TextView penalidadeNotificacao;
+
+    @Bind(R.id.detailsSectionPenalidadeDate)
+    protected TextView penalidadeDate;
+
+    @Bind(R.id.detailsSectionPenalidadePostagemLinearLayout)
+    protected LinearLayout penalidadePostgemLinearLayout;
+
+    @Bind(R.id.detailsSectionPenalidadePostagem)
+    protected TextView penalidadeDataPostagem;
+
+    @Bind(R.id.detailsSectionPenalidadeAR)
+    protected TextView penalidadeAr;
+
+    @Bind(R.id.detailsSectionPenalidadeSituacaoPostagem)
+    protected TextView penalidadeSituacaoPostagem;
+
+
+    // PAYMENT_SECTION_XML
+    @Bind(R.id.detailsSectionPaymentVencimentoLinearLayout)
+    protected LinearLayout paymentVencimentoLinearLayout;
+
+    @Bind(R.id.detailsSectionPaymentVencimento)
+    protected TextView paymentVencimento;
+
+    @Bind(R.id.detailsSectionPaymentValorJaPagoLinearLayout)
+    protected LinearLayout paymentValorJaPagoLinearLayout;
+
+    @Bind(R.id.detailsSectionPaymentValorJaPago)
+    protected TextView paymentValorJaPago;
+
+    @Bind(R.id.detailsSectionPaymentValorAPagarLinearLayout)
+    protected LinearLayout paymentValorAPagarLinerLayout;
+
+    @Bind(R.id.detailsSectionPaymentValorAPagar)
+    protected TextView paymentValorAPagar;
+
+    @Bind(R.id.detailsSectionPaymentSituation)
+    protected TextView paymentSituacao;
+
 
     @Override
     protected void onCreate (Bundle savedInstanceState)
@@ -53,312 +164,125 @@ public class DetailsActivity extends AppCompatActivity
 
         ctx = this;
 
-
         Bundle bundle = getIntent().getExtras();
         Multa multa = (Multa) bundle.getSerializable(Constants.MULTA);
 
-        RelativeLayout.LayoutParams llp0 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        llp0.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        llp0.setMargins(0, 0, 0, 10);
-
-        /** DADOS DO VEÍCULO E INFRAÇÃO **/
-
-        /** INFRACAO **/
-        TextView infracaoValueTextView = new TextView(this);
-        infracaoValueTextView.setLayoutParams(llp0);
-        infracaoValueTextView.setId(id);
-        infracaoValueTextView.setText(multa.getDescricao());
-        infracaoValueTextView.setTypeface(Typeface.DEFAULT_BOLD);
-        infracaoValueTextView.setTextAppearance(this, android.R.style.TextAppearance_Large);
-        rl.addView(infracaoValueTextView);
-
-        RelativeLayout.LayoutParams llp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx());
-        llp.addRule(RelativeLayout.BELOW, infracaoValueTextView.getId());
-        llp.setMargins(0, 10, 0, 10);
-
-        View hrView = new View(this);
-        hrView.setId(++id);
-        hrView.setBackgroundColor(getResources().getColor(R.color.actionbar_background));
-        hrView.setLayoutParams(llp);
-
-        rl.addView(hrView);
-
-        lastId = hrView.getId();
-
-        /** TIPO **/
-        if (multa.getType() != null && !multa.getType().contains("---"))
-        {
-            createRow("Tipo:", multa.getType());
-        }
-
-        /** AUTO DE INFRAÇÃO **/
-        if (multa.getAuto() != null && !multa.getAuto().contains("---"))
-        {
-            createRow("Auto de Infração:", multa.getAuto());
-        }
-
-        /** CÓDIGO DETRAN **/
-        if (multa.getCodDetran() != null && !multa.getCodDetran().contains("---"))
-        {
-            createRow("Código Detran:", multa.getCodDetran());
-        }
-
-        /** DATA E HORA DA INFRACAO **/
-        if (multa.getDataAutuacao() != null && !multa.getDataAutuacao().contains("---"))
-        {
-            createRow("Data/Hora da Infração:", multa.getDataHoraInfracao());
-        }
-
-        /** LOCAL DA INFRACAO **/
-        if (multa.getLocal() != null && !multa.getLocal().contains("---"))
-        {
-            createRow("Local de Infração:", multa.getLocal());
-        }
-
-        /** COD INFRACAO **/
-        if (multa.getCodInfracao() != null && !multa.getCodInfracao().contains("---"))
-        {
-            createRow("Código da Infração:", multa.getCodInfracao());
-        }
-
-        /** PONTOS **/
-        if (multa.getPontos() != null && !multa.getPontos().contains("---"))
-        {
-            createRow("Pontos:", multa.getPontos());
-        }
-
-        /** GRAVIDADE **/
-        if (multa.getGravidade() != null && !multa.getGravidade().contains("---"))
-        {
-            createRow("Gravidade:", multa.getGravidade());
-        }
-
-        /** VELOCIDADE AFERIDA **/
-        if (multa.getVelocidadeAferida() != null && !multa.getVelocidadeAferida().contains("---"))
-        {
-            createRow("Velocidade Aferida:", multa.getVelocidadeAferida());
-        }
-
-        /** VELOCIDADE PERMITIDA **/
-        if (multa.getVelocidadeMax() != null && !multa.getVelocidadeMax().contains("---"))
-        {
-            createRow("Velocidade Permitida:", multa.getVelocidadeMax());
-        }
-
-        /** EQUIPAMENTO **/
-        if (multa.getEquipamento() != null && !multa.getEquipamento().contains("---"))
-        {
-            createRow("Equipamento:", multa.getEquipamento());
-        }
-
-        /** AFERIDO CERTIFICADO **/
-        if (multa.getAferidoCertificado() != null && !multa.getAferidoCertificado().contains("---"))
-        {
-            createRow("Aferido/Certificado:", multa.getAferidoCertificado());
-        }
-
-        /** STATUS **/
-        if (multa.getStatus() != null && !multa.getStatus().contains("---"))
-        {
-            createRow("Status:", multa.getStatus());
-        }
-
-        /** AUTUAÇÃO **/
-        if (multa.getAutuacao() != null && !multa.getAutuacao().contains("---"))
-        {
-            createRow("Autuação:", multa.getAutuacao());
-        }
-
-        /** NUMERO NOTIFICACAO AUTUACAO **/
-        if (multa.getNotificacaoAutuacao() != null && !multa.getNotificacaoAutuacao().contains("---"))
-        {
-            createRow("Notificação:", multa.getNotificacaoAutuacao());
-        }
-
-        /** DATA AUTUACAO **/
-        if (multa.getDataAutuacao() != null && !multa.getDataAutuacao().contains("---"))
-        {
-            createRow("Data:", multa.getDataAutuacao());
-        }
-
-        /** DATA POSTAGEM AUTUACAO **/
-        if (multa.getPostagemAutuacao() != null && !multa.getPostagemAutuacao().contains("---"))
-        {
-            createRow("Postagem:", multa.getPostagemAutuacao());
-        }
-
-        /** SITUACAO AR AUTUACAO **/
-        if (multa.getPublicDomRJAutuacao() != null && !multa.getPublicDomRJAutuacao().contains("---"))
-        {
-            createRow("Public.dom RJ:", multa.getPublicDomRJAutuacao());
-        }
-
-        /** NUMERO NOTIFICACAO PENALIDADE **/
-        if (multa.getNumeroARAutuacao() != null && !multa.getNumeroARAutuacao().contains("---"))
-        {
-            createRow("Número do AR:", multa.getNumeroARAutuacao());
-        }
-
-        /** NUMERO AR PENALIDADE **/
-        if (multa.getSituacaoARAutuacao() != null && !multa.getSituacaoARAutuacao().contains("---"))
-        {
-            createRow("Situação do AR:", multa.getSituacaoARAutuacao());
-        }
-
+        fillCommonUI(multa);
+        fillAutuacaoUI(multa);
+        
         if(multa.isHasRecurso())
         {
-            /** NUMERO AR PENALIDADE **/
-            if (multa.getRecurso() != null && !multa.getRecurso().contains("---"))
-            {
-                createRow("Recurso:", multa.getRecurso());
-            }
-
-            /** NUMERO AR PENALIDADE **/
-            if (multa.getProcessoData() != null && !multa.getProcessoData().contains("---"))
-            {
-                createRow("Processo (Real infrator) - Data:", multa.getProcessoData());
-            }
-
-            /** NUMERO AR PENALIDADE **/
-            if (multa.getProcessoSituacao() != null && !multa.getProcessoSituacao().contains("---"))
-            {
-                createRow("Processo (Real infrator) - Situação:", multa.getProcessoSituacao());
-            }
+            fillRecursoUI(multa);
         }
-
-        /** DATA POSTAGEM PENALIDADE **/
-        if (multa.getPenalidade() != null && !multa.getPenalidade().contains("---"))
+        if(multa.isHasPenalidade())
         {
-            createRow("Penalidade:", multa.getPenalidade());
+            fillPenalidadeUI(multa);
         }
-
-        /** DATA VENCIMENTO **/
-        if (multa.getNotificacaoPenalidade() != null && !multa.getNotificacaoPenalidade().contains("---"))
-        {
-            createRow("Notificação:", multa.getNotificacaoPenalidade());
-        }
-
-        /** VALOR PAGO **/
-        if (multa.getDataPenalidade() != null && !multa.getDataPenalidade().contains("---"))
-        {
-            createRow("Data:", multa.getDataPenalidade());
-        }
-
-        /** DATA VENCIMENTO **/
-        if (multa.getPostagemPenalidade() != null && !multa.getPostagemPenalidade().contains("---"))
-        {
-            createRow("Postagem:", multa.getPostagemPenalidade());
-        }
-
-        /** DATA DO PAGAMENTO **/
-        if (multa.getPublicDomRJPenalidade() != null && !multa.getPublicDomRJPenalidade().contains("---"))
-        {
-            createRow("Public.dom RJ:", multa.getPublicDomRJPenalidade());
-        }
-
-        /** SITUACAO PAGAMENTO **/
-        if (multa.getNumeroARPenalidade() != null && !multa.getNumeroARPenalidade().contains("---"))
-        {
-            createRow("AR:", multa.getNumeroARPenalidade());
-        }
-
-        /** LOTE **/
-        if (multa.getLote() != null && !multa.getLote().contains("---"))
-        {
-            createRow("IDOBJ./LOTE:", multa.getLote());
-        }
-
-        /** SITUACAO PAGAMENTO **/
-        if (multa.getSituacaoARPenalidade() != null && !multa.getSituacaoARPenalidade().contains("---"))
-        {
-            createRow("Situação da Postagem:", multa.getSituacaoARPenalidade());
-        }
-
-        /** SITUACAO PAGAMENTO **/
-        if (multa.getDadosParaPagamento() != null && !multa.getDadosParaPagamento().contains("---"))
-        {
-            createRow("Dados para pagamento:", multa.getDadosParaPagamento());
-        }
-
-        /** SITUACAO PAGAMENTO **/
-        if (multa.getVencimento() != null && !multa.getVencimento().contains("---"))
-        {
-            createRow("Vencimento:", multa.getVencimento());
-        }
-
-        /** SITUACAO PAGAMENTO **/
-        if (multa.getValorAPagar() != null && !multa.getValorAPagar().contains("---"))
-        {
-            createRow("Valor até o vencimento:", multa.getValorAPagar());
-        }
-
-        /** SITUACAO PAGAMENTO **/
-        if (multa.getDataDoPagamento() != null && !multa.getDataDoPagamento().contains("---"))
-        {
-            createRow("Pagamento:", multa.getDataDoPagamento());
-        }
-
-        /** SITUACAO PAGAMENTO **/
-        if (multa.getValorPago() != null && !multa.getValorPago().contains("---"))
-        {
-            createRow("Valor Pago:", multa.getValorPago());
-        }
-
-        /** SITUACAO PAGAMENTO **/
-        if (multa.getSituacaoDoPagamento() != null && !multa.getSituacaoDoPagamento().contains("---"))
-        {
-            createRow("Situação do Pagamento:", multa.getSituacaoDoPagamento());
-        }
-
+        fillPaymentUI(multa);
     }
-
-    private void createRow(String typeText, String typeTextValue)
+    
+    private void fillCommonUI(Multa multa)
     {
-        RelativeLayout.LayoutParams llp1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        llp1.addRule(RelativeLayout.BELOW, lastId);
-        llp1.setMargins(0, 10, 0, 10);
+        description.setText(multa.getDescricao());
 
-        TextView typeTextView = new TextView(this);
-        typeTextView.setLayoutParams(llp1);
-        typeTextView.setId(++id);
-        typeTextView.setText(typeText);
-        typeTextView.setTypeface(Typeface.DEFAULT_BOLD);
-        typeTextView.setTextAppearance(this, android.R.style.TextAppearance_Medium);
+        points.setText(multa.getPontos());
+        gravidade.setText(multa.getGravidade());
 
-        rl.addView(typeTextView);
+        local.setText(multa.getLocal());
 
-        RelativeLayout.LayoutParams llp2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        llp2.addRule(RelativeLayout.BELOW, typeTextView.getId());
-        llp2.setMargins(0, 10, 0, 10);
+        infracao.setText(multa.getInfracao());
+        codDetran.setText(multa.getCodDetran());
 
-        TextView typeValueTextView = new TextView(this);
-        typeValueTextView.setLayoutParams(llp2);
-        typeValueTextView.setId(++id);
-        typeValueTextView.setTextAppearance(this, android.R.style.TextAppearance_Small);
-        typeValueTextView.setText(typeTextValue);
+        codInfracao.setText(multa.getCodInfracao());
+        type.setText(multa.getType());
 
-        rl.addView(typeValueTextView);
+        dateHour.setText(multa.getDataHoraInfracao());
+        status.setText(multa.getStatus());
 
-        RelativeLayout.LayoutParams llp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, getPx());
-        llp3.addRule(RelativeLayout.BELOW, typeValueTextView.getId());
-        llp3.setMargins(0, 10, 0, 10);
-
-        View hrView3 = new View(this);
-        hrView3.setId(++id);
-        hrView3.setBackgroundColor(getResources().getColor(R.color.actionbar_background));
-        hrView3.setLayoutParams(llp3);
-
-        rl.addView(hrView3);
-
-        lastId = hrView3.getId();
+        if(multa.getVelocidadeAferida() != null && multa.getVelocidadeMax() != null)
+        {
+            velocidadeLinearLayout.setVisibility(View.VISIBLE);
+            velocAferica.setText(multa.getVelocidadeAferida());
+            velocMax.setText(multa.getVelocidadeMax());
+        }
     }
-
-    private int getPx ()
+    
+    private void fillAutuacaoUI(Multa multa)
     {
-        float density = getResources().getDisplayMetrics().density;
-        return (int) (2 * density + 0.5f);
+        autuacaoNotificacao.setText(multa.getNotificacaoAutuacao());
+
+        autuacaoDate.setText(multa.getDataAutuacao());
+
+        if(multa.getPostagemAutuacao() != null)
+        {
+            autuacaoPostagemLinearLayout.setVisibility(View.VISIBLE);
+            autuacaoPostagem.setText(multa.getPostagemAutuacao());
+        }
+
+        autuacaoAr.setText(multa.getNumeroARAutuacao());
+
+        autuacaoSituacaoPostagem.setText(multa.getSituacaoARAutuacao());
     }
 
+    private void fillRecursoUI(Multa multa)
+    {
+        recursoSubtitle.setText(multa.getRecurso());
+
+        recursoProcessAndDate.setText(multa.getProcessoData());
+
+        if (multa.getProcessoSituacao() != null)
+        {
+            recursoSituationLinerLayout.setVisibility(View.VISIBLE);
+            recursoSituation.setText(multa.getProcessoSituacao());
+        }
+    }
+
+    private void fillPenalidadeUI(Multa multa)
+    {
+        penalidadeNotificacao.setText(multa.getNotificacaoPenalidade());
+
+        penalidadeDate.setText(multa.getDataPenalidade());
+
+        if(multa.getPostagemPenalidade() != null)
+        {
+            penalidadePostgemLinearLayout.setVisibility(View.VISIBLE);
+            penalidadeDataPostagem.setText(multa.getPostagemPenalidade());
+        }
+
+        penalidadeAr.setText(multa.getNumeroARPenalidade());
+
+        penalidadeSituacaoPostagem.setText(multa.getSituacaoARPenalidade());
+    }
+
+    private void fillPaymentUI(Multa multa)
+    {
+        if(multa.getVencimento() != null)
+        {
+            paymentVencimentoLinearLayout.setVisibility(View.VISIBLE);
+            paymentVencimento.setText(multa.getVencimento());
+        }
+
+        if(multa.getValorPago() != null)
+        {
+            paymentValorJaPagoLinearLayout.setVisibility(View.VISIBLE);
+            paymentValorJaPago.setText(multa.getValorPago());
+        }
+
+        if ("PENALIDADE PAGA".equalsIgnoreCase(multa.getSituacaoDoPagamento()))
+        {
+            paymentSituacao.setText("Pagamento efetuado em " + multa.getDataDoPagamento());
+        }
+        else
+        {
+            if(multa.getValorAPagar() != null)
+            {
+                paymentValorAPagarLinerLayout.setVisibility(View.VISIBLE);
+                paymentValorAPagar.setText(multa.getValorAPagar());
+            }
+            paymentSituacao.setText("Pagamento NÃO efetuado");
+        }
+    }
+    
     @Override
     public boolean onCreateOptionsMenu (Menu menu)
     {
@@ -399,6 +323,12 @@ public class DetailsActivity extends AppCompatActivity
                     AlertDialog alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_plate), button);
                     alertDialog.show();
                     return false;
+                }
+
+                if(DetailsActivity.this.getCurrentFocus() != null)
+                {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(DetailsActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 
                 Intent myIntent = new Intent(ctx, ResultActivity.class);

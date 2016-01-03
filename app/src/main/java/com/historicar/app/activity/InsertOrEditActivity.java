@@ -13,6 +13,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -326,6 +327,12 @@ public class InsertOrEditActivity extends AppCompatActivity
                     AlertDialog alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_plate), button);
                     alertDialog.show();
                     return false;
+                }
+
+                if(InsertOrEditActivity.this.getCurrentFocus() != null)
+                {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(InsertOrEditActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 
                 Intent myIntent = new Intent(ctx, ResultActivity.class);

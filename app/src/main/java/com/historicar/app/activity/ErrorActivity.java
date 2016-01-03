@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.appodeal.ads.Appodeal;
@@ -90,6 +91,12 @@ public class ErrorActivity extends AppCompatActivity
                     AlertDialog alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_plate), button);
                     alertDialog.show();
                     return false;
+                }
+
+                if(ErrorActivity.this.getCurrentFocus() != null)
+                {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(ErrorActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 
                 Intent myIntent = new Intent(ctx, ResultActivity.class);

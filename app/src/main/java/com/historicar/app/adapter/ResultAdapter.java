@@ -26,8 +26,8 @@ import butterknife.Bind;
 public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.LinearViewHolder>
 {
 
-    private List<Multa> mList;
-    private Context mContext;
+    private final List<Multa> mList;
+    private final Context mContext;
 
     public ResultAdapter (List<Multa> mList, Context mContext)
     {
@@ -83,17 +83,17 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.LinearView
     public class LinearViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
 
-        private TextView mDescription;
+        private final TextView mDescription;
 
-        private TextView mPoints;
+        private final TextView mPoints;
 
-        private TextView mGravidade;
+        private final TextView mGravidade;
 
-        private TextView mDate;
+        private final TextView mDate;
 
-        private ImageView mStatus;
+        private final ImageView mStatus;
 
-        private TextView mPrice;
+        private final TextView mPrice;
 
         public LinearViewHolder(View view)
         {
