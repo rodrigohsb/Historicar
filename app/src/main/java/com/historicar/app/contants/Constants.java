@@ -10,6 +10,8 @@ public class Constants
 
     public static final String MULTA = "multa";
 
+    public static final String MULTAS = "multas";
+
     public static final String OK = "OK";
 
     public static final String YES = "Sim";

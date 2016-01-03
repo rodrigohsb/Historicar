@@ -47,21 +47,39 @@ public class DetailsActivity extends AppCompatActivity
     @Bind(R.id.detailsSectionCommonLocal)
     protected TextView local;
 
+
+    @Bind(R.id.detailsSectionCommonInfracaoLinearLayout)
+    protected LinearLayout infracaoLinearLayout;
     @Bind(R.id.detailsSectionCommonInfracao)
     protected TextView infracao;
 
+
+    @Bind(R.id.detailsSectionCommonCodigoDetranLinearLayout)
+    protected LinearLayout CodigoDetranLinearLayout;
     @Bind(R.id.detailsSectionCommonCodigoDetran)
     protected TextView codDetran;
 
+
+    @Bind(R.id.detailsSectionCommonCodInfracaoLinearLayout)
+    protected LinearLayout codInfracaoLinearLayout;
     @Bind(R.id.detailsSectionCommonCodInfracao)
     protected TextView codInfracao;
 
+
+    @Bind(R.id.detailsSectionCommonTypeLinearLayout)
+    protected LinearLayout typeLinearLayout;
     @Bind(R.id.detailsSectionCommonType)
     protected TextView type;
 
+
+    @Bind(R.id.detailsSectionCommonDateHourLinearLayout)
+    protected LinearLayout dateHourLinearLayout;
     @Bind(R.id.detailsSectionCommonDateHour)
     protected TextView dateHour;
 
+
+    @Bind(R.id.detailsSectionCommonStatusLinearLayout)
+    protected LinearLayout statusLinearLayout;
     @Bind(R.id.detailsSectionCommonStatus)
     protected TextView status;
 
@@ -76,21 +94,32 @@ public class DetailsActivity extends AppCompatActivity
 
 
     // AUTUACAO_SECTION_XML
+    @Bind(R.id.detailsAutuacaoSectionNotificacaoLinearLayout)
+    protected LinearLayout autuacaoNotificacaoLinearLayout;
     @Bind(R.id.detailsAutuacaoSectionNotificacao)
     protected TextView autuacaoNotificacao;
 
+
+    @Bind(R.id.detailsAutuacaoSectionDateLinearLayout)
+    protected LinearLayout autuacaoDateLinearLayout;
     @Bind(R.id.detailsAutuacaoSectionDate)
     protected TextView autuacaoDate;
 
+
     @Bind(R.id.detailsAutuacaoSectionPostagemLinearLayout)
     protected LinearLayout autuacaoPostagemLinearLayout;
-
     @Bind(R.id.detailsAutuacaoSectionPostagem)
     protected TextView autuacaoPostagem;
 
+
+    @Bind(R.id.detailsAutuacaoSectionARLinearLayout)
+    protected LinearLayout autuacaoArLinearLayout;
     @Bind(R.id.detailsAutuacaoSectionAR)
     protected TextView autuacaoAr;
 
+
+    @Bind(R.id.detailsAutuacaoSectionSituacaoPostagemLinearLayout)
+    protected LinearLayout autuacaoSituacaoPostagemLinearLayout;
     @Bind(R.id.detailsAutuacaoSectionSituacaoPostagem)
     protected TextView autuacaoSituacaoPostagem;
 
@@ -99,31 +128,46 @@ public class DetailsActivity extends AppCompatActivity
     @Bind(R.id.detailsRecursoSectionSubtitle)
     protected TextView recursoSubtitle;
 
+
+    @Bind(R.id.detailsRecursoSectionProcessAndDateLinearLayout)
+    protected LinearLayout recursoProcessAndDateLinearLayout;
     @Bind(R.id.detailsRecursoSectionProcessAndDate)
     protected TextView recursoProcessAndDate;
 
+
     @Bind(R.id.detailsRecursoSectionSituationLinearLayout)
     protected LinearLayout recursoSituationLinerLayout;
-
     @Bind(R.id.detailsRecursoSectionSituation)
     protected TextView recursoSituation;
 
+
     // PENALIDADE_SECTION_XML
+    @Bind(R.id.detailsSectionPenalidadeNotificacaoLinearLayout)
+    protected LinearLayout penalidadeNotificacaoLinearLayout;
     @Bind(R.id.detailsSectionPenalidadeNotificacao)
     protected TextView penalidadeNotificacao;
 
+
+    @Bind(R.id.detailsSectionPenalidadeDateLinearLayout)
+    protected LinearLayout penalidadeDateLinearLayout;
     @Bind(R.id.detailsSectionPenalidadeDate)
     protected TextView penalidadeDate;
 
-    @Bind(R.id.detailsSectionPenalidadePostagemLinearLayout)
-    protected LinearLayout penalidadePostgemLinearLayout;
 
+    @Bind(R.id.detailsSectionPenalidadePostagemLinearLayout)
+    protected LinearLayout penalidadePostagemLinearLayout;
     @Bind(R.id.detailsSectionPenalidadePostagem)
     protected TextView penalidadeDataPostagem;
 
+
+    @Bind(R.id.detailsSectionPenalidadeARLinearLayout)
+    protected LinearLayout penalidadeArLinearLayout;
     @Bind(R.id.detailsSectionPenalidadeAR)
     protected TextView penalidadeAr;
 
+
+    @Bind(R.id.detailsSectionPenalidadeSituacaoPostagemLinearLayout)
+    protected LinearLayout penalidadeSituacaoPostagemLinearLayout;
     @Bind(R.id.detailsSectionPenalidadeSituacaoPostagem)
     protected TextView penalidadeSituacaoPostagem;
 
@@ -160,7 +204,6 @@ public class DetailsActivity extends AppCompatActivity
 
         Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.INTERSTITIAL | Appodeal.BANNER);
         Appodeal.show(this, Appodeal.BANNER_BOTTOM);
-        Appodeal.setTesting(true);
 
         ctx = this;
 
@@ -190,14 +233,41 @@ public class DetailsActivity extends AppCompatActivity
 
         local.setText(multa.getLocal());
 
-        infracao.setText(multa.getInfracao());
-        codDetran.setText(multa.getCodDetran());
+        if(multa.getInfracao() != null)
+        {
+            infracaoLinearLayout.setVisibility(View.VISIBLE);
+            infracao.setText(multa.getInfracao());
+        }
 
-        codInfracao.setText(multa.getCodInfracao());
-        type.setText(multa.getType());
+        if(multa.getCodDetran() != null)
+        {
+            CodigoDetranLinearLayout.setVisibility(View.VISIBLE);
+            codDetran.setText(multa.getCodDetran());
+        }
 
-        dateHour.setText(multa.getDataHoraInfracao());
-        status.setText(multa.getStatus());
+        if(multa.getCodInfracao() != null)
+        {
+            codInfracaoLinearLayout.setVisibility(View.VISIBLE);
+            codInfracao.setText(multa.getCodInfracao());
+        }
+
+        if(multa.getType() != null)
+        {
+            typeLinearLayout.setVisibility(View.VISIBLE);
+            type.setText(multa.getType());
+        }
+
+        if(multa.getDataHoraInfracao() != null)
+        {
+            dateHourLinearLayout.setVisibility(View.VISIBLE);
+            dateHour.setText(multa.getDataHoraInfracao());
+        }
+
+        if(multa.getStatus() != null)
+        {
+            statusLinearLayout.setVisibility(View.VISIBLE);
+            status.setText(multa.getStatus());
+        }
 
         if(multa.getVelocidadeAferida() != null && multa.getVelocidadeMax() != null)
         {
@@ -209,9 +279,17 @@ public class DetailsActivity extends AppCompatActivity
     
     private void fillAutuacaoUI(Multa multa)
     {
-        autuacaoNotificacao.setText(multa.getNotificacaoAutuacao());
+        if(multa.getNotificacaoAutuacao() != null)
+        {
+            autuacaoNotificacaoLinearLayout.setVisibility(View.VISIBLE);
+            autuacaoNotificacao.setText(multa.getNotificacaoAutuacao());
+        }
 
-        autuacaoDate.setText(multa.getDataAutuacao());
+        if(multa.getDataAutuacao() != null)
+        {
+            autuacaoDateLinearLayout.setVisibility(View.VISIBLE);
+            autuacaoDate.setText(multa.getDataAutuacao());
+        }
 
         if(multa.getPostagemAutuacao() != null)
         {
@@ -219,16 +297,33 @@ public class DetailsActivity extends AppCompatActivity
             autuacaoPostagem.setText(multa.getPostagemAutuacao());
         }
 
-        autuacaoAr.setText(multa.getNumeroARAutuacao());
+        if(multa.getNumeroARAutuacao() != null)
+        {
+            autuacaoArLinearLayout.setVisibility(View.VISIBLE);
+            autuacaoAr.setText(multa.getNumeroARAutuacao());
+        }
 
-        autuacaoSituacaoPostagem.setText(multa.getSituacaoARAutuacao());
+        if(multa.getSituacaoARAutuacao() != null)
+        {
+            autuacaoSituacaoPostagemLinearLayout.setVisibility(View.VISIBLE);
+            autuacaoSituacaoPostagem.setText(multa.getSituacaoARAutuacao());
+        }
     }
 
     private void fillRecursoUI(Multa multa)
     {
-        recursoSubtitle.setText(multa.getRecurso());
 
-        recursoProcessAndDate.setText(multa.getProcessoData());
+        if(multa.getRecurso() != null)
+        {
+            recursoSubtitle.setVisibility(View.VISIBLE);
+            recursoSubtitle.setText(multa.getRecurso());
+        }
+
+        if(multa.getProcessoData() != null)
+        {
+            recursoProcessAndDateLinearLayout.setVisibility(View.VISIBLE);
+            recursoProcessAndDate.setText(multa.getProcessoData());
+        }
 
         if (multa.getProcessoSituacao() != null)
         {
@@ -239,19 +334,35 @@ public class DetailsActivity extends AppCompatActivity
 
     private void fillPenalidadeUI(Multa multa)
     {
-        penalidadeNotificacao.setText(multa.getNotificacaoPenalidade());
+        if(multa.getNotificacaoPenalidade() != null)
+        {
+            penalidadeNotificacaoLinearLayout.setVisibility(View.VISIBLE);
+            penalidadeNotificacao.setText(multa.getNotificacaoPenalidade());
+        }
 
-        penalidadeDate.setText(multa.getDataPenalidade());
+        if(multa.getDataPenalidade() != null)
+        {
+            penalidadeDateLinearLayout.setVisibility(View.VISIBLE);
+            penalidadeDate.setText(multa.getDataPenalidade());
+        }
 
         if(multa.getPostagemPenalidade() != null)
         {
-            penalidadePostgemLinearLayout.setVisibility(View.VISIBLE);
+            penalidadePostagemLinearLayout.setVisibility(View.VISIBLE);
             penalidadeDataPostagem.setText(multa.getPostagemPenalidade());
         }
 
-        penalidadeAr.setText(multa.getNumeroARPenalidade());
+        if(multa.getNumeroARPenalidade() != null)
+        {
+            penalidadeArLinearLayout.setVisibility(View.VISIBLE);
+            penalidadeAr.setText(multa.getNumeroARPenalidade());
+        }
 
-        penalidadeSituacaoPostagem.setText(multa.getSituacaoARPenalidade());
+        if(multa.getSituacaoARPenalidade() != null)
+        {
+            penalidadeSituacaoPostagemLinearLayout.setVisibility(View.VISIBLE);
+            penalidadeSituacaoPostagem.setText(multa.getSituacaoARPenalidade());
+        }
     }
 
     private void fillPaymentUI(Multa multa)
@@ -298,20 +409,7 @@ public class DetailsActivity extends AppCompatActivity
             public boolean onQueryTextSubmit (String s)
             {
 
-                if (!ValidateUtils.isOnline(ctx))
-                {
-                    DialogInterface.OnClickListener button = new DialogInterface.OnClickListener()
-                    {
-                        public void onClick (DialogInterface dialog, int id)
-                        {
-                            dialog.dismiss();
-                        }
-                    };
-                    AlertDialog alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_connection), button);
-                    alertDialog.show();
-                    return false;
-                }
-                else if (!ValidateUtils.validatePlate(s))
+                if (!ValidateUtils.validatePlate(s))
                 {
                     DialogInterface.OnClickListener button = new DialogInterface.OnClickListener()
                     {

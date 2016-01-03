@@ -161,7 +161,11 @@
         <service android:enabled="true" android:name="com.inmobi.signals.activityrecognition.ActivityRecognitionManager" />
 
 
-
+        <service
+            android:name=".service.CacheService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
 
     </application>
 

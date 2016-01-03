@@ -17,9 +17,9 @@ import com.historicar.app.adapter.ResultAdapter;
 import com.historicar.app.bean.Multa;
 import com.historicar.app.connection.Connection;
 import com.historicar.app.contants.Constants;
+import com.historicar.app.service.CacheService;
 import com.historicar.app.util.EncodeUtils;
 
-import org.apache.commons.lang3.text.WordUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -106,7 +106,7 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
         Multa multa = new Multa();
 
         //DADOS DO VEÍCULO E INFRAÇÃO
-        multa.setType(item.get(3).text().contains("---") ? null : EncodeUtils.formatText(item.get(3).text().split(" ")[item.get(3).text().split(" ").length-1]));
+        multa.setType(item.get(3).text().contains("---") ? null : EncodeUtils.formatText(item.get(3).text().split(" ")[item.get(3).text().split(" ").length - 1]));
         multa.setInfracao(item.get(7).text().contains("---") ? null : EncodeUtils.formatText(item.get(7).text().split(" ")[item.get(7).text().split(" ").length - 1]));
         multa.setCodDetran(item.get(8).text().contains("---") ? null : EncodeUtils.formatter(item.get(8).text().split(" ")[item.get(8).text().split(" ").length - 1]));
         multa.setDataHoraInfracao(item.get(11).text().contains("---") ? null : EncodeUtils.formatter(item.get(11).text()).replace("DATA - HORA ", ""));
@@ -114,7 +114,15 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
         multa.setCodInfracao(item.get(13).text().contains("---") ? null : EncodeUtils.formatter(item.get(13).text().split(" ")[item.get(13).text().split(" ").length - 1]));
 
         String descricao = item.get(14).text().contains("---") ? null : EncodeUtils.formatter(item.get(14).text()).replace("DESCRIÇÃO DA INFRAÇÃO", "");
-        multa.setDescricao(WordUtils.capitalizeFully(descricao, new char[]{'.'}));
+        if(descricao != null)
+        {
+            descricao = EncodeUtils.replaceAll(descricao).toLowerCase().trim();
+            multa.setDescricao(Character.toUpperCase(descricao.charAt(0)) + descricao.substring(1));
+        }
+        else
+        {
+            multa.setDescricao(null);
+        }
 
         multa.setPontos(item.get(15).text().contains("---") ? null : EncodeUtils.formatter(item.get(15).text().split(" ")[item.get(15).text().split(" ").length - 1]));
         multa.setGravidade(item.get(16).text().contains("---") ? null : EncodeUtils.formatter(item.get(16).text().split(" ")[item.get(16).text().split(" ").length - 1]));
@@ -224,24 +232,35 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
     @Override
     protected List<Multa> doInBackground (String... params)
     {
-        List<Multa> multaList;
+        List<Multa> multaList = null;
 
         try
         {
             multaList = getMultas();
 
-            if(multaList == null)
+            if(multaList != null)
             {
-                multaList = recoverFromCache();
+                //Salva o resultado em cache
+                Intent it = new Intent(ctx, CacheService.class);
+                it.putExtra(Constants.MULTAS, new Gson().toJson(multaList));
+                it.putExtra(Constants.PLACA_KEY, placa);
+                ctx.startService(it);
             }
             else
             {
-                saveInCache(multaList);
+                multaList = recoverFromCache();
             }
         }
         catch (Exception e)
         {
-           multaList = recoverFromCache();
+            try
+            {
+                multaList = recoverFromCache();
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
         return multaList;
@@ -294,10 +313,5 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
             return Arrays.asList(new Gson().fromJson(json, Multa[].class));
         }
         return new ArrayList<>();
-    }
-
-    private void saveInCache(List<Multa> multaList)
-    {
-        PreferenceManager.getDefaultSharedPreferences(ctx).edit().putString(placa,new Gson().toJson(multaList)).commit();
     }
 }

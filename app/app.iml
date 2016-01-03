@@ -111,9 +111,8 @@
     <orderEntry type="library" exported="" name="chartboost-6.0.2" level="project" />
     <orderEntry type="library" exported="" name="applovin-6.1.4" level="project" />
     <orderEntry type="library" exported="" name="my-target-4.1.2" level="project" />
-    <orderEntry type="library" exported="" name="play-services-location-8.4.0" level="project" />
     <orderEntry type="library" exported="" name="appodeal-1.13.10" level="project" />
-    <orderEntry type="library" exported="" name="commons-lang3-3.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-location-8.4.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.2.0" level="project" />
     <orderEntry type="library" exported="" name="gson-2.3" level="project" />
     <orderEntry type="library" exported="" name="inmobi-5.0.1" level="project" />

@@ -145,11 +145,13 @@
 
                         <!--INFRAÇÃO-->
                         <LinearLayout
+                            android:id="@+id/detailsSectionCommonInfracaoLinearLayout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -169,11 +171,13 @@
 
                         <!--CODIGO DETRAN-->
                         <LinearLayout
+                            android:id="@+id/detailsSectionCommonCodigoDetranLinearLayout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -201,11 +205,13 @@
 
                         <!--CODIGO DA INFRACAO-->
                         <LinearLayout
+                            android:id="@+id/detailsSectionCommonCodInfracaoLinearLayout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -226,11 +232,13 @@
 
                         <!--TIPO-->
                         <LinearLayout
+                            android:id="@+id/detailsSectionCommonTypeLinearLayout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -259,11 +267,13 @@
 
                         <!--DATA E HORA-->
                         <LinearLayout
+                            android:id="@+id/detailsSectionCommonDateHourLinearLayout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -283,11 +293,13 @@
 
                         <!--STATUS-->
                         <LinearLayout
+                            android:id="@+id/detailsSectionCommonStatusLinearLayout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -313,9 +325,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:visibility="gone"
                         android:gravity="center_horizontal"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <!--VELOC AFERIDA-->
                         <LinearLayout

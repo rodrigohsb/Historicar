@@ -42,7 +42,6 @@ public class NoMultaActivity extends AppCompatActivity
 
         Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.INTERSTITIAL | Appodeal.BANNER);
         Appodeal.show(this, Appodeal.BANNER_BOTTOM);
-        Appodeal.setTesting(true);
 
         ctx = this;
 
@@ -65,7 +64,6 @@ public class NoMultaActivity extends AppCompatActivity
             @Override
             public boolean onQueryTextSubmit (String s)
             {
-
                 if (!ValidateUtils.isOnline(ctx))
                 {
                     DialogInterface.OnClickListener button = new DialogInterface.OnClickListener()

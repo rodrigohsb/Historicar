@@ -70,7 +70,6 @@ public class HomeActivity extends AppCompatActivity
 
         Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.INTERSTITIAL | Appodeal.BANNER);
         Appodeal.show(this, Appodeal.BANNER_BOTTOM);
-        Appodeal.setTesting(true);
 
         ctx = this;
 
@@ -216,20 +215,7 @@ public class HomeActivity extends AppCompatActivity
             public boolean onQueryTextSubmit (String s)
             {
 
-                if (!ValidateUtils.isOnline(ctx))
-                {
-                    DialogInterface.OnClickListener button = new DialogInterface.OnClickListener()
-                    {
-                        public void onClick (DialogInterface dialog, int id)
-                        {
-                            dialog.dismiss();
-                        }
-                    };
-                    alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_connection), button);
-                    alertDialog.show();
-                    return false;
-                }
-                else if (!ValidateUtils.validatePlate(s))
+                if (!ValidateUtils.validatePlate(s))
                 {
                     DialogInterface.OnClickListener button = new DialogInterface.OnClickListener()
                     {
@@ -302,24 +288,9 @@ public class HomeActivity extends AppCompatActivity
         @Override
         public void onItemClick (AdapterView<?> parent, View view, int position, long id)
         {
-            if (!ValidateUtils.isOnline(ctx))
-            {
-                DialogInterface.OnClickListener button = new DialogInterface.OnClickListener()
-                {
-                    public void onClick (DialogInterface dialog, int id)
-                    {
-                        dialog.dismiss();
-                    }
-                };
-                alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_connection), button);
-                alertDialog.show();
-            }
-            else
-            {
-                Intent myIntent = new Intent(ctx, ResultActivity.class);
-                myIntent.putExtra(Constants.PLACA_KEY, carros.get(position).getPlaca().replaceAll(" - ", ""));
-                startActivity(myIntent);
-            }
+            Intent myIntent = new Intent(ctx, ResultActivity.class);
+            myIntent.putExtra(Constants.PLACA_KEY, carros.get(position).getPlaca().replaceAll(" - ", ""));
+            startActivity(myIntent);
         }
     }
 

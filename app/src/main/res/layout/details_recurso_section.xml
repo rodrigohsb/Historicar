@@ -27,6 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="(Defesa Prévia / Real Infrator)"
+            android:visibility="gone"
             android:textSize="14sp"/>
     </LinearLayout>
 
@@ -57,9 +58,11 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/detailsRecursoSectionProcessAndDateLinearLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:visibility="gone"
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
 

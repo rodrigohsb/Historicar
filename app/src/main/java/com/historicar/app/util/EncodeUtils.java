@@ -42,4 +42,9 @@ public class EncodeUtils
         return formatter(s).replaceAll("\u00A0", "");
     }
 
+    public static String replaceAll(String s)
+    {
+        return s.replaceAll("MAXIMA", "MÁXIMA").replaceAll("ELETRONICA", "ELETRÔNICA").replaceAll("OBSERVANCIA", "OBSERVÂNCIA").replaceAll("SEGURANCA", "SEGURANÇA").replaceAll("HORARIO", "HORÁRIO").replaceAll("CRIANCA", "CRIANÇA").replaceAll("VEICULO", "VEÍCULO").replaceAll(" ATE ", " ATÉ ").replaceAll("CAO", "ÇÃO").replaceAll("PUBLICO", "PÚBLICO");
+    }
+
 }
