@@ -8,9 +8,12 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.historicar.app.R;
+import com.historicar.app.activity.CaptchaActivity;
 import com.historicar.app.activity.ErrorActivity;
 import com.historicar.app.activity.NoMultaActivity;
 import com.historicar.app.adapter.ResultAdapter;
@@ -34,21 +37,28 @@ import java.util.List;
 public class ParseAsync extends AsyncTask<String, String, List<Multa>>
 {
 
+    private static String TAG = ParseAsync.class.getName();
+
     private final Context ctx;
 
     private ProgressDialog dialog;
 
     private final String placa;
 
-    public ParseAsync (Context ctx, String placa)
+    private final String captcha;
+
+    private boolean isInvalidCode = false;
+
+    public ParseAsync (Context ctx, String placa, String captcha)
     {
         this.ctx = ctx;
         this.placa = placa;
+        this.captcha = captcha;
     }
 
     private List<Multa> getMultas ()
     {
-        Document doc = Connection.getContent(placa);
+        Document doc = Connection.getContent(placa,captcha);
 
         if (doc != null)
         {
@@ -57,6 +67,11 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
             if (!tables.isEmpty())
             {
                 return convertTablesToMultas(tables);
+            }
+            if(doc.select("div:contains(Favor refazer a consulta)") != null)
+            {
+                isInvalidCode = true;
+                return null;
             }
             return new ArrayList<>();
         }
@@ -106,14 +121,14 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
         Multa multa = new Multa();
 
         //DADOS DO VEÍCULO E INFRAÇÃO
-        multa.setType(item.get(3).text().contains("---") ? null : EncodeUtils.formatText(item.get(3).text().split(" ")[item.get(3).text().split(" ").length - 1]));
-        multa.setInfracao(item.get(7).text().contains("---") ? null : EncodeUtils.formatText(item.get(7).text().split(" ")[item.get(7).text().split(" ").length - 1]));
-        multa.setCodDetran(item.get(8).text().contains("---") ? null : EncodeUtils.formatter(item.get(8).text().split(" ")[item.get(8).text().split(" ").length - 1]));
-        multa.setDataHoraInfracao(item.get(11).text().contains("---") ? null : EncodeUtils.formatter(item.get(11).text()).replace("DATA - HORA ", ""));
-        multa.setLocal(item.get(12).text().contains("---") ? null : EncodeUtils.formatter(item.get(12).text()).replace("LOCAL ", ""));
-        multa.setCodInfracao(item.get(13).text().contains("---") ? null : EncodeUtils.formatter(item.get(13).text().split(" ")[item.get(13).text().split(" ").length - 1]));
+        multa.setType(item.get(5).text().contains("---") ? null : EncodeUtils.formatText(item.get(5).text().split(" ")[item.get(5).text().split(" ").length - 1]));
+        multa.setInfracao(item.get(9).text().contains("---") ? null : EncodeUtils.formatText(item.get(9).text().split(" ")[item.get(9).text().split(" ").length - 1]));
+        multa.setCodDetran(item.get(10).text().contains("---") ? null : EncodeUtils.formatter(item.get(10).text().split(" ")[item.get(10).text().split(" ").length - 1]));
+        multa.setDataHoraInfracao(item.get(13).text().contains("---") ? null : EncodeUtils.formatter(item.get(13).text()).replace("DATA - HORA ", ""));
+        multa.setLocal(item.get(14).text().contains("---") ? null : EncodeUtils.formatter(item.get(14).text()).replace("LOCAL ", ""));
+        multa.setCodInfracao(item.get(15).text().contains("---") ? null : EncodeUtils.formatter(item.get(15).text().split(" ")[item.get(15).text().split(" ").length - 1]));
 
-        String descricao = item.get(14).text().contains("---") ? null : EncodeUtils.formatter(item.get(14).text()).replace("DESCRIÇÃO DA INFRAÇÃO", "");
+        String descricao = item.get(16).text().contains("---") ? null : EncodeUtils.formatter(item.get(16).text()).replace("DESCRIÇÃO DA INFRAÇÃO", "");
         if(descricao != null)
         {
             descricao = EncodeUtils.replaceAll(descricao).toLowerCase().trim();
@@ -124,61 +139,61 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
             multa.setDescricao(null);
         }
 
-        multa.setPontos(item.get(15).text().contains("---") ? null : EncodeUtils.formatter(item.get(15).text().split(" ")[item.get(15).text().split(" ").length - 1]));
-        multa.setGravidade(item.get(16).text().contains("---") ? null : EncodeUtils.formatter(item.get(16).text().split(" ")[item.get(16).text().split(" ").length - 1]));
+        multa.setPontos(item.get(17).text().contains("---") ? null : EncodeUtils.formatter(item.get(17).text().split(" ")[item.get(17).text().split(" ").length - 1]));
+        multa.setGravidade(item.get(18).text().contains("---") ? null : EncodeUtils.formatter(item.get(18).text().split(" ")[item.get(18).text().split(" ").length - 1]));
 
-        if (item.get(17).text().contains("km/h"))
+        if (!item.get(19).text().contains("---"))
         {
-            String[] velocidade = EncodeUtils.formatter(item.get(17).text()).split(" ");
+            String[] velocidade = EncodeUtils.formatter(item.get(19).text()).split(" ");
             multa.setVelocidadeMax(velocidade[1].concat(" ").concat(velocidade[2]));
             multa.setVelocidadeAferida(velocidade[4].concat(" ").concat(velocidade[5]));
         }
 
-        multa.setStatus(item.get(20).text().contains("---") ? null : EncodeUtils.formatter(item.get(20).text().split("-")[item.get(20).text().split("-").length - 1]));
+        multa.setStatus(item.get(22).text().contains("---") ? null : EncodeUtils.formatter(item.get(22).text().split("-")[item.get(22).text().split("-").length - 1]));
 
         //AUTUAÇÃO
-        multa.setNotificacaoAutuacao(item.get(22).text().contains("---") ? null : EncodeUtils.formatter(item.get(22).text().split(" ")[item.get(22).text().split(" ").length - 1]));
-        multa.setDataAutuacao(item.get(23).text().contains("---") ? null : EncodeUtils.formatter(item.get(23).text().split(" ")[item.get(23).text().split(" ").length - 1]));
-        multa.setPostagemAutuacao(item.get(24).text().contains("---") ? null : EncodeUtils.formatter(item.get(24).text().split(" ")[item.get(24).text().split(" ").length - 1]));
-        multa.setNumeroARAutuacao(item.get(26).text().contains("---") ? null : EncodeUtils.formatter(item.get(26).text().split(" ")[item.get(26).text().split(" ").length - 1]));
-        multa.setSituacaoARAutuacao(item.get(27).text().contains("---") ? null : EncodeUtils.formatter(item.get(27).text().replace("SITUAÇÃO DO AR ","")));
+        multa.setNotificacaoAutuacao(item.get(24).text().contains("---") ? null : EncodeUtils.formatter(item.get(24).text().split(" ")[item.get(24).text().split(" ").length - 1]));
+        multa.setDataAutuacao(item.get(25).text().contains("---") ? null : EncodeUtils.formatter(item.get(25).text().split(" ")[item.get(25).text().split(" ").length - 1]));
+        multa.setPostagemAutuacao(item.get(26).text().contains("---") ? null : EncodeUtils.formatter(item.get(26).text().split(" ")[item.get(26).text().split(" ").length - 1]));
+        multa.setNumeroARAutuacao(item.get(28).text().contains("---") ? null : EncodeUtils.formatter(item.get(28).text().split(" ")[item.get(28).text().split(" ").length - 1]));
+        multa.setSituacaoARAutuacao(item.get(29).text().contains("---") ? null : EncodeUtils.formatter(item.get(29).text().replace("SITUAÇÃO DO AR ","")));
 
-        if(item.get(28).text() != null && item.get(28).text().contains("RECURSO"))
+        if(item.get(30).text() != null && item.get(30).text().contains("RECURSO"))
         {
             multa.setHasRecurso(true);
             //RECURSO
-            multa.setRecurso(EncodeUtils.formatter(item.get(28).text().replace("RECURSO ","")));
-            multa.setProcessoData(item.get(29).text().contains("---") ? null : EncodeUtils.formatter(item.get(29).text().replace("PROCESSO (REAL INFRATOR) - DATA ", "")));
-            multa.setProcessoSituacao(item.get(30).text().contains("---") ? null : EncodeUtils.formatter(item.get(30).text().replace("PROCESSO (REAL INFRATOR) - SITUAÇÃO ", "")));
+            multa.setRecurso(EncodeUtils.formatter(item.get(30).text().replace("RECURSO ","")));
+            multa.setProcessoData(item.get(31).text().contains("---") ? null : EncodeUtils.formatter(item.get(31).text().replace("PROCESSO (REAL INFRATOR) - DATA ", "")));
+            multa.setProcessoSituacao(item.get(32).text().contains("---") ? null : EncodeUtils.formatter(item.get(32).text().replace("PROCESSO (REAL INFRATOR) - SITUAÇÃO ", "")));
 
             if (multa.getType().equalsIgnoreCase("PENALIDADE"))
             {
 
                 multa.setHasPenalidade(true);
                 //PENALIDADE
-                multa.setNotificacaoPenalidade(item.get(32).text().contains("---") ? null : EncodeUtils.formatter(item.get(32).text().split(" ")[item.get(32).text().split(" ").length - 1]));
-                multa.setDataPenalidade(item.get(33).text().contains("---") ? null : item.get(33).text().contains("---") ? null : EncodeUtils.formatter(item.get(33).text().split(" ")[item.get(33).text().split(" ").length - 1]));
-                multa.setPostagemPenalidade(item.get(34).text().contains("---") ? null : EncodeUtils.formatter(item.get(34).text().split(" ")[item.get(34).text().split(" ").length - 1]));
-                multa.setNumeroARPenalidade(item.get(36).text().contains("---") ? null : EncodeUtils.formatter(item.get(36).text().split(" ")[item.get(36).text().split(" ").length - 1]));
-                multa.setSituacaoARPenalidade(item.get(37).text().contains("---") ? null : EncodeUtils.formatter(item.get(37).text().replace("SITUAÇÃO DA POSTAGEM ", "")));
+                multa.setNotificacaoPenalidade(item.get(34).text().contains("---") ? null : EncodeUtils.formatter(item.get(34).text().split(" ")[item.get(34).text().split(" ").length - 1]));
+                multa.setDataPenalidade(item.get(35).text().contains("---") ? null : item.get(35).text().contains("---") ? null : EncodeUtils.formatter(item.get(35).text().split(" ")[item.get(35).text().split(" ").length - 1]));
+                multa.setPostagemPenalidade(item.get(36).text().contains("---") ? null : EncodeUtils.formatter(item.get(36).text().split(" ")[item.get(36).text().split(" ").length - 1]));
+                multa.setNumeroARPenalidade(item.get(38).text().contains("---") ? null : EncodeUtils.formatter(item.get(38).text().split(" ")[item.get(38).text().split(" ").length - 1]));
+                multa.setSituacaoARPenalidade(item.get(39).text().contains("---") ? null : EncodeUtils.formatter(item.get(39).text().replace("SITUAÇÃO DA POSTAGEM ", "")));
 
 
                 //DADOS PARA PAGAMENTO
-                multa.setVencimento(item.get(39).text().contains("---") ? null : EncodeUtils.formatter(item.get(39).text().split(" ")[item.get(39).text().split(" ").length - 1]));
-                multa.setValorAPagar(item.get(40).text().contains("---") ? null : EncodeUtils.formatter(item.get(40).text().replace("VALOR ", "")));
-                multa.setDataDoPagamento(item.get(41).text().contains("---") ? null : EncodeUtils.formatter(item.get(41).text().split(" ")[item.get(41).text().split(" ").length-1]));
-                multa.setValorPago(item.get(42).text().contains("---") ? null : EncodeUtils.formatter(item.get(42).text().replace("VALOR PAGO ", "")));
-                multa.setSituacaoDoPagamento(item.get(43).text().contains("---") ? null : EncodeUtils.formatter(item.get(43).text().replace("SITUAÇÃO DO PAGAMENTO ", "")));
+                multa.setVencimento(item.get(41).text().contains("---") ? null : EncodeUtils.formatter(item.get(41).text().split(" ")[item.get(41).text().split(" ").length - 1]));
+                multa.setValorAPagar(item.get(42).text().contains("---") ? null : EncodeUtils.formatter(item.get(42).text().replace("VALOR ", "")));
+                multa.setDataDoPagamento(item.get(43).text().contains("---") ? null : EncodeUtils.formatter(item.get(43).text().split(" ")[item.get(43).text().split(" ").length-1]));
+                multa.setValorPago(item.get(44).text().contains("---") ? null : EncodeUtils.formatter(item.get(44).text().replace("VALOR PAGO ", "")));
+                multa.setSituacaoDoPagamento(item.get(45).text().contains("---") ? null : EncodeUtils.formatter(item.get(45).text().replace("SITUAÇÃO DO PAGAMENTO ", "")));
             }
             else
             {
                 multa.setHasPenalidade(false);
                 //DADOS PARA PAGAMENTO
-                multa.setVencimento(item.get(32).text().contains("---") ? null : EncodeUtils.formatter(item.get(32).text().split(" ")[item.get(32).text().split(" ").length - 1]));
-                multa.setValorAPagar(item.get(33).text().contains("---") ? null : EncodeUtils.formatter(item.get(33).text().replace("VALOR ", "")));
-                multa.setDataDoPagamento(item.get(34).text().contains("---") ? null : EncodeUtils.formatter(item.get(34).text().split(" ")[item.get(34).text().split(" ").length-1]));
-                multa.setValorPago(item.get(35).text().contains("---") ? null : EncodeUtils.formatter(item.get(35).text()).replace("VALOR PAGO ", ""));
-                multa.setSituacaoDoPagamento(item.get(36).text().contains("---") ? null : EncodeUtils.formatter(item.get(36).text().replace("SITUAÇÃO DO PAGAMENTO ", "")));
+                multa.setVencimento(item.get(34).text().contains("---") ? null : EncodeUtils.formatter(item.get(34).text().split(" ")[item.get(34).text().split(" ").length - 1]));
+                multa.setValorAPagar(item.get(35).text().contains("---") ? null : EncodeUtils.formatter(item.get(35).text().replace("VALOR ", "")));
+                multa.setDataDoPagamento(item.get(36).text().contains("---") ? null : EncodeUtils.formatter(item.get(36).text().split(" ")[item.get(36).text().split(" ").length-1]));
+                multa.setValorPago(item.get(37).text().contains("---") ? null : EncodeUtils.formatter(item.get(37).text()).replace("VALOR PAGO ", ""));
+                multa.setSituacaoDoPagamento(item.get(38).text().contains("---") ? null : EncodeUtils.formatter(item.get(38).text().replace("SITUAÇÃO DO PAGAMENTO ", "")));
             }
         }
         else
@@ -188,32 +203,32 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
             if (multa.getType().equalsIgnoreCase("PENALIDADE"))
             {
                 //PENALIDADE
-                multa.setNotificacaoPenalidade(item.get(29).text().contains("---") ? null : EncodeUtils.formatter(item.get(29).text().split(" ")[item.get(29).text().split(" ").length - 1]));
-                multa.setDataPenalidade(item.get(30).text().contains("---") ? null : EncodeUtils.formatter(item.get(30).text().split(" ")[item.get(30).text().split(" ").length - 1]));
-                multa.setPostagemPenalidade(item.get(31).text().contains("---") ? null : EncodeUtils.formatter(item.get(31).text().split(" ")[item.get(31).text().split(" ").length - 1]));
+                multa.setNotificacaoPenalidade(item.get(31).text().contains("---") ? null : EncodeUtils.formatter(item.get(31).text().split(" ")[item.get(31).text().split(" ").length - 1]));
+                multa.setDataPenalidade(item.get(32).text().contains("---") ? null : EncodeUtils.formatter(item.get(32).text().split(" ")[item.get(32).text().split(" ").length - 1]));
+                multa.setPostagemPenalidade(item.get(33).text().contains("---") ? null : EncodeUtils.formatter(item.get(33).text().split(" ")[item.get(33).text().split(" ").length - 1]));
 
-                if(!item.get(33).text().contains("LOTE"))
+                if(!item.get(35).text().contains("LOTE"))
                 {
-                    multa.setNumeroARPenalidade(item.get(33).text().contains("---") ? null : EncodeUtils.formatter(item.get(33).text().split(" ")[item.get(33).text().split(" ").length - 1]));
+                    multa.setNumeroARPenalidade(item.get(35).text().contains("---") ? null : EncodeUtils.formatter(item.get(35).text().split(" ")[item.get(35).text().split(" ").length - 1]));
                 }
-                multa.setSituacaoARPenalidade(item.get(34).text().contains("---") ? null : EncodeUtils.formatter(item.get(34).text()).replace("SITUAÇÃO DA POSTAGEM ", ""));
+                multa.setSituacaoARPenalidade(item.get(36).text().contains("---") ? null : EncodeUtils.formatter(item.get(36).text()).replace("SITUAÇÃO DA POSTAGEM ", ""));
 
 
                 //DADOS PARA PAGAMENTO
-                multa.setVencimento(item.get(36).text().contains("---") ? null : EncodeUtils.formatter(item.get(36).text().split(" ")[item.get(36).text().split(" ").length - 1]));
-                multa.setValorAPagar(item.get(37).text().contains("---") ? null : EncodeUtils.formatter(item.get(37).text().replace("VALOR ", "")));
-                multa.setDataDoPagamento(item.get(38).text().contains("---") ? null : EncodeUtils.formatter(item.get(38).text().split(" ")[item.get(38).text().split(" ").length - 1]));
-                multa.setValorPago(item.get(39).text().contains("---") ? null : EncodeUtils.formatter(item.get(39).text().replace("VALOR PAGO ", "")));
-                multa.setSituacaoDoPagamento(item.get(40).text().contains("---") ? null : EncodeUtils.formatter(item.get(40).text()).replace("SITUAÇÃO DO PAGAMENTO ",""));
+                multa.setVencimento(item.get(38).text().contains("---") ? null : EncodeUtils.formatter(item.get(38).text().split(" ")[item.get(38).text().split(" ").length - 1]));
+                multa.setValorAPagar(item.get(39).text().contains("---") ? null : EncodeUtils.formatter(item.get(39).text().replace("VALOR ", "")));
+                multa.setDataDoPagamento(item.get(40).text().contains("---") ? null : EncodeUtils.formatter(item.get(40).text().split(" ")[item.get(40).text().split(" ").length - 1]));
+                multa.setValorPago(item.get(41).text().contains("---") ? null : EncodeUtils.formatter(item.get(41).text().replace("VALOR PAGO ", "")));
+                multa.setSituacaoDoPagamento(item.get(42).text().contains("---") ? null : EncodeUtils.formatter(item.get(42).text()).replace("SITUAÇÃO DO PAGAMENTO ",""));
             }
             else
             {
                 //DADOS PARA PAGAMENTO
-                multa.setVencimento(item.get(29).text().contains("---") ? null : EncodeUtils.formatter(item.get(29).text().split(" ")[item.get(29).text().split(" ").length - 1]));
-                multa.setValorAPagar(item.get(30).text().contains("---") ? null : EncodeUtils.formatter(item.get(30).text().replace("VALOR ", "")));
-                multa.setDataDoPagamento(item.get(31).text().contains("---") ? null : EncodeUtils.formatter(item.get(31).text().split(" ")[item.get(31).text().split(" ").length - 1]));
-                multa.setValorPago(item.get(32).text().contains("---") ? null : EncodeUtils.formatter(item.get(32).text().replace("VALOR PAGO ", "")));
-                multa.setSituacaoDoPagamento(item.get(33).text().contains("---") ? null : EncodeUtils.formatter(item.get(33).text()).replace("SITUAÇÃO DO PAGAMENTO ",""));
+                multa.setVencimento(item.get(31).text().contains("---") ? null : EncodeUtils.formatter(item.get(31).text().split(" ")[item.get(31).text().split(" ").length - 1]));
+                multa.setValorAPagar(item.get(32).text().contains("---") ? null : EncodeUtils.formatter(item.get(32).text().replace("VALOR ", "")));
+                multa.setDataDoPagamento(item.get(33).text().contains("---") ? null : EncodeUtils.formatter(item.get(33).text().split(" ")[item.get(33).text().split(" ").length - 1]));
+                multa.setValorPago(item.get(34).text().contains("---") ? null : EncodeUtils.formatter(item.get(34).text().replace("VALOR PAGO ", "")));
+                multa.setSituacaoDoPagamento(item.get(35).text().contains("---") ? null : EncodeUtils.formatter(item.get(35).text()).replace("SITUAÇÃO DO PAGAMENTO ",""));
             }
         }
         return multa;
@@ -248,14 +263,14 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
             }
             else
             {
-                multaList = recoverFromCache();
+//                multaList = recoverFromCache();
             }
         }
         catch (Exception e)
         {
             try
             {
-                multaList = recoverFromCache();
+//                multaList = recoverFromCache();
             }
             catch (Exception ex)
             {
@@ -293,6 +308,16 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
                 ctx.startActivity(intent);
                 ((Activity) ctx).finish();
             }
+        }
+        else if(isInvalidCode)
+        {
+
+            Toast.makeText(ctx, "Código inválido!", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(ctx, CaptchaActivity.class);
+            intent.putExtra(Constants.PLACA_KEY, placa);
+            ctx.startActivity(intent);
+            ((Activity) ctx).finish();
         }
         else
         {

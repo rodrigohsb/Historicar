@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.appodeal.ads.Appodeal;
@@ -124,7 +125,11 @@ public class DetailsActivity extends AppCompatActivity
     protected TextView autuacaoSituacaoPostagem;
 
 
+    
     // RECURSO_SECTION_XML
+    @Bind(R.id.details_recurso_section)
+    RelativeLayout recursoSection;
+
     @Bind(R.id.detailsRecursoSectionSubtitle)
     protected TextView recursoSubtitle;
 
@@ -141,7 +146,12 @@ public class DetailsActivity extends AppCompatActivity
     protected TextView recursoSituation;
 
 
+
     // PENALIDADE_SECTION_XML
+    @Bind(R.id.details_penalidade_section)
+    RelativeLayout penalidadeSection;
+
+
     @Bind(R.id.detailsSectionPenalidadeNotificacaoLinearLayout)
     protected LinearLayout penalidadeNotificacaoLinearLayout;
     @Bind(R.id.detailsSectionPenalidadeNotificacao)
@@ -313,6 +323,8 @@ public class DetailsActivity extends AppCompatActivity
     private void fillRecursoUI(Multa multa)
     {
 
+        recursoSection.setVisibility(View.VISIBLE);
+
         if(multa.getRecurso() != null)
         {
             recursoSubtitle.setVisibility(View.VISIBLE);
@@ -334,6 +346,9 @@ public class DetailsActivity extends AppCompatActivity
 
     private void fillPenalidadeUI(Multa multa)
     {
+
+        penalidadeSection.setVisibility(View.VISIBLE);
+
         if(multa.getNotificacaoPenalidade() != null)
         {
             penalidadeNotificacaoLinearLayout.setVisibility(View.VISIBLE);
@@ -429,7 +444,7 @@ public class DetailsActivity extends AppCompatActivity
                     imm.hideSoftInputFromWindow(DetailsActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 
-                Intent myIntent = new Intent(ctx, ResultActivity.class);
+                Intent myIntent = new Intent(ctx, CaptchaActivity.class);
                 myIntent.putExtra(Constants.PLACA_KEY, s);
                 startActivity(myIntent);
                 finish();

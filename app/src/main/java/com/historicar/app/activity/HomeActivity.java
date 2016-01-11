@@ -235,7 +235,7 @@ public class HomeActivity extends AppCompatActivity
                     imm.hideSoftInputFromWindow(HomeActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 
-                Intent myIntent = new Intent(ctx, ResultActivity.class);
+                Intent myIntent = new Intent(ctx, CaptchaActivity.class);
                 myIntent.putExtra(Constants.PLACA_KEY, s);
                 startActivity(myIntent);
                 return true;
@@ -288,7 +288,7 @@ public class HomeActivity extends AppCompatActivity
         @Override
         public void onItemClick (AdapterView<?> parent, View view, int position, long id)
         {
-            Intent myIntent = new Intent(ctx, ResultActivity.class);
+            Intent myIntent = new Intent(ctx, CaptchaActivity.class);
             myIntent.putExtra(Constants.PLACA_KEY, carros.get(position).getPlaca().replaceAll(" - ", ""));
             startActivity(myIntent);
         }

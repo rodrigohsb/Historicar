@@ -97,7 +97,7 @@ public class NoMultaActivity extends AppCompatActivity
                     imm.hideSoftInputFromWindow(NoMultaActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 
-                Intent myIntent = new Intent(ctx, ResultActivity.class);
+                Intent myIntent = new Intent(ctx, CaptchaActivity.class);
                 myIntent.putExtra(Constants.PLACA_KEY, s);
                 startActivity(myIntent);
                 finish();

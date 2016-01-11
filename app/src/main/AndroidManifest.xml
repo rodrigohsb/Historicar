@@ -50,6 +50,9 @@
             android:name=".activity.AboutActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".activity.CaptchaActivity"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".activity.InsertOrEditActivity"
             android:screenOrientation="portrait"/>
