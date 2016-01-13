@@ -21,47 +21,31 @@ public class Connection
 
     private static String COOKIE;
 
-    public static Document getContent (String placa, String captcha)
+    public static Document getContent (String placa, String captcha) throws IOException
     {
 
-        int i = 0;
-
-        while (i < Constants.RETRIES)
-        {
-
-            try
-            {
-                return Jsoup.connect(Constants.TICKET_ULR)
-                        .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
-                        .header("Accept-Encoding", "gzip, deflate")
-                        .header("Accept-Language", "pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4,es;q=0.2,de;q=0.2")
-                        .header("Cache-Control", "max-age=0")
-                        .header("Connection","keep-alive")
-                        .header("Cookie", COOKIE)
-                        .header("Host", "www2.rio.rj.gov.br")
-                        .header("Referer","http://www2.rio.rj.gov.br/multas/index.asp")
-                        .header("User-Agent",Constants.USER_AGENT)
-                        .header("Content-Length","81")
-                        .header("Content-Type", "application/x-www-form-urlencoded")
-                        .header("Origin", "http://www2.rio.rj.gov.br")
-                        .header("Upgrade-Insecure-Requests","1")
-                        .data(Constants.PLACA_KEY, placa)
-                        .data("txtCaptcha", captcha)
-                        .data("dtinicial", "")
-                        .data("dtfinal", "")
-                        .data("filtro", "T")
-                        .data("bt_Consultar", "Consultar")
-                        .userAgent(Constants.USER_AGENT)
-                        .timeout(Constants.TIME_OUT).post();
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-            i++;
-        }
-
-        return null;
+        return Jsoup.connect(Constants.TICKET_ULR)
+                .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+                .header("Accept-Encoding", "gzip, deflate")
+                .header("Accept-Language", "pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4,es;q=0.2,de;q=0.2")
+                .header("Cache-Control", "max-age=0")
+                .header("Connection", "keep-alive")
+                .header("Cookie", COOKIE)
+                .header("Host", "www2.rio.rj.gov.br")
+                .header("Referer", "http://www2.rio.rj.gov.br/multas/index.asp")
+                .header("User-Agent", Constants.USER_AGENT)
+                .header("Content-Length", "81")
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .header("Origin", "http://www2.rio.rj.gov.br")
+                .header("Upgrade-Insecure-Requests", "1")
+                .data(Constants.PLACA_KEY, placa)
+                .data("txtCaptcha", captcha)
+                .data("dtinicial", "")
+                .data("dtfinal", "")
+                .data("filtro", "T")
+                .data("bt_Consultar", "Consultar")
+                .userAgent(Constants.USER_AGENT)
+                .timeout(Constants.TIME_OUT).post();
     }
 
     public static Drawable getCaptcha()

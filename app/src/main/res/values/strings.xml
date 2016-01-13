@@ -46,4 +46,8 @@
 
     <string name="appodeal_key">956e7c37b94eca6578c05d461500d0daaeea94463c52ddbd</string>
 
+
+    <string name="snackbar_singular">Foi encontrada %s multa.</string>
+    <string name="snackbar_plural">Foram encontradas %s multas.</string>
+
 </resources>

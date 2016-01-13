@@ -4,18 +4,21 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appodeal.ads.Appodeal;
+import com.chartboost.sdk.Model.a;
 import com.google.gson.Gson;
 import com.historicar.app.R;
 import com.historicar.app.activity.CaptchaActivity;
@@ -32,6 +35,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -54,6 +58,8 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
 
     private boolean isInvalidCode = false;
 
+    private boolean hasError = false;
+
     public ParseAsync (Context ctx, String placa, String captcha)
     {
         this.ctx = ctx;
@@ -63,25 +69,45 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
 
     private List<Multa> getMultas ()
     {
-        Document doc = Connection.getContent(placa,captcha);
-
-        if (doc != null)
+        Document doc;
+        try
         {
-            Elements tables = doc.select(".Section1 .MsoNormalTable");
+            doc = Connection.getContent(placa, captcha);
 
-            if (!tables.isEmpty())
+            if (doc != null)
             {
-                return convertTablesToMultas(tables);
-            }
+                Elements tables = doc.select(".Section1 .MsoNormalTable");
 
-            Elements elements = doc.select("div:contains(Favor refazer a consulta)");
+                if (!tables.isEmpty())
+                {
+                    Log.d(TAG,"A busca para a placa ["+ placa + "] e o captcha [" + captcha + "] retornou [" + tables.size() + "] multas");
+                    return convertTablesToMultas(tables);
+                }
 
-            if(elements != null && elements.size() > 0)
-            {
-                isInvalidCode = true;
-                return null;
+                Elements elements = doc.select("div:contains(Favor refazer a consulta)");
+
+                if(elements != null && elements.size() > 0)
+                {
+                    Log.d(TAG,"A busca para a placa ["+ placa + "] e o captcha [" + captcha + "] retornou captcha inválido");
+                    isInvalidCode = true;
+                    return null;
+                }
+
+                Log.d(TAG,"A busca para a placa ["+ placa + "] e o captcha [" + captcha + "] nao retornou nenhuma multa");
+                return new ArrayList<>();
             }
-            return new ArrayList<>();
+        }
+        catch (SocketTimeoutException stex)
+        {
+            Log.d(TAG,"A busca para a placa ["+ placa + "] e o captcha [" + captcha + "] retornou [" + stex.getMessage() + "]");
+
+            hasError = true;
+            stex.printStackTrace();
+        }
+        catch (Exception ex)
+        {
+            Log.d(TAG,"A busca para a placa ["+ placa + "] e o captcha [" + captcha + "] retornou [" + ex.getMessage() + "]");
+            ex.printStackTrace();
         }
         return null;
     }
@@ -128,9 +154,13 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
 
         Multa multa = new Multa();
 
+        String infracao = item.get(9).text().contains("---") ? null : EncodeUtils.formatText(item.get(9).text().split(" ")[item.get(9).text().split(" ").length - 1]);
+
+        Log.d(TAG, "Convertendo a infraçao [" + infracao + "]");
+
         //DADOS DO VEÍCULO E INFRAÇÃO
         multa.setType(item.get(5).text().contains("---") ? null : EncodeUtils.formatText(item.get(5).text().split(" ")[item.get(5).text().split(" ").length - 1]));
-        multa.setInfracao(item.get(9).text().contains("---") ? null : EncodeUtils.formatText(item.get(9).text().split(" ")[item.get(9).text().split(" ").length - 1]));
+        multa.setInfracao(infracao);
         multa.setCodDetran(item.get(10).text().contains("---") ? null : EncodeUtils.formatter(item.get(10).text().split(" ")[item.get(10).text().split(" ").length - 1]));
         multa.setDataHoraInfracao(item.get(13).text().contains("---") ? null : EncodeUtils.formatter(item.get(13).text()).replace("DATA - HORA ", ""));
         multa.setLocal(item.get(14).text().contains("---") ? null : EncodeUtils.formatter(item.get(14).text()).replace("LOCAL ", ""));
@@ -239,6 +269,8 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
                 multa.setSituacaoDoPagamento(item.get(35).text().contains("---") ? null : EncodeUtils.formatter(item.get(35).text()).replace("SITUAÇÃO DO PAGAMENTO ",""));
             }
         }
+
+        Log.d(TAG, "Infraçao [" + infracao + "] convertida com sucesso");
         return multa;
     }
 
@@ -259,6 +291,8 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
 
         try
         {
+            Log.d(TAG,"Buscando o conteudo o site com a placa ["+ placa + "] e o captcha [" + captcha + "]");
+
             multaList = getMultas();
 
             if(multaList != null)
@@ -294,67 +328,90 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
     {
         super.onPostExecute(multaList);
 
+        dialog.dismiss();
+
+        Class<?> cls;
+
         if (multaList != null)
         {
             if (!multaList.isEmpty())
             {
-                Appodeal.hide(((Activity) ctx), Appodeal.BANNER_BOTTOM);
-
-                RecyclerView mRecyclerView = (RecyclerView) ((Activity) ctx).findViewById(R.id.recyclerView);
-
-                mRecyclerView.setHasFixedSize(true);
-
-                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(ctx);
-                mRecyclerView.setLayoutManager(mLayoutManager);
-
-                RecyclerView.Adapter mAdapter = new ResultAdapter(multaList, ctx);
-                mRecyclerView.setAdapter(mAdapter);
-
-                CoordinatorLayout coordinatorLayout = (CoordinatorLayout)((Activity) ctx).findViewById(R.id.snackbarlocation);
-                Snackbar snackbar = Snackbar.make(coordinatorLayout, "Foram encontradas " + multaList.size() + " multas.", Snackbar.LENGTH_LONG);
-
-                View sbView = snackbar.getView();
-                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                textView.setTextColor(ctx.getResources().getColor(R.color.actionbar_background));
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
-                snackbar.show();
-
-                snackbar.setCallback(new Snackbar.Callback()
-                {
-                    @Override
-                    public void onDismissed (Snackbar snackbar, int event)
-                    {
-                        Appodeal.show(((Activity) ctx), Appodeal.BANNER_BOTTOM);
-                    }
-                });
+                drawList(multaList);
+                return;
             }
-            else
-            {
-                Intent intent = new Intent(ctx, NoMultaActivity.class);
-                intent.putExtra(Constants.PLACA_KEY, placa);
-                ctx.startActivity(intent);
-                ((Activity) ctx).finish();
-            }
+
+            Log.d(TAG,"Mostrando NoMultaActivity");
+            cls = NoMultaActivity.class;
+
+        }
+        else if(hasError)
+        {
+            Log.d(TAG,"Mostrando ErrorActivity");
+            cls = ErrorActivity.class;
         }
         else if(isInvalidCode)
         {
-
+            Log.d(TAG,"Mostrando CaptchaActivity");
             Toast.makeText(ctx, "Código inválido!", Toast.LENGTH_SHORT).show();
-
-            Intent intent = new Intent(ctx, CaptchaActivity.class);
-            intent.putExtra(Constants.PLACA_KEY, placa);
-            ctx.startActivity(intent);
-            ((Activity) ctx).finish();
+            cls = CaptchaActivity.class;
         }
         else
         {
-            Intent intent = new Intent(ctx, ErrorActivity.class);
-            intent.putExtra(Constants.PLACA_KEY, placa);
-            ctx.startActivity(intent);
-            ((Activity) ctx).finish();
+            Log.d(TAG,"Mostrando CaptchaActivity");
+            Toast.makeText(ctx, "Problemas ao efetuar a busca. Por favor, tente novamente!", Toast.LENGTH_SHORT).show();
+            cls = CaptchaActivity.class;
         }
 
-        dialog.dismiss();
+        Intent intent = new Intent(ctx, cls);
+        intent.putExtra(Constants.PLACA_KEY, placa);
+        ctx.startActivity(intent);
+        ((Activity) ctx).finish();
+    }
+
+    private void drawList(List<Multa> multaList)
+    {
+        Appodeal.hide(((Activity) ctx), Appodeal.BANNER_BOTTOM);
+
+        RecyclerView mRecyclerView = (RecyclerView) ((Activity) ctx).findViewById(R.id.recyclerView);
+
+        mRecyclerView.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(ctx);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        RecyclerView.Adapter mAdapter = new ResultAdapter(multaList, ctx);
+        mRecyclerView.setAdapter(mAdapter);
+
+        CoordinatorLayout coordinatorLayout = (CoordinatorLayout)((Activity) ctx).findViewById(R.id.snackbarlocation);
+
+        Snackbar snackbar;
+
+        if(multaList.size() == 1)
+        {
+            snackbar = Snackbar.make(coordinatorLayout, ctx.getString(R.string.snackbar_singular, multaList.size()), Snackbar.LENGTH_LONG);
+        }
+        else
+        {
+            snackbar = Snackbar.make(coordinatorLayout, ctx.getString(R.string.snackbar_plural, multaList.size()), Snackbar.LENGTH_LONG);
+        }
+
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+
+        textView.setTypeface(null, Typeface.BOLD);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        textView.setTextColor(ctx.getResources().getColor(android.R.color.white));
+
+        snackbar.show();
+
+        snackbar.setCallback(new Snackbar.Callback()
+        {
+            @Override
+            public void onDismissed (Snackbar snackbar, int event)
+            {
+                Appodeal.show(((Activity) ctx), Appodeal.BANNER_BOTTOM);
+            }
+        });
     }
 
     private List<Multa> recoverFromCache()
