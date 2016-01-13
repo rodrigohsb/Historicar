@@ -6,11 +6,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.util.TypedValue;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appodeal.ads.Appodeal;
 import com.google.gson.Gson;
 import com.historicar.app.R;
 import com.historicar.app.activity.CaptchaActivity;
@@ -290,6 +295,8 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
         {
             if (!multaList.isEmpty())
             {
+                Appodeal.hide(((Activity) ctx), Appodeal.BANNER_BOTTOM);
+
                 RecyclerView mRecyclerView = (RecyclerView) ((Activity) ctx).findViewById(R.id.recyclerView);
 
                 mRecyclerView.setHasFixedSize(true);
@@ -300,6 +307,23 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
                 RecyclerView.Adapter mAdapter = new ResultAdapter(multaList, ctx);
                 mRecyclerView.setAdapter(mAdapter);
 
+                CoordinatorLayout coordinatorLayout = (CoordinatorLayout)((Activity) ctx).findViewById(R.id.snackbarlocation);
+                Snackbar snackbar = Snackbar.make(coordinatorLayout, "Foram encontradas " + multaList.size() + " multas.", Snackbar.LENGTH_LONG);
+
+                View sbView = snackbar.getView();
+                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                textView.setTextColor(ctx.getResources().getColor(R.color.actionbar_background));
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
+                snackbar.show();
+
+                snackbar.setCallback(new Snackbar.Callback()
+                {
+                    @Override
+                    public void onDismissed (Snackbar snackbar, int event)
+                    {
+                        Appodeal.show(((Activity) ctx), Appodeal.BANNER_BOTTOM);
+                    }
+                });
             }
             else
             {
