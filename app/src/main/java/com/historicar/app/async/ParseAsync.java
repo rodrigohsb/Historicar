@@ -73,7 +73,10 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
             {
                 return convertTablesToMultas(tables);
             }
-            if(doc.select("div:contains(Favor refazer a consulta)") != null)
+
+            Elements elements = doc.select("div:contains(Favor refazer a consulta)");
+
+            if(elements != null && elements.size() > 0)
             {
                 isInvalidCode = true;
                 return null;
