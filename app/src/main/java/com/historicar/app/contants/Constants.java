@@ -12,8 +12,6 @@ public class Constants
 
     public static final String MULTA = "multa";
 
-    public static final String MULTAS = "multas";
-
     public static final String OK = "OK";
 
     public static final String YES = "Sim";
@@ -28,9 +26,11 @@ public class Constants
 
 
 
-    public static final int TIME_OUT = 10000;
+    public static final int TIME_OUT = 20000;
 
     public static final int RETRIES = 3;
+
+    public static String COOKIE;
 
     public static final String COOKIE_ULR = "http://www2.rio.rj.gov.br/multas/index.asp";
 

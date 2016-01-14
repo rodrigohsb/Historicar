@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,8 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appodeal.ads.Appodeal;
-import com.chartboost.sdk.Model.a;
-import com.google.gson.Gson;
 import com.historicar.app.R;
 import com.historicar.app.activity.CaptchaActivity;
 import com.historicar.app.activity.ErrorActivity;
@@ -28,7 +25,6 @@ import com.historicar.app.adapter.ResultAdapter;
 import com.historicar.app.bean.Multa;
 import com.historicar.app.connection.Connection;
 import com.historicar.app.contants.Constants;
-import com.historicar.app.service.CacheService;
 import com.historicar.app.util.EncodeUtils;
 
 import org.jsoup.nodes.Document;
@@ -37,7 +33,6 @@ import org.jsoup.select.Elements;
 
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -46,7 +41,7 @@ import java.util.List;
 public class ParseAsync extends AsyncTask<String, String, List<Multa>>
 {
 
-    private static String TAG = ParseAsync.class.getName();
+    private static final String TAG = ParseAsync.class.getName();
 
     private final Context ctx;
 
@@ -76,6 +71,7 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
 
             if (doc != null)
             {
+
                 Elements tables = doc.select(".Section1 .MsoNormalTable");
 
                 if (!tables.isEmpty())
@@ -156,8 +152,6 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
 
         String infracao = item.get(9).text().contains("---") ? null : EncodeUtils.formatText(item.get(9).text().split(" ")[item.get(9).text().split(" ").length - 1]);
 
-        Log.d(TAG, "Convertendo a infraçao [" + infracao + "]");
-
         //DADOS DO VEÍCULO E INFRAÇÃO
         multa.setType(item.get(5).text().contains("---") ? null : EncodeUtils.formatText(item.get(5).text().split(" ")[item.get(5).text().split(" ").length - 1]));
         multa.setInfracao(infracao);
@@ -194,7 +188,7 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
         multa.setDataAutuacao(item.get(25).text().contains("---") ? null : EncodeUtils.formatter(item.get(25).text().split(" ")[item.get(25).text().split(" ").length - 1]));
         multa.setPostagemAutuacao(item.get(26).text().contains("---") ? null : EncodeUtils.formatter(item.get(26).text().split(" ")[item.get(26).text().split(" ").length - 1]));
         multa.setNumeroARAutuacao(item.get(28).text().contains("---") ? null : EncodeUtils.formatter(item.get(28).text().split(" ")[item.get(28).text().split(" ").length - 1]));
-        multa.setSituacaoARAutuacao(item.get(29).text().contains("---") ? null : EncodeUtils.formatter(item.get(29).text().replace("SITUAÇÃO DO AR ","")));
+        multa.setSituacaoARAutuacao(item.get(29).text().contains("---") ? null : EncodeUtils.formatter(item.get(29).text().replace("SITUAÇÃO DO AR ", "")));
 
         if(item.get(30).text() != null && item.get(30).text().contains("RECURSO"))
         {
@@ -270,7 +264,6 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
             }
         }
 
-        Log.d(TAG, "Infraçao [" + infracao + "] convertida com sucesso");
         return multa;
     }
 
@@ -287,40 +280,16 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
     @Override
     protected List<Multa> doInBackground (String... params)
     {
-        List<Multa> multaList = null;
-
         try
         {
-            Log.d(TAG,"Buscando o conteudo o site com a placa ["+ placa + "] e o captcha [" + captcha + "]");
-
-            multaList = getMultas();
-
-            if(multaList != null)
-            {
-                //Salva o resultado em cache
-                Intent it = new Intent(ctx, CacheService.class);
-                it.putExtra(Constants.MULTAS, new Gson().toJson(multaList));
-                it.putExtra(Constants.PLACA_KEY, placa);
-                ctx.startService(it);
-            }
-            else
-            {
-//                multaList = recoverFromCache();
-            }
+            Log.d(TAG, "Buscando o conteudo o site com a placa [" + placa + "] e o captcha [" + captcha + "]");
+            return getMultas();
         }
         catch (Exception e)
         {
-            try
-            {
-//                multaList = recoverFromCache();
-            }
-            catch (Exception ex)
-            {
-
-            }
+            Log.d(TAG,"Problemas ao buscar o conteudo o site com a placa ["+ placa + "] e o captcha [" + captcha + "]. Message [" + e.getMessage() + "]");
+            return null;
         }
-
-        return multaList;
     }
 
     @Override
@@ -339,25 +308,19 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
                 drawList(multaList);
                 return;
             }
-
-            Log.d(TAG,"Mostrando NoMultaActivity");
             cls = NoMultaActivity.class;
-
         }
         else if(hasError)
         {
-            Log.d(TAG,"Mostrando ErrorActivity");
             cls = ErrorActivity.class;
         }
         else if(isInvalidCode)
         {
-            Log.d(TAG,"Mostrando CaptchaActivity");
             Toast.makeText(ctx, "Código inválido!", Toast.LENGTH_SHORT).show();
             cls = CaptchaActivity.class;
         }
         else
         {
-            Log.d(TAG,"Mostrando CaptchaActivity");
             Toast.makeText(ctx, "Problemas ao efetuar a busca. Por favor, tente novamente!", Toast.LENGTH_SHORT).show();
             cls = CaptchaActivity.class;
         }
@@ -368,6 +331,10 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
         ((Activity) ctx).finish();
     }
 
+    /**
+     *
+     * @param multaList
+     */
     private void drawList(List<Multa> multaList)
     {
         Appodeal.hide(((Activity) ctx), Appodeal.BANNER_BOTTOM);
@@ -414,13 +381,4 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
         });
     }
 
-    private List<Multa> recoverFromCache()
-    {
-        String json = PreferenceManager.getDefaultSharedPreferences(ctx).getString(placa, null);
-        if(json != null)
-        {
-            return Arrays.asList(new Gson().fromJson(json, Multa[].class));
-        }
-        return new ArrayList<>();
-    }
 }

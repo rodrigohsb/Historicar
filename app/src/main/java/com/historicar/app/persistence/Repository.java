@@ -65,10 +65,9 @@ public class Repository extends SQLiteOpenHelper
                 carros.add(carro);
 
             } while (c.moveToNext());
+            c.close();
         }
-        c.close();
         return carros;
-
     }
 
     public void update (Carro carro)

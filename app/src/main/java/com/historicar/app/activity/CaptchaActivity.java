@@ -1,6 +1,5 @@
 package com.historicar.app.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -192,18 +191,15 @@ public class CaptchaActivity extends AppCompatActivity
 
                 return;
             }
+            if (!ValidateUtils.isOnline(ctx))
+            {
+                Toast.makeText(ctx, "Não foi possível encontrar conexão ativa.", Toast.LENGTH_SHORT).show();
+            }
             else
             {
-                if (!ValidateUtils.isOnline(ctx))
-                {
-                    Toast.makeText(ctx, "Não foi possível encontrar conexão ativa.", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    Toast.makeText(ctx, "Não foi possível recuperar imagem. Por favor, tente mais tarde.", Toast.LENGTH_SHORT).show();
-                }
-                finish();
+                Toast.makeText(ctx, "Não foi possível recuperar imagem. Por favor, tente mais tarde.", Toast.LENGTH_SHORT).show();
             }
+            finish();
         }
     }
 

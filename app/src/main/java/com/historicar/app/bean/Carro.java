@@ -16,8 +16,6 @@ public class Carro implements Serializable
 
     private String description;
 
-    public static String[] columns = new String[]{CarDB._ID , CarDB.DESCRIPTION , CarDB.PLATE};
-
     public Carro ()
     {
     }
@@ -71,8 +69,6 @@ public class Carro implements Serializable
 
     public static final class CarDB implements BaseColumns
     {
-
-        public static final String DEFAULT_SORT_ORDER = "id ACS";
 
         public static final String DESCRIPTION = "DESCRIPTION";
 

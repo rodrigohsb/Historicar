@@ -19,8 +19,6 @@ import java.util.List;
 public class Connection
 {
 
-    private static String COOKIE;
-
     public static Document getContent (String placa, String captcha) throws IOException
     {
 
@@ -30,7 +28,7 @@ public class Connection
                 .header("Accept-Language", "pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4,es;q=0.2,de;q=0.2")
                 .header("Cache-Control", "max-age=0")
                 .header("Connection", "keep-alive")
-                .header("Cookie", COOKIE)
+                .header("Cookie", Constants.COOKIE)
                 .header("Host", "www2.rio.rj.gov.br")
                 .header("Referer", "http://www2.rio.rj.gov.br/multas/index.asp")
                 .header("User-Agent", Constants.USER_AGENT)
@@ -44,6 +42,7 @@ public class Connection
                 .data("dtfinal", "")
                 .data("filtro", "T")
                 .data("bt_Consultar", "Consultar")
+                .maxBodySize(0)
                 .userAgent(Constants.USER_AGENT)
                 .timeout(Constants.TIME_OUT).post();
     }
@@ -101,7 +100,7 @@ public class Connection
                         }
                     }
 
-                    COOKIE = cookie;
+                    Constants.COOKIE = cookie;
                     return cookie;
                 }
 

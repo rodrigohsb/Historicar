@@ -4,8 +4,6 @@
     <string name="app_name">Historicar</string>
 
     <!-- Home Activity-->
-    <string name="homeActivityconfirmButton">Buscar</string>
-    <string name="homeActivityTitle">Digite a placa do veículo</string>
     <string name="homeActivityValidOnly">Válido somente para veículos da cidade do Rio de Janeiro.</string>
 
     <!-- About Activity-->
@@ -32,12 +30,6 @@
     <string name="invalid_plate_number">Por favor, digite os números corretamente.</string>
     <string name="invalid_connection">Por favor, verifique sua conexão.</string>
     <string name="are_you_sure">Tem certeza que deseja deletar a placa </string>
-    <string name="warning">Aviso</string>
-    <string name="multa">multa</string>
-    <string name="ok">OK</string>
-    <string name="sim">Sim</string>
-    <string name="nao">Nao</string>
-    <string name="plate_key">placa</string>
     <string name="carro">carro</string>
 
     <string name="hint_example">EX: AAA1234</string>

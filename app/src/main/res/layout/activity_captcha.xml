@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Digite o código visualizado abaixo:"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:visibility="gone"/>
 
         <ImageView
@@ -29,7 +29,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/captchaImage"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 

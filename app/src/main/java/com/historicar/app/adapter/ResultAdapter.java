@@ -1,6 +1,5 @@
 package com.historicar.app.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -17,8 +16,6 @@ import com.historicar.app.bean.Multa;
 import com.historicar.app.contants.Constants;
 
 import java.util.List;
-
-import butterknife.Bind;
 
 /**
  * Created by Rodrigo on 01/01/16.
