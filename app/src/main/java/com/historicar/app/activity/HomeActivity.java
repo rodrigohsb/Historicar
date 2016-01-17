@@ -95,7 +95,7 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick (View v)
             {
-                startActivity(new Intent(ctx, AboutActivity.class));
+                AboutActivity.start(HomeActivity.this);
             }
         });
 
@@ -108,7 +108,7 @@ public class HomeActivity extends AppCompatActivity
         switch (item.getItemId())
         {
             case R.id.action_insert_or_edit:
-                startActivityForResult(new Intent(ctx, InsertOrEditActivity.class), Constants.REQUEST_FOR_CREATE_PLATE);
+                InsertOrEditActivity.startActivityForResult(this, Constants.REQUEST_FOR_CREATE_PLATE);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -235,9 +235,7 @@ public class HomeActivity extends AppCompatActivity
                     imm.hideSoftInputFromWindow(HomeActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 
-                Intent myIntent = new Intent(ctx, CaptchaActivity.class);
-                myIntent.putExtra(Constants.PLACA_KEY, s);
-                startActivity(myIntent);
+                CaptchaActivity.start(HomeActivity.this,s);
                 return true;
 
             }

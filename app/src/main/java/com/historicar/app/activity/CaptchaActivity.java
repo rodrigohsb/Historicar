@@ -1,5 +1,6 @@
 package com.historicar.app.activity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -45,6 +46,13 @@ public class CaptchaActivity extends AppCompatActivity
 
     private Context ctx;
 
+    public static void start(Activity activity, String placa)
+    {
+        Intent intent = new Intent(activity.getApplicationContext(), CaptchaActivity.class);
+        intent.putExtra(Constants.PLACA_KEY, placa);
+        activity.startActivity(intent);
+    }
+
     @Override
     protected void onCreate (Bundle savedInstanceState)
     {
@@ -66,7 +74,7 @@ public class CaptchaActivity extends AppCompatActivity
             @Override
             public void onClick (View v)
             {
-                Appodeal.hide(CaptchaActivity.this,Appodeal.BANNER_BOTTOM);
+                Appodeal.hide(CaptchaActivity.this, Appodeal.BANNER_BOTTOM);
             }
         });
 
@@ -76,29 +84,25 @@ public class CaptchaActivity extends AppCompatActivity
             public void onClick (View v)
             {
 
-                if(CaptchaActivity.this.getCurrentFocus() != null)
+                if (CaptchaActivity.this.getCurrentFocus() != null)
                 {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(CaptchaActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 
-                if(text.getText() == null)
+                if (text.getText() == null)
                 {
-                    Toast.makeText(ctx,"O código não pode ser vazio!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx, "O código não pode ser vazio!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if(text.getText().length() < 4)
+                if (text.getText().length() < 4)
                 {
-                    Toast.makeText(ctx,"Por favor, digite o código corretamente!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx, "Por favor, digite o código corretamente!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                Intent myIntent = new Intent(ctx, ResultActivity.class);
-                myIntent.putExtra(Constants.PLACA_KEY, getIntent().getExtras().getString(Constants.PLACA_KEY));
-                myIntent.putExtra(Constants.CAPTCHA, text.getText().toString());
-                startActivity(myIntent);
-                finish();
+                ResultActivity.start(CaptchaActivity.this, getIntent().getExtras().getString(Constants.PLACA_KEY), text.getText().toString());
             }
         });
     }
@@ -107,18 +111,18 @@ public class CaptchaActivity extends AppCompatActivity
     public class NumberTextWatcher implements TextWatcher
     {
         @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count)
+        public void onTextChanged (CharSequence s, int start, int before, int count)
         {
         }
 
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after)
+        public void beforeTextChanged (CharSequence s, int start, int count, int after)
         {
 
         }
 
         @Override
-        public void afterTextChanged(Editable s)
+        public void afterTextChanged (Editable s)
         {
             if (text.getText().length() == 4)
             {
@@ -175,7 +179,7 @@ public class CaptchaActivity extends AppCompatActivity
         {
             super.onPostExecute(drawable);
 
-            if(drawable != null)
+            if (drawable != null)
             {
                 title.setVisibility(View.VISIBLE);
 

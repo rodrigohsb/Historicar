@@ -1,5 +1,6 @@
 package com.historicar.app.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,7 +15,6 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.appodeal.ads.Appodeal;
 import com.historicar.app.R;
-import com.historicar.app.contants.Constants;
 import com.historicar.app.util.AlertUtils;
 import com.historicar.app.util.ValidateUtils;
 
@@ -26,7 +26,13 @@ import butterknife.ButterKnife;
 public class AboutActivity extends AppCompatActivity
 {
     private Context ctx;
-    
+
+    public static void start(Activity activity)
+    {
+        Intent intent = new Intent(activity.getApplicationContext(), AboutActivity.class);
+        activity.startActivity(intent);
+    }
+
     @Override
     protected void onCreate (Bundle savedInstanceState)
     {
@@ -87,9 +93,7 @@ public class AboutActivity extends AppCompatActivity
                     imm.hideSoftInputFromWindow(AboutActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 
-                Intent myIntent = new Intent(ctx, CaptchaActivity.class);
-                myIntent.putExtra(Constants.PLACA_KEY, s);
-                startActivity(myIntent);
+                CaptchaActivity.start(AboutActivity.this, s);
                 finish();
                 return true;
 
@@ -107,20 +111,6 @@ public class AboutActivity extends AppCompatActivity
         });
 
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected (MenuItem item)
-    {
-        switch (item.getItemId())
-        {
-            case R.id.action_insert_or_edit:
-                startActivity(new Intent(ctx, InsertOrEditActivity.class));
-                finish();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

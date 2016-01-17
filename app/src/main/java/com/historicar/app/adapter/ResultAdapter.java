@@ -1,7 +1,6 @@
 package com.historicar.app.adapter;
 
-import android.content.Context;
-import android.content.Intent;
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import com.historicar.app.R;
 import com.historicar.app.activity.DetailsActivity;
 import com.historicar.app.bean.Multa;
-import com.historicar.app.contants.Constants;
 
 import java.util.List;
 
@@ -24,12 +22,12 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.LinearView
 {
 
     private final List<Multa> mList;
-    private final Context mContext;
+    private final Activity mActivity;
 
-    public ResultAdapter (List<Multa> mList, Context mContext)
+    public ResultAdapter (List<Multa> mList, Activity activity)
     {
         this.mList = mList;
-        this.mContext = mContext;
+        mActivity = activity;
     }
 
     @Override
@@ -107,9 +105,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.LinearView
         @Override
         public void onClick(View view)
         {
-            Intent intent = new Intent(mContext, DetailsActivity.class);
-            intent.putExtra(Constants.MULTA, mList.get(getAdapterPosition()));
-            mContext.startActivity(intent);
+            DetailsActivity.start(mActivity, mList.get(getAdapterPosition()));
         }
     }
 }

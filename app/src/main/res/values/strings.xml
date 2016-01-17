@@ -15,7 +15,7 @@
     <string name="aboutActivityMultaNaoPaga">Multa não paga.</string>
     <string name="aboutActivityDevelopertitle">Desenvolvedor:</string>
     <string name="aboutActivityDeveloperValue">Rodrigo Haus Bacellar - rodrigo.haus@gmail.com</string>
-    <string name="aboutActivityAppVersion">Versão 1.2.1</string>
+    <string name="aboutActivityAppVersion">Versão 1.3.0</string>
 
     <!-- No Multa Activity -->
     <string name="noMultaActivityCidadeAgradece">A cidade agradece.</string>
@@ -24,6 +24,8 @@
     <string name="newPlateText">Nova Placa</string>
     <string name="updatePlateText">Editar Placa</string>
 
+    <string name="try_again">Problemas ao efetuar a busca. Por favor, tente novamente!</string>
+    <string name="invalid_code">Código inválido!</string>
 
     <string name="invalid_description">Por favor, digite digita a descrição corretamente.</string>
     <string name="invalid_plate">Por favor, digite a placa no padrão: ABC1234</string>

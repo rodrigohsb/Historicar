@@ -1,5 +1,6 @@
 package com.historicar.app.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,6 +33,15 @@ public class ErrorActivity extends AppCompatActivity
 
     @Bind(R.id.error)
     protected TextView textView;
+
+
+    public static void start(Activity activity, String placa)
+    {
+        Intent intent = new Intent(activity.getApplicationContext(), ErrorActivity.class);
+        intent.putExtra(Constants.PLACA_KEY, placa);
+        activity.startActivity(intent);
+        activity.finish();
+    }
 
     @Override
     protected void onCreate (Bundle savedInstanceState)
@@ -97,9 +107,7 @@ public class ErrorActivity extends AppCompatActivity
                     imm.hideSoftInputFromWindow(ErrorActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 
-                Intent myIntent = new Intent(ctx, CaptchaActivity.class);
-                myIntent.putExtra(Constants.PLACA_KEY, s);
-                startActivity(myIntent);
+                CaptchaActivity.start(ErrorActivity.this, s);
                 finish();
                 return true;
 
@@ -117,20 +125,6 @@ public class ErrorActivity extends AppCompatActivity
         });
 
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected (MenuItem item)
-    {
-        switch (item.getItemId())
-        {
-            case R.id.action_insert_or_edit:
-                startActivity(new Intent(ctx, InsertOrEditActivity.class));
-                finish();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

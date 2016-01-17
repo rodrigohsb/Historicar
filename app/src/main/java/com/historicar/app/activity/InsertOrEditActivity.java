@@ -1,5 +1,6 @@
 package com.historicar.app.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,7 +22,6 @@ import android.widget.TextView;
 import com.appodeal.ads.Appodeal;
 import com.historicar.app.R;
 import com.historicar.app.bean.Carro;
-import com.historicar.app.contants.Constants;
 import com.historicar.app.persistence.Repository;
 import com.historicar.app.util.AlertUtils;
 import com.historicar.app.util.ValidateUtils;
@@ -49,6 +49,12 @@ public class InsertOrEditActivity extends AppCompatActivity
     @Bind(R.id.insertOrEditPlacaNumeros) protected EditText placaNumeros;
     @Bind(R.id.saveButton) protected Button saveButton;
     @Bind(R.id.deleteButton) protected Button deleteButton;
+
+    public static void startActivityForResult(Activity activity, int requestCode)
+    {
+        Intent intent = new Intent(activity, InsertOrEditActivity.class);
+        activity.startActivityForResult(intent, requestCode);
+    }
 
     @Override
     protected void onCreate (Bundle savedInstanceState)
@@ -333,9 +339,7 @@ public class InsertOrEditActivity extends AppCompatActivity
                     imm.hideSoftInputFromWindow(InsertOrEditActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 
-                Intent myIntent = new Intent(ctx, CaptchaActivity.class);
-                myIntent.putExtra(Constants.PLACA_KEY, s);
-                startActivity(myIntent);
+                CaptchaActivity.start(InsertOrEditActivity.this, s);
                 finish();
                 return true;
 
@@ -353,20 +357,6 @@ public class InsertOrEditActivity extends AppCompatActivity
         });
 
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected (MenuItem item)
-    {
-        switch (item.getItemId())
-        {
-            case R.id.action_insert_or_edit:
-                startActivity(new Intent(ctx, InsertOrEditActivity.class));
-                finish();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
