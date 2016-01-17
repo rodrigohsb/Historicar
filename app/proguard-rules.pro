@@ -78,3 +78,10 @@
   -keep class android.support.v4.util.LruCache { *; }
   -keep class android.support.v4.view.PagerAdapter { *; }
   -keep class android.support.v4.view.ViewPager { *; }
+
+#otto
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @com.squareup.otto.Subscribe public *;
+    @com.squareup.otto.Produce public *;
+}
