@@ -102,7 +102,7 @@ public class CaptchaActivity extends AppCompatActivity
                     return;
                 }
 
-                ResultActivity.start(CaptchaActivity.this, getIntent().getExtras().getString(Constants.PLACA_KEY), text.getText().toString());
+                ResultActivity.start(CaptchaActivity.this, getIntent().getExtras().getString(Constants.PLACA_KEY), text.getText().toString(), Constants.COOKIE);
             }
         });
     }

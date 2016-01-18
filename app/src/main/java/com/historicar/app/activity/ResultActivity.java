@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,7 +27,6 @@ import android.widget.Toast;
 import com.appodeal.ads.Appodeal;
 import com.historicar.app.R;
 import com.historicar.app.adapter.ResultAdapter;
-import com.historicar.app.async.ParseAsync;
 import com.historicar.app.bean.Multa;
 import com.historicar.app.contants.Constants;
 import com.historicar.app.event.LoadTicketErrorEvent;
@@ -35,19 +35,27 @@ import com.historicar.app.event.LoadTicketSuccessEvent;
 import com.historicar.app.provider.BusProvider;
 import com.historicar.app.util.AlertUtils;
 import com.historicar.app.util.ValidateUtils;
-import com.squareup.otto.Bus;
+import com.historicar.app.webservice.WebServiceAPi;
 import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.GsonConverterFactory;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * Created by Rodrigo on 17/04/15.
  */
 public class ResultActivity extends AppCompatActivity
 {
+
+    protected static final String TAG = ResultActivity.class.getSimpleName();
 
     private Context ctx;
 
@@ -59,13 +67,12 @@ public class ResultActivity extends AppCompatActivity
 
     private ProgressDialog dialog;
 
-    private Bus bus;
-
-    public static void start(Activity activity, String placa, String captcha)
+    public static void start(Activity activity, String placa, String captcha, String cookie)
     {
         Intent intent = new Intent(activity.getApplicationContext(), ResultActivity.class);
         intent.putExtra(Constants.PLACA_KEY, placa);
         intent.putExtra(Constants.CAPTCHA, captcha);
+        intent.putExtra(Constants.COOKIE, cookie);
         activity.startActivity(intent);
         activity.finish();
     }
@@ -78,8 +85,6 @@ public class ResultActivity extends AppCompatActivity
         setContentView(R.layout.activity_result);
 
         ButterKnife.bind(this);
-        bus = new Bus();
-        bus.register(this);
 
         Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.INTERSTITIAL | Appodeal.BANNER);
         Appodeal.show(this, Appodeal.BANNER_BOTTOM);
@@ -87,15 +92,84 @@ public class ResultActivity extends AppCompatActivity
         ctx = this;
 
         String placa = getIntent().getExtras().getString(Constants.PLACA_KEY);
-
         String captcha = getIntent().getExtras().getString(Constants.CAPTCHA);
+        String cookie = getIntent().getExtras().getString(Constants.COOKIE);
 
         dialog = new ProgressDialog(ctx);
         dialog.setMessage("Buscando informações...");
         dialog.setCancelable(false);
         dialog.show();
 
-        new ParseAsync(this, placa, captcha).execute();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        WebServiceAPi wsAPI = retrofit.create(WebServiceAPi.class);
+        Call<List<Multa>> multas = wsAPI.getTickets(placa, captcha, cookie);
+        multas.enqueue(new Callback<List<Multa>>()
+        {
+            @Override
+            public void onResponse (Response<List<Multa>> response)
+            {
+
+                int httpResponseCode = response.code();
+
+                Log.d(TAG,"[getTickets] StatusCode [" + httpResponseCode + "]");
+
+                if(response.isSuccess())
+                {
+                    List<Multa> multas = response.body();
+
+                    if (multas != null && !multas.isEmpty())
+                    {
+                        BusProvider.getInstance().post(new LoadTicketSuccessEvent(multas));
+                        return;
+                    }
+                    //NO_CONTENT
+                    if(httpResponseCode == 204)
+                    {
+                        BusProvider.getInstance().post(new LoadTicketSuccessEvent(new ArrayList<Multa>()));
+                        return;
+                    }
+                }
+                //BAD_REQUEST
+                if(httpResponseCode == 400)
+                {
+                    BusProvider.getInstance().post(new LoadTicketRetryEvent(true));
+                    return;
+                }
+                //UNAUTHORIZED
+                if(httpResponseCode == 401)
+                {
+                    String newUserToken = (String) response.body();
+
+                    //Chamar de novo com o novo usertoken
+
+                    return;
+                }
+                //NOT_ACCEPTABLE
+                if(httpResponseCode == 406)
+                {
+                    BusProvider.getInstance().post(new LoadTicketRetryEvent(false));
+                    return;
+                }
+                //INTERNAL_SERVER_ERROR
+                if(httpResponseCode == 500)
+                {
+                    BusProvider.getInstance().post(new LoadTicketErrorEvent());
+                }
+            }
+
+            @Override
+            public void onFailure (Throwable t)
+            {
+                Log.d(TAG,"[getTickets] Error [" + t.getMessage() + "]");
+                BusProvider.getInstance().post(new LoadTicketErrorEvent());
+            }
+        });
+
+
     }
 
     @Subscribe
