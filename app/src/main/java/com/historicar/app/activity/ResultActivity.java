@@ -142,7 +142,7 @@ public class ResultActivity extends AppCompatActivity
                 //UNAUTHORIZED
                 if(httpResponseCode == 401)
                 {
-                    String newUserToken = (String) response.body();
+//                    String newUserToken = (String) response.body();
 
                     //Chamar de novo com o novo usertoken
 
