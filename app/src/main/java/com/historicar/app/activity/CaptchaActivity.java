@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -21,16 +22,33 @@ import com.appodeal.ads.Appodeal;
 import com.historicar.app.R;
 import com.historicar.app.connection.Connection;
 import com.historicar.app.contants.Constants;
+import com.historicar.app.event.LoadTicketErrorEvent;
+import com.historicar.app.event.LoadTicketSuccessEvent;
+import com.historicar.app.event.captcha.LoadCaptchaErrorEvent;
+import com.historicar.app.event.captcha.LoadCaptchaRetryEvent;
+import com.historicar.app.event.captcha.LoadCaptchaSuccessEvent;
+import com.historicar.app.provider.BusProvider;
 import com.historicar.app.util.ValidateUtils;
+import com.historicar.app.webservice.WebServiceAPi;
+import com.squareup.otto.Subscribe;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.GsonConverterFactory;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * Created by Rodrigo on 10/01/16.
  */
 public class CaptchaActivity extends AppCompatActivity
 {
+
+    protected static final String TAG = CaptchaActivity.class.getSimpleName();
+
+    private ProgressDialog dialog;
 
     @Bind(R.id.captchaTitle)
     protected TextView title;
@@ -60,7 +78,72 @@ public class CaptchaActivity extends AppCompatActivity
         setContentView(R.layout.activity_captcha);
         ButterKnife.bind(this);
 
-        new CaptchaAsyncTask(this).execute();
+//        new CaptchaAsyncTask(this).execute();
+
+        dialog = new ProgressDialog(ctx);
+        dialog.setMessage("Buscando imagem...");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        WebServiceAPi wsAPI = retrofit.create(WebServiceAPi.class);
+        Call<Drawable> multas = wsAPI.getCaptcha();
+        multas.enqueue(new Callback<Drawable>()
+        {
+            @Override
+            public void onResponse (Response<Drawable> response)
+            {
+
+                int httpResponseCode = response.code();
+
+                Log.d(TAG, "[getCaptcha] StatusCode [" + httpResponseCode + "]");
+
+                if (response.isSuccess())
+                {
+                    Drawable captchaImage = response.body();
+
+                    if (captchaImage != null)
+                    {
+                        BusProvider.getInstance().post(new LoadCaptchaSuccessEvent(captchaImage));
+                        return;
+                    }
+                    //NO_CONTENT
+                    if (httpResponseCode == 204)
+                    {
+                        BusProvider.getInstance().post(new LoadCaptchaErrorEvent());
+                        return;
+                    }
+                }
+                //BAD_REQUEST
+                if (httpResponseCode == 400)
+                {
+                    BusProvider.getInstance().post(new LoadCaptchaRetryEvent());
+                    return;
+                }
+                //UNAUTHORIZED
+                if (httpResponseCode == 401)
+                {
+                    //TODO Pegar novo usertoken e chamar de novo
+                    return;
+                }
+                //INTERNAL_SERVER_ERROR
+                if (httpResponseCode == 500)
+                {
+                    BusProvider.getInstance().post(new LoadCaptchaErrorEvent());
+                }
+            }
+
+            @Override
+            public void onFailure (Throwable t)
+            {
+                Log.d(TAG, "[getCaptcha] Error [" + t.getMessage() + "]");
+                BusProvider.getInstance().post(new LoadCaptchaErrorEvent());
+            }
+        });
 
         Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.INTERSTITIAL | Appodeal.BANNER);
         Appodeal.show(this, Appodeal.BANNER_BOTTOM);
@@ -108,6 +191,43 @@ public class CaptchaActivity extends AppCompatActivity
     }
 
 
+    @Subscribe
+    public void onLoadCaptchaErrorEvent(LoadCaptchaErrorEvent event)
+    {
+        dialog.dismiss();
+
+        if (!ValidateUtils.isOnline(ctx))
+        {
+            Toast.makeText(ctx, "Não foi possível encontrar conexão ativa.", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(ctx, "Não foi possível recuperar imagem. Por favor, tente mais tarde.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Subscribe
+    public void onLoadCaptchaSuccessEvent(LoadCaptchaSuccessEvent event)
+    {
+        dialog.dismiss();
+
+        title.setVisibility(View.VISIBLE);
+
+        image.setVisibility(View.VISIBLE);
+        image.setImageDrawable(event.getDrawable());
+
+        text.setVisibility(View.VISIBLE);
+        text.setEnabled(true);
+
+        button.setVisibility(View.VISIBLE);
+    }
+
+    @Subscribe
+    public void onLoadCaptchaRetryEvent(LoadCaptchaRetryEvent event)
+    {
+        //TODO Chamar de novo
+    }
+
     public class NumberTextWatcher implements TextWatcher
     {
         @Override
@@ -143,7 +263,6 @@ public class CaptchaActivity extends AppCompatActivity
         super.onResume();
         Appodeal.onResume(this, Appodeal.BANNER);
     }
-
 
     private class CaptchaAsyncTask extends AsyncTask<String, String, Drawable>
     {

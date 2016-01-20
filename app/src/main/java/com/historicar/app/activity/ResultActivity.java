@@ -144,7 +144,7 @@ public class ResultActivity extends AppCompatActivity
                 {
 //                    String newUserToken = (String) response.body();
 
-                    //Chamar de novo com o novo usertoken
+                    //TODO Pegar novo usertoken e chamar de novo
 
                     return;
                 }

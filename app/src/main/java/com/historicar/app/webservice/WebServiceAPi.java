@@ -36,7 +36,7 @@ public interface WebServiceAPi
 
     @Headers({Constants.APP_ACCESS_TOKEN + ": " + Constants.APP_ACCESS_TOKEN_VALUE , Constants.X_USER_ACCESS_TOKEN + ": " + Constants.X_USER_ACCESS_TOKEN_VALUE})
     @GET("/getCaptcha")
-    Drawable getCaptcha ();
+    Call<Drawable> getCaptcha ();
 
     @Headers({Constants.APP_ACCESS_TOKEN + ": " + Constants.APP_ACCESS_TOKEN_VALUE , Constants.X_USER_ACCESS_TOKEN + ": " + Constants.X_USER_ACCESS_TOKEN_VALUE})
     @GET("ticket/{placa}/{captcha}/{cookie}")
