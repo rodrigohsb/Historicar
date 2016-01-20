@@ -50,6 +50,8 @@ public class InsertOrEditActivity extends AppCompatActivity
     @Bind(R.id.saveButton) protected Button saveButton;
     @Bind(R.id.deleteButton) protected Button deleteButton;
 
+    private boolean isShowing;
+
     public static void startActivityForResult(Activity activity, int requestCode)
     {
         Intent intent = new Intent(activity, InsertOrEditActivity.class);
@@ -63,8 +65,9 @@ public class InsertOrEditActivity extends AppCompatActivity
         setContentView(R.layout.activity_insert_or_edit);
         ButterKnife.bind(this);
 
-        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.INTERSTITIAL | Appodeal.BANNER);
+        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.BANNER);
         Appodeal.show(this, Appodeal.BANNER_BOTTOM);
+        isShowing = true;
 
         ctx = this;
 
@@ -73,8 +76,46 @@ public class InsertOrEditActivity extends AppCompatActivity
         Bundle bundle = getIntent().getExtras();
 
         descriptionValue.addTextChangedListener(new DescriptionTextWatcher());
+        descriptionValue.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick (View v)
+            {
+                if (isShowing)
+                {
+                    Appodeal.hide(InsertOrEditActivity.this, Appodeal.BANNER_BOTTOM);
+                    isShowing = false;
+                }
+            }
+        });
+
         placaLetras.addTextChangedListener(new LetterTextWatcher());
+        placaLetras.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick (View v)
+            {
+                if (isShowing)
+                {
+                    Appodeal.hide(InsertOrEditActivity.this, Appodeal.BANNER_BOTTOM);
+                    isShowing = false;
+                }
+            }
+        });
+
         placaNumeros.addTextChangedListener(new NumberTextWatcher());
+        placaNumeros.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick (View v)
+            {
+                if (isShowing)
+                {
+                    Appodeal.hide(InsertOrEditActivity.this, Appodeal.BANNER_BOTTOM);
+                    isShowing = false;
+                }
+            }
+        });
 
         if (bundle == null)
         {

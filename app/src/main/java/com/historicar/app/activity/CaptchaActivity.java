@@ -78,77 +78,17 @@ public class CaptchaActivity extends AppCompatActivity
         setContentView(R.layout.activity_captcha);
         ButterKnife.bind(this);
 
-//        new CaptchaAsyncTask(this).execute();
-
-        dialog = new ProgressDialog(ctx);
-        dialog.setMessage("Buscando imagem...");
-        dialog.setCancelable(false);
-        dialog.show();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        WebServiceAPi wsAPI = retrofit.create(WebServiceAPi.class);
-        Call<Drawable> multas = wsAPI.getCaptcha();
-        multas.enqueue(new Callback<Drawable>()
-        {
-            @Override
-            public void onResponse (Response<Drawable> response)
-            {
-
-                int httpResponseCode = response.code();
-
-                Log.d(TAG, "[getCaptcha] StatusCode [" + httpResponseCode + "]");
-
-                if (response.isSuccess())
-                {
-                    Drawable captchaImage = response.body();
-
-                    if (captchaImage != null)
-                    {
-                        BusProvider.getInstance().post(new LoadCaptchaSuccessEvent(captchaImage));
-                        return;
-                    }
-                    //NO_CONTENT
-                    if (httpResponseCode == 204)
-                    {
-                        BusProvider.getInstance().post(new LoadCaptchaErrorEvent());
-                        return;
-                    }
-                }
-                //BAD_REQUEST
-                if (httpResponseCode == 400)
-                {
-                    BusProvider.getInstance().post(new LoadCaptchaRetryEvent());
-                    return;
-                }
-                //UNAUTHORIZED
-                if (httpResponseCode == 401)
-                {
-                    //TODO Pegar novo usertoken e chamar de novo
-                    return;
-                }
-                //INTERNAL_SERVER_ERROR
-                if (httpResponseCode == 500)
-                {
-                    BusProvider.getInstance().post(new LoadCaptchaErrorEvent());
-                }
-            }
-
-            @Override
-            public void onFailure (Throwable t)
-            {
-                Log.d(TAG, "[getCaptcha] Error [" + t.getMessage() + "]");
-                BusProvider.getInstance().post(new LoadCaptchaErrorEvent());
-            }
-        });
-
-        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.INTERSTITIAL | Appodeal.BANNER);
+        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.BANNER);
         Appodeal.show(this, Appodeal.BANNER_BOTTOM);
 
         ctx = this;
+
+        dialog = new ProgressDialog(ctx);
+        dialog.setMessage(getString(R.string.captchaActivityrecoveringImage));
+        dialog.setCancelable(false);
+        dialog.show();
+
+        getCaptcha();
 
         text.addTextChangedListener(new NumberTextWatcher());
 
@@ -190,6 +130,70 @@ public class CaptchaActivity extends AppCompatActivity
         });
     }
 
+    private void getCaptcha ()
+    {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        WebServiceAPi wsAPI = retrofit.create(WebServiceAPi.class);
+        Call<Drawable> captcha = wsAPI.getCaptcha();
+        captcha.enqueue(new Callback<Drawable>()
+        {
+            @Override
+            public void onResponse (Response<Drawable> response)
+            {
+
+                int httpResponseCode = response.code();
+
+                Log.d(TAG, "[getCaptcha] StatusCode [" + httpResponseCode + "]");
+
+                if (response.isSuccess())
+                {
+                    Drawable captchaImage = response.body();
+
+                    if (captchaImage != null)
+                    {
+                        BusProvider.getInstance().post(new LoadCaptchaSuccessEvent(captchaImage));
+                        return;
+                    }
+                    //NO_CONTENT
+                    if (httpResponseCode == 204)
+                    {
+                        BusProvider.getInstance().post(new LoadCaptchaErrorEvent());
+                        return;
+                    }
+                }
+                //BAD_REQUEST
+                if (httpResponseCode == 400)
+                {
+                    BusProvider.getInstance().post(new LoadCaptchaRetryEvent());
+                    return;
+                }
+                //UNAUTHORIZED
+                if (httpResponseCode == 401)
+                {
+                    //TODO Pegar novo usertoken e chamar de novo
+                    BusProvider.getInstance().post(new LoadCaptchaRetryEvent());
+                    return;
+                }
+                //INTERNAL_SERVER_ERROR
+                if (httpResponseCode == 500)
+                {
+                    BusProvider.getInstance().post(new LoadCaptchaErrorEvent());
+                }
+            }
+
+            @Override
+            public void onFailure (Throwable t)
+            {
+                Log.d(TAG, "[getCaptcha] Error [" + t.getMessage() + "]");
+                BusProvider.getInstance().post(new LoadCaptchaErrorEvent());
+            }
+        });
+    }
+
 
     @Subscribe
     public void onLoadCaptchaErrorEvent(LoadCaptchaErrorEvent event)
@@ -204,6 +208,7 @@ public class CaptchaActivity extends AppCompatActivity
         {
             Toast.makeText(ctx, "Não foi possível recuperar imagem. Por favor, tente mais tarde.", Toast.LENGTH_SHORT).show();
         }
+        finish();
     }
 
     @Subscribe
@@ -225,7 +230,7 @@ public class CaptchaActivity extends AppCompatActivity
     @Subscribe
     public void onLoadCaptchaRetryEvent(LoadCaptchaRetryEvent event)
     {
-        //TODO Chamar de novo
+        getCaptcha();
     }
 
     public class NumberTextWatcher implements TextWatcher
@@ -256,74 +261,10 @@ public class CaptchaActivity extends AppCompatActivity
         }
     }
 
-
     @Override
     protected void onResume ()
     {
         super.onResume();
         Appodeal.onResume(this, Appodeal.BANNER);
     }
-
-    private class CaptchaAsyncTask extends AsyncTask<String, String, Drawable>
-    {
-
-        private final Context ctx;
-
-        private ProgressDialog dialog;
-
-        public CaptchaAsyncTask (Context ctx)
-        {
-            this.ctx = ctx;
-        }
-
-        @Override
-        protected void onPreExecute ()
-        {
-            super.onPreExecute();
-
-            dialog = new ProgressDialog(ctx);
-            dialog.setMessage("Buscando imagem...");
-            dialog.setCancelable(false);
-            dialog.show();
-        }
-
-        @Override
-        protected Drawable doInBackground (String... params)
-        {
-            return Connection.getCaptcha();
-        }
-
-        @Override
-        protected void onPostExecute (Drawable drawable)
-        {
-            super.onPostExecute(drawable);
-
-            if (drawable != null)
-            {
-                title.setVisibility(View.VISIBLE);
-
-                image.setVisibility(View.VISIBLE);
-                image.setImageDrawable(drawable);
-
-                text.setVisibility(View.VISIBLE);
-                text.setEnabled(true);
-
-                button.setVisibility(View.VISIBLE);
-
-                dialog.dismiss();
-
-                return;
-            }
-            if (!ValidateUtils.isOnline(ctx))
-            {
-                Toast.makeText(ctx, "Não foi possível encontrar conexão ativa.", Toast.LENGTH_SHORT).show();
-            }
-            else
-            {
-                Toast.makeText(ctx, "Não foi possível recuperar imagem. Por favor, tente mais tarde.", Toast.LENGTH_SHORT).show();
-            }
-            finish();
-        }
-    }
-
 }

@@ -31,7 +31,7 @@
             android:divider="@android:color/transparent"
             android:dividerHeight="8dp"
             android:scrollbars="none"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/newPlate"
@@ -41,7 +41,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="40dp"
             android:src="@drawable/ic_new_plate"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
         <TextView
             android:id="@+id/validText"
