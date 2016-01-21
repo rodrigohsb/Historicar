@@ -2,8 +2,8 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/actionbar_background"
-              tools:context=".HomeActivity">
+              tools:context=".HomeActivity"
+              android:background="@color/actionbar_background">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,24 +14,24 @@
             android:id="@+id/information"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_alignParentRight="true"
             android:src="@drawable/ic_information"/>
 
         <ListView
             android:id="@+id/homeList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="24dp"
+            android:layout_marginTop="2dp"
             android:layout_marginLeft="88dp"
             android:layout_marginRight="88dp"
-            android:layout_marginTop="2dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="24dp"
             android:divider="@android:color/transparent"
             android:dividerHeight="8dp"
             android:scrollbars="none"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/newPlate"
@@ -49,10 +49,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:paddingBottom="6dp"
             android:text="@string/homeActivityValidOnly"
-            android:textColor="@android:color/white"
             android:textSize="12sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:paddingBottom="6dp"/>
     </RelativeLayout>
 </LinearLayout>

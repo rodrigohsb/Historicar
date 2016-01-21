@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+    </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
         android:orientation="vertical">
 
         <TextView
@@ -15,20 +31,20 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:gravity="center"
+            android:text="Edição:"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/actionbar_background"
-            android:textStyle="bold"
             android:textSize="24sp"
-            android:text="Edição:"/>
+            android:textStyle="bold"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="30dp"
+            android:text="Descrição:"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/actionbar_background"
-            android:text="Descrição:"/>
+            android:textColor="@color/actionbar_background"/>
 
         <EditText
             android:id="@+id/insertOrEditPlacaDescriptionValue"
@@ -36,20 +52,20 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
+            android:hint="Ex: Meu Carro"
             android:maxLength="10"
             android:maxLines="1"
             android:nextFocusDown="@+id/insertOrEditPlacaLetras"
-            android:singleLine="true"
-            android:hint="Ex: Meu Carro"/>
+            android:singleLine="true"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="30dp"
+            android:text="Placa:"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/actionbar_background"
-            android:text="Placa:"/>
+            android:textColor="@color/actionbar_background"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -62,12 +78,12 @@
                 android:id="@+id/insertOrEditPlacaLetras"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:hint="Letras"
                 android:inputType="text"
                 android:maxLength="3"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:textAllCaps="true"
-                android:hint="Letras"/>
+                android:textAllCaps="true"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -78,12 +94,12 @@
                 android:id="@+id/insertOrEditPlacaNumeros"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:hint="Números"
                 android:inputType="number"
                 android:maxLength="4"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:textAllCaps="true"
-                android:hint="Números"/>
+                android:textAllCaps="true"/>
 
 
         </LinearLayout>
@@ -119,4 +135,4 @@
                 android:textColor="#ffffff"/>
         </LinearLayout>
     </LinearLayout>
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

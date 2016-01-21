@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -43,12 +44,15 @@ public class InsertOrEditActivity extends AppCompatActivity
 
     private Repository repository;
 
+    @Bind(R.id.toolbar) protected Toolbar mToolbar;
     @Bind(R.id.insertOrEditTitle) protected TextView textView;
     @Bind(R.id.insertOrEditPlacaDescriptionValue) protected EditText descriptionValue;
     @Bind(R.id.insertOrEditPlacaLetras) protected EditText placaLetras;
     @Bind(R.id.insertOrEditPlacaNumeros) protected EditText placaNumeros;
     @Bind(R.id.saveButton) protected Button saveButton;
     @Bind(R.id.deleteButton) protected Button deleteButton;
+
+    private boolean isShowing;
 
     @Override
     protected void onCreate (Bundle savedInstanceState)
@@ -57,8 +61,10 @@ public class InsertOrEditActivity extends AppCompatActivity
         setContentView(R.layout.activity_insert_or_edit);
         ButterKnife.bind(this);
 
-        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.INTERSTITIAL | Appodeal.BANNER);
+        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.BANNER);
         Appodeal.show(this, Appodeal.BANNER_BOTTOM);
+        Appodeal.setTesting(true);
+        isShowing = true;
 
         ctx = this;
 
@@ -67,16 +73,56 @@ public class InsertOrEditActivity extends AppCompatActivity
         Bundle bundle = getIntent().getExtras();
 
         descriptionValue.addTextChangedListener(new DescriptionTextWatcher());
+        descriptionValue.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick (View v)
+            {
+                if(isShowing)
+                {
+                    Appodeal.hide(InsertOrEditActivity.this, Appodeal.BANNER_BOTTOM);
+                    isShowing = false;
+                }
+            }
+        });
+
         placaLetras.addTextChangedListener(new LetterTextWatcher());
+        placaLetras.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick (View v)
+            {
+                if(isShowing)
+                {
+                    Appodeal.hide(InsertOrEditActivity.this, Appodeal.BANNER_BOTTOM);
+                    isShowing = false;
+                }
+            }
+        });
+
         placaNumeros.addTextChangedListener(new NumberTextWatcher());
+        placaNumeros.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick (View v)
+            {
+                if(isShowing)
+                {
+                    Appodeal.hide(InsertOrEditActivity.this, Appodeal.BANNER_BOTTOM);
+                    isShowing = false;
+                }
+            }
+    });
 
         if (bundle == null)
         {
+            initActionBar("Nova Placa");
             textView.setText(R.string.newPlateText);
             deleteButton.setVisibility(View.GONE);
         }
         else
         {
+            initActionBar("Edição");
             saveButton.setText(R.string.updatePlateText);
 
             carro = (Carro) bundle.getSerializable(getString(R.string.carro));
@@ -186,6 +232,16 @@ public class InsertOrEditActivity extends AppCompatActivity
                 alertDialog.show();
             }
         });
+    }
+
+    protected void initActionBar(String title)
+    {
+        if (mToolbar != null)
+        {
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setTitle(title);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     public class DescriptionTextWatcher implements TextWatcher
@@ -360,6 +416,10 @@ public class InsertOrEditActivity extends AppCompatActivity
     {
         switch (item.getItemId())
         {
+            case android.R.id.home:
+                finish();
+                break;
+
             case R.id.action_insert_or_edit:
                 startActivity(new Intent(ctx, InsertOrEditActivity.class));
                 finish();

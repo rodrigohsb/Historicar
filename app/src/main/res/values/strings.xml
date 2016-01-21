@@ -4,6 +4,8 @@
     <string name="app_name">Historicar</string>
 
     <!-- Home Activity-->
+    <string name="homeActivityTicketsTitleTab">Multas</string>
+    <string name="homeActivityPointsTitleTab">Pontos</string>
     <string name="homeActivityValidOnly">Válido somente para veículos da cidade do Rio de Janeiro.</string>
 
     <!-- About Activity-->
