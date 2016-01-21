@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
@@ -19,6 +20,7 @@ import com.historicar.app.contants.Constants;
 import com.historicar.app.util.AlertUtils;
 import com.historicar.app.util.ValidateUtils;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
@@ -28,6 +30,9 @@ public class ResultActivity extends AppCompatActivity
 {
 
     private Context ctx;
+
+    @Bind(R.id.toolbar)
+    protected Toolbar mToolbar;
 
     @Override
     protected void onCreate (Bundle savedInstanceState)
@@ -40,6 +45,8 @@ public class ResultActivity extends AppCompatActivity
         Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.INTERSTITIAL | Appodeal.BANNER);
         Appodeal.show(this, Appodeal.BANNER_BOTTOM);
 
+        initActionBar();
+
         ctx = this;
 
         String placa = getIntent().getExtras().getString(Constants.PLACA_KEY);
@@ -47,6 +54,12 @@ public class ResultActivity extends AppCompatActivity
         String captcha = getIntent().getExtras().getString(Constants.CAPTCHA);
 
         new ParseAsync(this, placa, captcha).execute();
+    }
+
+    private void initActionBar ()
+    {
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -123,6 +136,10 @@ public class ResultActivity extends AppCompatActivity
     {
         switch (item.getItemId())
         {
+            case android.R.id.home:
+                finish();
+                break;
+
             case R.id.action_insert_or_edit:
                 startActivity(new Intent(ctx, InsertOrEditActivity.class));
                 finish();

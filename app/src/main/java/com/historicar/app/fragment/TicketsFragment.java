@@ -124,4 +124,28 @@ public class TicketsFragment extends Fragment
             return true;
         }
     }
+
+    public void updateData()
+    {
+        List<Carro> carrosRepo = new Repository(getActivity()).getAll();
+
+        if (carrosRepo == null || carrosRepo.isEmpty())
+        {
+            list.setVisibility(View.GONE);
+            newPlateView.setVisibility(View.VISIBLE);
+            newPlateView.setOnClickListener(new ImageClickListener());
+        }
+        else
+        {
+            carros.clear();
+            carros.addAll(carrosRepo);
+
+
+            list.setVisibility(View.VISIBLE);
+            newPlateView.setVisibility(View.GONE);
+            list.setOnItemClickListener(new ItemClickListener());
+            list.setOnItemLongClickListener(new ItemLongClickListener());
+            adapter.notifyDataSetChanged();
+        }
+    }
 }

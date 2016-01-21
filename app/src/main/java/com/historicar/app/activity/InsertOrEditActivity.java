@@ -66,6 +66,8 @@ public class InsertOrEditActivity extends AppCompatActivity
         Appodeal.setTesting(true);
         isShowing = true;
 
+        initActionBar();
+
         ctx = this;
 
         repository = new Repository(ctx);
@@ -78,7 +80,7 @@ public class InsertOrEditActivity extends AppCompatActivity
             @Override
             public void onClick (View v)
             {
-                if(isShowing)
+                if (isShowing)
                 {
                     Appodeal.hide(InsertOrEditActivity.this, Appodeal.BANNER_BOTTOM);
                     isShowing = false;
@@ -92,7 +94,7 @@ public class InsertOrEditActivity extends AppCompatActivity
             @Override
             public void onClick (View v)
             {
-                if(isShowing)
+                if (isShowing)
                 {
                     Appodeal.hide(InsertOrEditActivity.this, Appodeal.BANNER_BOTTOM);
                     isShowing = false;
@@ -106,23 +108,21 @@ public class InsertOrEditActivity extends AppCompatActivity
             @Override
             public void onClick (View v)
             {
-                if(isShowing)
+                if (isShowing)
                 {
                     Appodeal.hide(InsertOrEditActivity.this, Appodeal.BANNER_BOTTOM);
                     isShowing = false;
                 }
             }
-    });
+        });
 
         if (bundle == null)
         {
-            initActionBar("Nova Placa");
             textView.setText(R.string.newPlateText);
             deleteButton.setVisibility(View.GONE);
         }
         else
         {
-            initActionBar("Edição");
             saveButton.setText(R.string.updatePlateText);
 
             carro = (Carro) bundle.getSerializable(getString(R.string.carro));
@@ -214,10 +214,7 @@ public class InsertOrEditActivity extends AppCompatActivity
                     {
                         dialog.dismiss();
                         repository.delete(carro);
-                        Intent it = new Intent(ctx, HomeActivity.class);
-                        it.putExtra(getString(R.string.carro), carro);
-                        it.putExtra("delete", true);
-                        setResult(RESULT_OK, it);
+                        setResult(RESULT_OK, new Intent(ctx, HomeActivity2.class));
                         finish();
                     }
                 };
@@ -234,14 +231,10 @@ public class InsertOrEditActivity extends AppCompatActivity
         });
     }
 
-    protected void initActionBar(String title)
+    private void initActionBar ()
     {
-        if (mToolbar != null)
-        {
-            setSupportActionBar(mToolbar);
-            getSupportActionBar().setTitle(title);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public class DescriptionTextWatcher implements TextWatcher

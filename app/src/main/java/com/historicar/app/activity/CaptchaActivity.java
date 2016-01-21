@@ -7,8 +7,10 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -30,6 +32,9 @@ import butterknife.ButterKnife;
  */
 public class CaptchaActivity extends AppCompatActivity
 {
+
+    @Bind(R.id.toolbar)
+    protected Toolbar mToolbar;
 
     @Bind(R.id.captchaTitle)
     protected TextView title;
@@ -59,6 +64,8 @@ public class CaptchaActivity extends AppCompatActivity
 
         ctx = this;
 
+        initActionBar();
+
         text.addTextChangedListener(new NumberTextWatcher());
 
         text.setOnClickListener(new View.OnClickListener()
@@ -66,7 +73,7 @@ public class CaptchaActivity extends AppCompatActivity
             @Override
             public void onClick (View v)
             {
-                Appodeal.hide(CaptchaActivity.this,Appodeal.BANNER_BOTTOM);
+                Appodeal.hide(CaptchaActivity.this, Appodeal.BANNER_BOTTOM);
             }
         });
 
@@ -76,21 +83,21 @@ public class CaptchaActivity extends AppCompatActivity
             public void onClick (View v)
             {
 
-                if(CaptchaActivity.this.getCurrentFocus() != null)
+                if (CaptchaActivity.this.getCurrentFocus() != null)
                 {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(CaptchaActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 
-                if(text.getText() == null)
+                if (text.getText() == null)
                 {
-                    Toast.makeText(ctx,"O código não pode ser vazio!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx, "O código não pode ser vazio!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if(text.getText().length() < 4)
+                if (text.getText().length() < 4)
                 {
-                    Toast.makeText(ctx,"Por favor, digite o código corretamente!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx, "Por favor, digite o código corretamente!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -103,22 +110,40 @@ public class CaptchaActivity extends AppCompatActivity
         });
     }
 
+    private void initActionBar ()
+    {
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected (MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     public class NumberTextWatcher implements TextWatcher
     {
         @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count)
+        public void onTextChanged (CharSequence s, int start, int before, int count)
         {
         }
 
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after)
+        public void beforeTextChanged (CharSequence s, int start, int count, int after)
         {
 
         }
 
         @Override
-        public void afterTextChanged(Editable s)
+        public void afterTextChanged (Editable s)
         {
             if (text.getText().length() == 4)
             {
@@ -175,7 +200,7 @@ public class CaptchaActivity extends AppCompatActivity
         {
             super.onPostExecute(drawable);
 
-            if(drawable != null)
+            if (drawable != null)
             {
                 title.setVisibility(View.VISIBLE);
 

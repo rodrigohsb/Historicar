@@ -57,6 +57,8 @@ public class HomeActivity2 extends AppCompatActivity
 
     private boolean leaving = false;
 
+    private ViewPagerAdapter mViewPagerAdapter;
+
     @Override
     protected void onCreate (Bundle savedInstanceState)
     {
@@ -73,30 +75,14 @@ public class HomeActivity2 extends AppCompatActivity
         setSupportActionBar(toolbar);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
-        setupTabIcons();
     }
 
     private void setupViewPager (ViewPager viewPager)
     {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new TicketsFragment(), getString(R.string.homeActivityTicketsTitleTab));
-        adapter.addFragment(new PointsFragment(), getString(R.string.homeActivityPointsTitleTab));
-        viewPager.setAdapter(adapter);
-    }
-
-    private void setupTabIcons ()
-    {
-        TabLayout.Tab tab0 = tabLayout.getTabAt(0);
-        if (tab0 != null)
-        {
-//            tab0.setIcon(tabIcons[0]);
-        }
-
-        TabLayout.Tab tab1 = tabLayout.getTabAt(1);
-        if (tab1 != null)
-        {
-//            tab1.setIcon(tabIcons[0]);
-        }
+        mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        mViewPagerAdapter.addFragment(new TicketsFragment(), getString(R.string.homeActivityTicketsTitleTab));
+        mViewPagerAdapter.addFragment(new PointsFragment(), getString(R.string.homeActivityPointsTitleTab));
+        viewPager.setAdapter(mViewPagerAdapter);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter
@@ -135,7 +121,6 @@ public class HomeActivity2 extends AppCompatActivity
         }
     }
 
-
     @Override
     public boolean onOptionsItemSelected (MenuItem item)
     {
@@ -159,7 +144,7 @@ public class HomeActivity2 extends AppCompatActivity
     public void onBackPressed ()
     {
 
-        if(leaving)
+        if (leaving)
         {
             super.onBackPressed();
             finish();
@@ -257,6 +242,18 @@ public class HomeActivity2 extends AppCompatActivity
             }
         });
         return true;
+    }
+
+    @Override
+    protected void onActivityResult (int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if ((requestCode == Constants.REQUEST_FOR_CREATE_PLATE || requestCode == Constants.REQUEST_FOR_UPDATE_PLATE) && resultCode == RESULT_OK)
+        {
+            TicketsFragment mTicketsFragment = (TicketsFragment) mViewPagerAdapter.getItem(0);
+            mTicketsFragment.updateData();
+        }
     }
 
 }

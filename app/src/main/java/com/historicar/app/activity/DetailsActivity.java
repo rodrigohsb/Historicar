@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +35,8 @@ public class DetailsActivity extends AppCompatActivity
 
     private Context ctx;
 
+    @Bind(R.id.toolbar)
+    protected Toolbar mToolbar;
 
     // COMMON_SECTION_XML
     @Bind(R.id.detailsSectionCommonTitle)
@@ -215,6 +218,8 @@ public class DetailsActivity extends AppCompatActivity
         Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.INTERSTITIAL | Appodeal.BANNER);
         Appodeal.show(this, Appodeal.BANNER_BOTTOM);
 
+        initActionBar();
+
         ctx = this;
 
         Bundle bundle = getIntent().getExtras();
@@ -233,7 +238,13 @@ public class DetailsActivity extends AppCompatActivity
         }
         fillPaymentUI(multa);
     }
-    
+
+    private void initActionBar ()
+    {
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
     private void fillCommonUI(Multa multa)
     {
         description.setText(multa.getDescricao());
@@ -471,6 +482,10 @@ public class DetailsActivity extends AppCompatActivity
     {
         switch (item.getItemId())
         {
+            case android.R.id.home:
+                finish();
+                break;
+
             case R.id.action_insert_or_edit:
                 startActivity(new Intent(ctx, InsertOrEditActivity.class));
                 finish();

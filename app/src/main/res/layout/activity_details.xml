@@ -1,57 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="50dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:scrollbars="none">
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/detailsRelativeLayoutLayout"
+    <include layout="@layout/include_toolbar"/>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:scrollbars="none">
 
-        <include
-            android:id="@+id/details_common_section"
-            layout="@layout/details_common_section"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <RelativeLayout
+            android:id="@+id/detailsRelativeLayoutLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <include
-            android:id="@+id/details_autuacao_section"
-            layout="@layout/details_autuacao_section"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/details_common_section"
-            android:layout_marginTop="8dp"/>
+            <include
+                android:id="@+id/details_common_section"
+                layout="@layout/details_common_section"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
-        <include
-            android:id="@+id/details_recurso_section"
-            layout="@layout/details_recurso_section"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/details_autuacao_section"
-            android:layout_marginTop="8dp"
-            android:visibility="gone"/>
+            <include
+                android:id="@+id/details_autuacao_section"
+                layout="@layout/details_autuacao_section"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/details_common_section"
+                android:layout_marginTop="8dp"/>
 
-        <include
-            android:id="@+id/details_penalidade_section"
-            layout="@layout/details_penalidade_section"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/details_recurso_section"
-            android:layout_marginTop="8dp"
-            android:visibility="gone"/>
+            <include
+                android:id="@+id/details_recurso_section"
+                layout="@layout/details_recurso_section"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/details_autuacao_section"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"/>
 
-        <include
-            android:id="@+id/details_payment_section"
-            layout="@layout/details_payment_section"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/details_penalidade_section"
-            android:layout_marginTop="8dp"/>
+            <include
+                android:id="@+id/details_penalidade_section"
+                layout="@layout/details_penalidade_section"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/details_recurso_section"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"/>
 
-    </RelativeLayout>
+            <include
+                android:id="@+id/details_payment_section"
+                layout="@layout/details_payment_section"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/details_penalidade_section"
+                android:layout_marginTop="8dp"/>
 
-</ScrollView>
+        </RelativeLayout>
+
+    </ScrollView>
+</android.support.design.widget.CoordinatorLayout>

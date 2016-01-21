@@ -1,58 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
-        android:orientation="vertical">
+    <include layout="@layout/include_toolbar"/>
 
-        <TextView
-            android:id="@+id/captchaTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Digite o código visualizado abaixo:"
-            android:textSize="20sp"
-            android:visibility="gone"/>
-
-        <ImageView
-            android:id="@+id/captchaImage"
-            android:layout_width="160dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="24dp"
-            android:visibility="gone"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24dp"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/captchaTextView"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:inputType="number"
-                android:maxLength="4"
-                android:maxLines="1"
-                android:textSize="24sp"
-                android:visibility="gone"/>
-
-            <Button
-                android:id="@+id/captchaButton"
+            <TextView
+                android:id="@+id/captchaTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:enabled="false"
-                android:text="Buscar"
+                android:text="Digite o código visualizado abaixo:"
                 android:textSize="20sp"
                 android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/captchaImage"
+                android:layout_width="160dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="24dp"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/captchaTextView"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:maxLines="1"
+                    android:textSize="24sp"
+                    android:visibility="gone"/>
+
+                <Button
+                    android:id="@+id/captchaButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text="Buscar"
+                    android:textSize="20sp"
+                    android:visibility="gone"/>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
 
-</RelativeLayout>
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
