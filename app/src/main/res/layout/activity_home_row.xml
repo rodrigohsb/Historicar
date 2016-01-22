@@ -1,53 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginBottom="4dp"
+    android:elevation="2sp"
+    card_view:cardCornerRadius="2dp">
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-    <LinearLayout
-        android:id="@+id/homePlacaLinearLayout"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/custom_shape_placa"
-        android:orientation="vertical">
+        android:background="@android:color/white"
+        android:paddingBottom="2dp"
+        android:paddingLeft="24dp"
+        android:paddingTop="2dp">
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:layout_marginTop="2dp"
-            android:background="@drawable/custom_shape_placa_top"/>
+            android:id="@+id/homeCarImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_car"/>
+
+        <View
+            android:id="@+id/homeView"
+            android:layout_width="1dp"
+            android:layout_height="56dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@id/homeCarImage"
+            android:background="#000000"/>
 
         <TextView
             android:id="@+id/homeDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/custom_shape_placa_nome"
-            android:paddingBottom="2dp"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:paddingTop="2dp"
-            tools:text="@string/hint_plate_name"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@id/homeView"
+            android:text="Meu Carro"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="16sp"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/black"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/homePlacaValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/homeDescription"
+            android:layout_alignStart="@id/homeDescription"
+            android:layout_below="@id/homeDescription"
             android:layout_gravity="center"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
-            tools:text="@string/hint_plate_value"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="18sp"
-            android:textColor="@android:color/black"/>
-
-    </LinearLayout>
-
-</RelativeLayout>
+            android:text="@string/hint_plate_value"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/darker_gray"/>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

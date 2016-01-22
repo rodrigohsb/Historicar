@@ -38,6 +38,8 @@
     <string name="hint_plate_name">Meu Carro</string>
     <string name="hint_plate_value">LSL - 4317</string>
 
+    <string name="hint_points">EX: CPF</string>
+
     <string name="appodeal_key">956e7c37b94eca6578c05d461500d0daaeea94463c52ddbd</string>
 
 
