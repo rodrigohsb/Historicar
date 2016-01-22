@@ -42,7 +42,7 @@ public class ResultActivity extends AppCompatActivity
         setContentView(R.layout.activity_result);
         ButterKnife.bind(this);
 
-        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.INTERSTITIAL | Appodeal.BANNER);
+        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.BANNER);
         Appodeal.show(this, Appodeal.BANNER_BOTTOM);
 
         initActionBar();

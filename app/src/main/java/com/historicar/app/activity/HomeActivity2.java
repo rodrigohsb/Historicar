@@ -186,7 +186,7 @@ public class HomeActivity2 extends AppCompatActivity
         if ((requestCode == Constants.REQUEST_FOR_CREATE_PLATE || requestCode == Constants.REQUEST_FOR_UPDATE_PLATE) && resultCode == RESULT_OK)
         {
             TicketsFragment mTicketsFragment = (TicketsFragment) mViewPagerAdapter.getItem(0);
-//            mTicketsFragment.updateData();
+            //            mTicketsFragment.updateData();
         }
     }
 

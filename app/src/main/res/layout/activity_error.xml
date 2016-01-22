@@ -6,9 +6,12 @@
     android:layout_height="match_parent"
     android:layout_marginBottom="50dp">
 
+    <include layout="@layout/include_toolbar"/>
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingTop="?attr/actionBarSize">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,9 +24,9 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="90dp"
                 android:text="Ops,"
-                android:textStyle="bold"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@android:color/black"/>
+                android:textColor="@android:color/black"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/error"
@@ -32,8 +35,8 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:text="Não foi possível obter multas para "
-                android:textColor="@android:color/black"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/black"/>
 
             <ImageView
                 android:layout_width="150dp"

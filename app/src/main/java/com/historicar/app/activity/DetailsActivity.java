@@ -33,8 +33,6 @@ import butterknife.ButterKnife;
 public class DetailsActivity extends AppCompatActivity
 {
 
-    private Context ctx;
-
     @Bind(R.id.toolbar)
     protected Toolbar mToolbar;
 
@@ -89,7 +87,7 @@ public class DetailsActivity extends AppCompatActivity
 
     @Bind(R.id.detailsSectionCommonVelocidade)
     protected LinearLayout velocidadeLinearLayout;
-    
+
     @Bind(R.id.detailsSectionCommonVelocidadeAferida)
     protected TextView velocAferica;
 
@@ -128,7 +126,6 @@ public class DetailsActivity extends AppCompatActivity
     protected TextView autuacaoSituacaoPostagem;
 
 
-    
     // RECURSO_SECTION_XML
     @Bind(R.id.details_recurso_section)
     RelativeLayout recursoSection;
@@ -147,7 +144,6 @@ public class DetailsActivity extends AppCompatActivity
     protected LinearLayout recursoSituationLinerLayout;
     @Bind(R.id.detailsRecursoSectionSituation)
     protected TextView recursoSituation;
-
 
 
     // PENALIDADE_SECTION_XML
@@ -215,24 +211,22 @@ public class DetailsActivity extends AppCompatActivity
         setContentView(R.layout.activity_details);
         ButterKnife.bind(this);
 
-        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.INTERSTITIAL | Appodeal.BANNER);
+        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.BANNER);
         Appodeal.show(this, Appodeal.BANNER_BOTTOM);
 
         initActionBar();
-
-        ctx = this;
 
         Bundle bundle = getIntent().getExtras();
         Multa multa = (Multa) bundle.getSerializable(Constants.MULTA);
 
         fillCommonUI(multa);
         fillAutuacaoUI(multa);
-        
-        if(multa.isHasRecurso())
+
+        if (multa.isHasRecurso())
         {
             fillRecursoUI(multa);
         }
-        if(multa.isHasPenalidade())
+        if (multa.isHasPenalidade())
         {
             fillPenalidadeUI(multa);
         }
@@ -245,7 +239,7 @@ public class DetailsActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private void fillCommonUI(Multa multa)
+    private void fillCommonUI (Multa multa)
     {
         description.setText(multa.getDescricao());
 
@@ -254,95 +248,95 @@ public class DetailsActivity extends AppCompatActivity
 
         local.setText(multa.getLocal());
 
-        if(multa.getInfracao() != null)
+        if (multa.getInfracao() != null)
         {
             infracaoLinearLayout.setVisibility(View.VISIBLE);
             infracao.setText(multa.getInfracao());
         }
 
-        if(multa.getCodDetran() != null)
+        if (multa.getCodDetran() != null)
         {
             CodigoDetranLinearLayout.setVisibility(View.VISIBLE);
             codDetran.setText(multa.getCodDetran());
         }
 
-        if(multa.getCodInfracao() != null)
+        if (multa.getCodInfracao() != null)
         {
             codInfracaoLinearLayout.setVisibility(View.VISIBLE);
             codInfracao.setText(multa.getCodInfracao());
         }
 
-        if(multa.getType() != null)
+        if (multa.getType() != null)
         {
             typeLinearLayout.setVisibility(View.VISIBLE);
             type.setText(multa.getType());
         }
 
-        if(multa.getDataHoraInfracao() != null)
+        if (multa.getDataHoraInfracao() != null)
         {
             dateHourLinearLayout.setVisibility(View.VISIBLE);
             dateHour.setText(multa.getDataHoraInfracao());
         }
 
-        if(multa.getStatus() != null)
+        if (multa.getStatus() != null)
         {
             statusLinearLayout.setVisibility(View.VISIBLE);
             status.setText(multa.getStatus());
         }
 
-        if(multa.getVelocidadeAferida() != null && multa.getVelocidadeMax() != null)
+        if (multa.getVelocidadeAferida() != null && multa.getVelocidadeMax() != null)
         {
             velocidadeLinearLayout.setVisibility(View.VISIBLE);
             velocAferica.setText(multa.getVelocidadeAferida());
             velocMax.setText(multa.getVelocidadeMax());
         }
     }
-    
-    private void fillAutuacaoUI(Multa multa)
+
+    private void fillAutuacaoUI (Multa multa)
     {
-        if(multa.getNotificacaoAutuacao() != null)
+        if (multa.getNotificacaoAutuacao() != null)
         {
             autuacaoNotificacaoLinearLayout.setVisibility(View.VISIBLE);
             autuacaoNotificacao.setText(multa.getNotificacaoAutuacao());
         }
 
-        if(multa.getDataAutuacao() != null)
+        if (multa.getDataAutuacao() != null)
         {
             autuacaoDateLinearLayout.setVisibility(View.VISIBLE);
             autuacaoDate.setText(multa.getDataAutuacao());
         }
 
-        if(multa.getPostagemAutuacao() != null)
+        if (multa.getPostagemAutuacao() != null)
         {
             autuacaoPostagemLinearLayout.setVisibility(View.VISIBLE);
             autuacaoPostagem.setText(multa.getPostagemAutuacao());
         }
 
-        if(multa.getNumeroARAutuacao() != null)
+        if (multa.getNumeroARAutuacao() != null)
         {
             autuacaoArLinearLayout.setVisibility(View.VISIBLE);
             autuacaoAr.setText(multa.getNumeroARAutuacao());
         }
 
-        if(multa.getSituacaoARAutuacao() != null)
+        if (multa.getSituacaoARAutuacao() != null)
         {
             autuacaoSituacaoPostagemLinearLayout.setVisibility(View.VISIBLE);
             autuacaoSituacaoPostagem.setText(multa.getSituacaoARAutuacao());
         }
     }
 
-    private void fillRecursoUI(Multa multa)
+    private void fillRecursoUI (Multa multa)
     {
 
         recursoSection.setVisibility(View.VISIBLE);
 
-        if(multa.getRecurso() != null)
+        if (multa.getRecurso() != null)
         {
             recursoSubtitle.setVisibility(View.VISIBLE);
             recursoSubtitle.setText(multa.getRecurso());
         }
 
-        if(multa.getProcessoData() != null)
+        if (multa.getProcessoData() != null)
         {
             recursoProcessAndDateLinearLayout.setVisibility(View.VISIBLE);
             recursoProcessAndDate.setText(multa.getProcessoData());
@@ -355,51 +349,51 @@ public class DetailsActivity extends AppCompatActivity
         }
     }
 
-    private void fillPenalidadeUI(Multa multa)
+    private void fillPenalidadeUI (Multa multa)
     {
 
         penalidadeSection.setVisibility(View.VISIBLE);
 
-        if(multa.getNotificacaoPenalidade() != null)
+        if (multa.getNotificacaoPenalidade() != null)
         {
             penalidadeNotificacaoLinearLayout.setVisibility(View.VISIBLE);
             penalidadeNotificacao.setText(multa.getNotificacaoPenalidade());
         }
 
-        if(multa.getDataPenalidade() != null)
+        if (multa.getDataPenalidade() != null)
         {
             penalidadeDateLinearLayout.setVisibility(View.VISIBLE);
             penalidadeDate.setText(multa.getDataPenalidade());
         }
 
-        if(multa.getPostagemPenalidade() != null)
+        if (multa.getPostagemPenalidade() != null)
         {
             penalidadePostagemLinearLayout.setVisibility(View.VISIBLE);
             penalidadeDataPostagem.setText(multa.getPostagemPenalidade());
         }
 
-        if(multa.getNumeroARPenalidade() != null)
+        if (multa.getNumeroARPenalidade() != null)
         {
             penalidadeArLinearLayout.setVisibility(View.VISIBLE);
             penalidadeAr.setText(multa.getNumeroARPenalidade());
         }
 
-        if(multa.getSituacaoARPenalidade() != null)
+        if (multa.getSituacaoARPenalidade() != null)
         {
             penalidadeSituacaoPostagemLinearLayout.setVisibility(View.VISIBLE);
             penalidadeSituacaoPostagem.setText(multa.getSituacaoARPenalidade());
         }
     }
 
-    private void fillPaymentUI(Multa multa)
+    private void fillPaymentUI (Multa multa)
     {
-        if(multa.getVencimento() != null)
+        if (multa.getVencimento() != null)
         {
             paymentVencimentoLinearLayout.setVisibility(View.VISIBLE);
             paymentVencimento.setText(multa.getVencimento());
         }
 
-        if(multa.getValorPago() != null)
+        if (multa.getValorPago() != null)
         {
             paymentValorJaPagoLinearLayout.setVisibility(View.VISIBLE);
             paymentValorJaPago.setText(multa.getValorPago());
@@ -411,7 +405,7 @@ public class DetailsActivity extends AppCompatActivity
         }
         else
         {
-            if(multa.getValorAPagar() != null)
+            if (multa.getValorAPagar() != null)
             {
                 paymentValorAPagarLinerLayout.setVisibility(View.VISIBLE);
                 paymentValorAPagar.setText(multa.getValorAPagar());
@@ -419,7 +413,7 @@ public class DetailsActivity extends AppCompatActivity
             paymentSituacao.setText("Pagamento NÃO efetuado");
         }
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu (Menu menu)
     {
@@ -444,18 +438,18 @@ public class DetailsActivity extends AppCompatActivity
                             dialog.dismiss();
                         }
                     };
-                    AlertDialog alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_plate), button);
+                    AlertDialog alertDialog = new AlertUtils(DetailsActivity.this).getAlertDialog(getString(R.string.invalid_plate), button);
                     alertDialog.show();
                     return false;
                 }
 
-                if(DetailsActivity.this.getCurrentFocus() != null)
+                if (DetailsActivity.this.getCurrentFocus() != null)
                 {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(DetailsActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 
-                Intent myIntent = new Intent(ctx, CaptchaActivity.class);
+                Intent myIntent = new Intent(DetailsActivity.this, CaptchaActivity.class);
                 myIntent.putExtra(Constants.PLACA_KEY, s);
                 startActivity(myIntent);
                 finish();
@@ -483,11 +477,6 @@ public class DetailsActivity extends AppCompatActivity
         switch (item.getItemId())
         {
             case android.R.id.home:
-                finish();
-                break;
-
-            case R.id.action_insert_or_edit:
-                startActivity(new Intent(ctx, InsertOrEditActivity.class));
                 finish();
                 break;
         }

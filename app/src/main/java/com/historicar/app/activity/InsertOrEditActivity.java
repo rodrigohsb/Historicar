@@ -182,7 +182,7 @@ public class InsertOrEditActivity extends AppCompatActivity
                 {
                     Carro carroAux = new Carro(placaLetras.getText().toString() + " - " + placaNumeros.getText().toString(), descriptionValue.getText().toString());
 
-                    Intent it = new Intent(ctx, HomeActivity.class);
+                    Intent it = new Intent(ctx, HomeActivity2.class);
                     
                     if (carro == null)
                     {

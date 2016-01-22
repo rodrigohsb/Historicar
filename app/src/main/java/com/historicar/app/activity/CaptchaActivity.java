@@ -48,8 +48,6 @@ public class CaptchaActivity extends AppCompatActivity
     @Bind(R.id.captchaButton)
     protected Button button;
 
-    private Context ctx;
-
     @Override
     protected void onCreate (Bundle savedInstanceState)
     {
@@ -59,10 +57,8 @@ public class CaptchaActivity extends AppCompatActivity
 
         new CaptchaAsyncTask(this).execute();
 
-        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.INTERSTITIAL | Appodeal.BANNER);
+        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.BANNER);
         Appodeal.show(this, Appodeal.BANNER_BOTTOM);
-
-        ctx = this;
 
         initActionBar();
 
@@ -91,17 +87,17 @@ public class CaptchaActivity extends AppCompatActivity
 
                 if (text.getText() == null)
                 {
-                    Toast.makeText(ctx, "O código não pode ser vazio!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CaptchaActivity.this, "O código não pode ser vazio!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (text.getText().length() < 4)
                 {
-                    Toast.makeText(ctx, "Por favor, digite o código corretamente!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CaptchaActivity.this, "Por favor, digite o código corretamente!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                Intent myIntent = new Intent(ctx, ResultActivity.class);
+                Intent myIntent = new Intent(CaptchaActivity.this, ResultActivity.class);
                 myIntent.putExtra(Constants.PLACA_KEY, getIntent().getExtras().getString(Constants.PLACA_KEY));
                 myIntent.putExtra(Constants.CAPTCHA, text.getText().toString());
                 startActivity(myIntent);

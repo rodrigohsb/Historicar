@@ -5,10 +5,13 @@
     android:layout_height="match_parent"
     android:layout_marginBottom="50dp">
 
+    <include layout="@layout/include_toolbar"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:paddingTop="?attr/actionBarSize">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -26,11 +29,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:textSize="24sp"
                     android:gravity="center"
                     android:text="@string/aboutActivityTitle"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/actionbar_background"
+                    android:textSize="24sp"
                     android:textStyle="bold"/>
 
                 <ImageView
@@ -163,10 +166,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textStyle="italic"
                     android:text="@string/aboutActivityAppVersion"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/actionbar_background"/>
+                    android:textColor="@color/actionbar_background"
+                    android:textStyle="italic"/>
             </LinearLayout>
 
         </LinearLayout>

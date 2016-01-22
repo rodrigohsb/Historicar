@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
@@ -28,7 +29,8 @@ import butterknife.ButterKnife;
 public class NoMultaActivity extends AppCompatActivity
 {
 
-    private Context ctx;
+    @Bind(R.id.toolbar)
+    protected Toolbar mToolbar;
 
     @Bind(R.id.noMulta)
     protected TextView textView;
@@ -40,14 +42,20 @@ public class NoMultaActivity extends AppCompatActivity
         setContentView(R.layout.activity_no_multa);
         ButterKnife.bind(this);
 
-        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.INTERSTITIAL | Appodeal.BANNER);
-        Appodeal.show(this, Appodeal.BANNER_BOTTOM);
+        initActionBar();
 
-        ctx = this;
+        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.BANNER);
+        Appodeal.show(this, Appodeal.BANNER_BOTTOM);
 
         String placa = getIntent().getExtras().getString(Constants.PLACA_KEY);
 
         textView.setText(textView.getText().toString() + placa.toUpperCase());
+    }
+
+    private void initActionBar ()
+    {
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -64,7 +72,7 @@ public class NoMultaActivity extends AppCompatActivity
             @Override
             public boolean onQueryTextSubmit (String s)
             {
-                if (!ValidateUtils.isOnline(ctx))
+                if (!ValidateUtils.isOnline(NoMultaActivity.this))
                 {
                     DialogInterface.OnClickListener button = new DialogInterface.OnClickListener()
                     {
@@ -73,7 +81,7 @@ public class NoMultaActivity extends AppCompatActivity
                             dialog.dismiss();
                         }
                     };
-                    AlertDialog alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_connection), button);
+                    AlertDialog alertDialog = new AlertUtils(NoMultaActivity.this).getAlertDialog(getString(R.string.invalid_connection), button);
                     alertDialog.show();
                     return false;
                 }
@@ -86,18 +94,18 @@ public class NoMultaActivity extends AppCompatActivity
                             dialog.dismiss();
                         }
                     };
-                    AlertDialog alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_plate), button);
+                    AlertDialog alertDialog = new AlertUtils(NoMultaActivity.this).getAlertDialog(getString(R.string.invalid_plate), button);
                     alertDialog.show();
                     return false;
                 }
 
-                if(NoMultaActivity.this.getCurrentFocus() != null)
+                if (NoMultaActivity.this.getCurrentFocus() != null)
                 {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(NoMultaActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 
-                Intent myIntent = new Intent(ctx, CaptchaActivity.class);
+                Intent myIntent = new Intent(NoMultaActivity.this, CaptchaActivity.class);
                 myIntent.putExtra(Constants.PLACA_KEY, s);
                 startActivity(myIntent);
                 finish();
@@ -124,8 +132,7 @@ public class NoMultaActivity extends AppCompatActivity
     {
         switch (item.getItemId())
         {
-            case R.id.action_insert_or_edit:
-                startActivity(new Intent(ctx, InsertOrEditActivity.class));
+            case android.R.id.home:
                 finish();
                 break;
         }
