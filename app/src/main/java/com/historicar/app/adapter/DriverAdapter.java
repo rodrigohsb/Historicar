@@ -7,44 +7,48 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.historicar.app.R;
 import com.historicar.app.activity.CaptchaActivity;
-import com.historicar.app.activity.InsertOrEditActivity;
+import com.historicar.app.activity.InsertOrEditTicketsActivity;
 import com.historicar.app.bean.Carro;
 import com.historicar.app.contants.Constants;
 
 import java.util.List;
 
 /**
- * Created by Rodrigo on 01/01/16.
+ * Created by Rodrigo on 23/01/16.
  */
-public class TesteAdapter extends RecyclerView.Adapter<TesteAdapter.LinearViewHolder>
+public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.LinearViewHolder>
 {
 
     private final List<Carro> mList;
     private final Context mContext;
 
-    public TesteAdapter (List<Carro> mList, Context mContext)
+    public DriverAdapter (List<Carro> mList, Context mContext)
     {
         this.mList = mList;
         this.mContext = mContext;
     }
 
     @Override
-    public TesteAdapter.LinearViewHolder onCreateViewHolder (ViewGroup parent, int viewType)
+    public DriverAdapter.LinearViewHolder onCreateViewHolder (ViewGroup parent, int viewType)
     {
-        return new LinearViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_home_row, parent, false));
+        return new LinearViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_tickets_row, parent, false));
     }
 
     @Override
-    public void onBindViewHolder (TesteAdapter.LinearViewHolder holder, int position)
+    public void onBindViewHolder (DriverAdapter.LinearViewHolder holder, int position)
     {
         Carro carro = mList.get(position);
 
         holder.mDescription.setText(carro.getDescription());
         holder.mPlaca.setText(carro.getPlaca());
+
+        /* só eh moto se type == 1. Default eh carro */
+        holder.icon.setImageResource(carro.getType() == 1 ? R.drawable.ic_motorcycle : R.drawable.ic_car);
     }
 
     @Override
@@ -60,11 +64,14 @@ public class TesteAdapter extends RecyclerView.Adapter<TesteAdapter.LinearViewHo
 
         private final TextView mPlaca;
 
+        private final ImageView icon;
+
         public LinearViewHolder (View view)
         {
             super(view);
             mDescription = (TextView) view.findViewById(R.id.homeDescription);
             mPlaca = (TextView) view.findViewById(R.id.homePlacaValue);
+            icon = (ImageView) view.findViewById(R.id.homeCarImage);
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
         }
@@ -80,10 +87,11 @@ public class TesteAdapter extends RecyclerView.Adapter<TesteAdapter.LinearViewHo
         @Override
         public boolean onLongClick (View v)
         {
-            Intent myIntent = new Intent(mContext, InsertOrEditActivity.class);
+            Intent myIntent = new Intent(mContext, InsertOrEditTicketsActivity.class);
             myIntent.putExtra(mContext.getString(R.string.carro), mList.get(getAdapterPosition()));
             ((Activity) mContext).startActivityForResult(myIntent, Constants.REQUEST_FOR_UPDATE_PLATE);
             return true;
         }
     }
+
 }

@@ -23,8 +23,8 @@ import android.widget.ImageView;
 import com.historicar.app.R;
 import com.historicar.app.activity.AboutActivity;
 import com.historicar.app.activity.CaptchaActivity;
-import com.historicar.app.activity.InsertOrEditActivity;
-import com.historicar.app.adapter.TesteAdapter;
+import com.historicar.app.activity.InsertOrEditTicketsActivity;
+import com.historicar.app.adapter.TicketAdapter;
 import com.historicar.app.bean.Carro;
 import com.historicar.app.contants.Constants;
 import com.historicar.app.persistence.Repository;
@@ -39,7 +39,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Rodrigo on 20/01/16.
  */
-public class TicketsFragment extends Fragment
+public class TicketFragment extends Fragment
 {
     private AlertDialog alertDialog;
 
@@ -69,8 +69,7 @@ public class TicketsFragment extends Fragment
         ButterKnife.bind(this, mView);
 
         carros = new Repository(getActivity()).getAll();
-
-        adapter = new TesteAdapter(carros, getActivity());
+        adapter = new TicketAdapter(carros, getActivity());
 
         mRecyclerView.setHasFixedSize(true);
 
@@ -154,13 +153,36 @@ public class TicketsFragment extends Fragment
         switch (item.getItemId())
         {
             case R.id.action_about:
-                startActivity(new Intent(getActivity(), AboutActivity.class));
+                getActivity().startActivity(new Intent(getActivity(), AboutActivity.class));
                 break;
             case R.id.action_insert_or_edit:
-                startActivityForResult(new Intent(getActivity(), InsertOrEditActivity.class), Constants.REQUEST_FOR_CREATE_PLATE);
+                getActivity().startActivityForResult(new Intent(getActivity(), InsertOrEditTicketsActivity.class), Constants.REQUEST_FOR_CREATE_PLATE);
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void updateData ()
+    {
+
+        List<Carro> carrosRepo = new Repository(getActivity()).getAll();
+
+        if (carrosRepo == null || carrosRepo.isEmpty())
+        {
+            mRecyclerView.setVisibility(View.GONE);
+            newPlateView.setVisibility(View.VISIBLE);
+            newPlateView.setOnClickListener(new ImageClickListener());
+        }
+        else
+        {
+            carros.clear();
+            carros.addAll(carrosRepo);
+
+            mRecyclerView.setVisibility(View.VISIBLE);
+            newPlateView.setVisibility(View.GONE);
+            adapter.notifyDataSetChanged();
+        }
+
     }
 
     private class ImageClickListener implements View.OnClickListener
@@ -168,7 +190,7 @@ public class TicketsFragment extends Fragment
         @Override
         public void onClick (View v)
         {
-            startActivityForResult(new Intent(getActivity(), InsertOrEditActivity.class), Constants.REQUEST_FOR_CREATE_PLATE);
+            startActivityForResult(new Intent(getActivity(), InsertOrEditTicketsActivity.class), Constants.REQUEST_FOR_CREATE_PLATE);
         }
     }
 

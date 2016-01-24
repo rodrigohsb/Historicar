@@ -17,9 +17,10 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.appodeal.ads.Appodeal;
 import com.historicar.app.R;
 import com.historicar.app.bean.Carro;
 import com.historicar.app.contants.Constants;
@@ -33,7 +34,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Rodrigo on 29/04/15.
  */
-public class InsertOrEditActivity extends AppCompatActivity
+public class InsertOrEditTicketsActivity extends AppCompatActivity
 {
 
     private AlertDialog alertDialog;
@@ -44,15 +45,30 @@ public class InsertOrEditActivity extends AppCompatActivity
 
     private Repository repository;
 
-    @Bind(R.id.toolbar) protected Toolbar mToolbar;
-    @Bind(R.id.insertOrEditTitle) protected TextView textView;
-    @Bind(R.id.insertOrEditPlacaDescriptionValue) protected EditText descriptionValue;
-    @Bind(R.id.insertOrEditPlacaLetras) protected EditText placaLetras;
-    @Bind(R.id.insertOrEditPlacaNumeros) protected EditText placaNumeros;
-    @Bind(R.id.saveButton) protected Button saveButton;
-    @Bind(R.id.deleteButton) protected Button deleteButton;
+    @Bind(R.id.toolbar)
+    protected Toolbar mToolbar;
+    @Bind(R.id.insertOrEditTitle)
+    protected TextView textView;
 
-    private boolean isShowing;
+    @Bind(R.id.insertOrEditPlacaDescriptionValue)
+    protected EditText descriptionValue;
+
+    @Bind(R.id.insertOrEditRadioGroup)
+    protected RadioGroup radioGroup;
+    @Bind(R.id.insertOrEditCarRadioButton)
+    protected RadioButton carRadioButton;
+    @Bind(R.id.insertOrEditMotorcycleRadioButton)
+    protected RadioButton motocycleRadioButton;
+
+    @Bind(R.id.insertOrEditPlacaLetras)
+    protected EditText placaLetras;
+    @Bind(R.id.insertOrEditPlacaNumeros)
+    protected EditText placaNumeros;
+
+    @Bind(R.id.saveButton)
+    protected Button saveButton;
+    @Bind(R.id.deleteButton)
+    protected Button deleteButton;
 
     @Override
     protected void onCreate (Bundle savedInstanceState)
@@ -61,60 +77,19 @@ public class InsertOrEditActivity extends AppCompatActivity
         setContentView(R.layout.activity_insert_or_edit);
         ButterKnife.bind(this);
 
-        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.BANNER);
-        Appodeal.show(this, Appodeal.BANNER_BOTTOM);
-        Appodeal.setTesting(true);
-        isShowing = true;
-
         initActionBar();
 
         ctx = this;
 
         repository = new Repository(ctx);
 
-        Bundle bundle = getIntent().getExtras();
-
         descriptionValue.addTextChangedListener(new DescriptionTextWatcher());
-        descriptionValue.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick (View v)
-            {
-                if (isShowing)
-                {
-                    Appodeal.hide(InsertOrEditActivity.this, Appodeal.BANNER_BOTTOM);
-                    isShowing = false;
-                }
-            }
-        });
 
         placaLetras.addTextChangedListener(new LetterTextWatcher());
-        placaLetras.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick (View v)
-            {
-                if (isShowing)
-                {
-                    Appodeal.hide(InsertOrEditActivity.this, Appodeal.BANNER_BOTTOM);
-                    isShowing = false;
-                }
-            }
-        });
 
         placaNumeros.addTextChangedListener(new NumberTextWatcher());
-        placaNumeros.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick (View v)
-            {
-                if (isShowing)
-                {
-                    Appodeal.hide(InsertOrEditActivity.this, Appodeal.BANNER_BOTTOM);
-                    isShowing = false;
-                }
-            }
-        });
+
+        Bundle bundle = getIntent().getExtras();
 
         if (bundle == null)
         {
@@ -128,6 +103,15 @@ public class InsertOrEditActivity extends AppCompatActivity
             carro = (Carro) bundle.getSerializable(getString(R.string.carro));
 
             descriptionValue.setText(carro.getDescription());
+
+            if (carro.getType() == 1)
+            {
+                motocycleRadioButton.setChecked(true);
+            }
+            else
+            {
+                carRadioButton.setChecked(true);
+            }
 
             String placa = carro.getPlaca().replaceAll(" - ", "");
 
@@ -178,12 +162,27 @@ public class InsertOrEditActivity extends AppCompatActivity
                     alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_plate_number), button);
                     alertDialog.show();
                 }
+                else if (radioGroup.getCheckedRadioButtonId() == -1)
+                {
+                    DialogInterface.OnClickListener button = new DialogInterface.OnClickListener()
+                    {
+                        public void onClick (DialogInterface dialog, int id)
+                        {
+                            dialog.dismiss();
+                        }
+                    };
+                    alertDialog = new AlertUtils(ctx).getAlertDialog(getString(R.string.invalid_vehicle_type), button);
+                    alertDialog.show();
+                }
                 else
                 {
                     Carro carroAux = new Carro(placaLetras.getText().toString() + " - " + placaNumeros.getText().toString(), descriptionValue.getText().toString());
 
+                    RadioButton selectedButton = (RadioButton) findViewById(radioGroup.getCheckedRadioButtonId());
+                    carroAux.setType(radioGroup.indexOfChild(selectedButton));
+
                     Intent it = new Intent(ctx, HomeActivity2.class);
-                    
+
                     if (carro == null)
                     {
                         repository.save(carroAux);
@@ -195,7 +194,7 @@ public class InsertOrEditActivity extends AppCompatActivity
                         it.putExtra("old", carro);
                         it.putExtra("update", true);
                     }
-                    
+
                     it.putExtra(getString(R.string.carro), carroAux);
                     setResult(RESULT_OK, it);
                     finish();
@@ -240,18 +239,18 @@ public class InsertOrEditActivity extends AppCompatActivity
     public class DescriptionTextWatcher implements TextWatcher
     {
         @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count)
+        public void onTextChanged (CharSequence s, int start, int before, int count)
         {
         }
 
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after)
+        public void beforeTextChanged (CharSequence s, int start, int count, int after)
         {
 
         }
 
         @Override
-        public void afterTextChanged(Editable s)
+        public void afterTextChanged (Editable s)
         {
             if (descriptionValue.getText().length() == 10)
             {
@@ -263,18 +262,18 @@ public class InsertOrEditActivity extends AppCompatActivity
     public class LetterTextWatcher implements TextWatcher
     {
         @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count)
+        public void onTextChanged (CharSequence s, int start, int before, int count)
         {
         }
 
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after)
+        public void beforeTextChanged (CharSequence s, int start, int count, int after)
         {
 
         }
 
         @Override
-        public void afterTextChanged(Editable s)
+        public void afterTextChanged (Editable s)
         {
             if (placaLetras.getText().length() == 3)
             {
@@ -286,18 +285,18 @@ public class InsertOrEditActivity extends AppCompatActivity
     public class NumberTextWatcher implements TextWatcher
     {
         @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count)
+        public void onTextChanged (CharSequence s, int start, int before, int count)
         {
         }
 
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after)
+        public void beforeTextChanged (CharSequence s, int start, int count, int after)
         {
 
         }
 
         @Override
-        public void afterTextChanged(Editable s)
+        public void afterTextChanged (Editable s)
         {
             if (placaLetras.getText().length() == 4)
             {
@@ -376,10 +375,10 @@ public class InsertOrEditActivity extends AppCompatActivity
                     return false;
                 }
 
-                if(InsertOrEditActivity.this.getCurrentFocus() != null)
+                if (InsertOrEditTicketsActivity.this.getCurrentFocus() != null)
                 {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(InsertOrEditActivity.this.getCurrentFocus().getWindowToken(), 0);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(InsertOrEditTicketsActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 
                 Intent myIntent = new Intent(ctx, CaptchaActivity.class);
@@ -414,18 +413,11 @@ public class InsertOrEditActivity extends AppCompatActivity
                 break;
 
             case R.id.action_insert_or_edit:
-                startActivity(new Intent(ctx, InsertOrEditActivity.class));
+                startActivity(new Intent(ctx, InsertOrEditTicketsActivity.class));
                 finish();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onResume ()
-    {
-        super.onResume();
-        Appodeal.onResume(this, Appodeal.BANNER);
     }
 }

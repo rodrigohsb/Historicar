@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:src="@drawable/ic_car"/>
+            android:src="@drawable/ic_motorcycle"/>
 
         <View
             android:id="@+id/homeView"
