@@ -1,20 +1,15 @@
 package com.historicar.app.adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.historicar.app.R;
-import com.historicar.app.activity.CaptchaActivity;
-import com.historicar.app.activity.InsertOrEditTicketsActivity;
 import com.historicar.app.bean.Carro;
-import com.historicar.app.contants.Constants;
+import com.historicar.app.bean.Driver;
 
 import java.util.List;
 
@@ -24,10 +19,10 @@ import java.util.List;
 public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.LinearViewHolder>
 {
 
-    private final List<Carro> mList;
+    private final List<Driver> mList;
     private final Context mContext;
 
-    public DriverAdapter (List<Carro> mList, Context mContext)
+    public DriverAdapter (List<Driver> mList, Context mContext)
     {
         this.mList = mList;
         this.mContext = mContext;
@@ -36,19 +31,17 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.LinearView
     @Override
     public DriverAdapter.LinearViewHolder onCreateViewHolder (ViewGroup parent, int viewType)
     {
-        return new LinearViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_tickets_row, parent, false));
+        return new LinearViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_drivers_row, parent, false));
     }
 
     @Override
     public void onBindViewHolder (DriverAdapter.LinearViewHolder holder, int position)
     {
-        Carro carro = mList.get(position);
+        Driver driver = mList.get(position);
 
-        holder.mDescription.setText(carro.getDescription());
-        holder.mPlaca.setText(carro.getPlaca());
-
-        /* só eh moto se type == 1. Default eh carro */
-        holder.icon.setImageResource(carro.getType() == 1 ? R.drawable.ic_motorcycle : R.drawable.ic_car);
+        holder.mName.setText(driver.getName());
+        holder.mCPF.setText(String.valueOf(driver.getCpf()));
+        holder.mCNH.setText(String.valueOf(driver.getCnh()));
     }
 
     @Override
@@ -60,18 +53,18 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.LinearView
     public class LinearViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener
     {
 
-        private final TextView mDescription;
+        private final TextView mName;
 
-        private final TextView mPlaca;
+        private final TextView mCPF;
 
-        private final ImageView icon;
+        private final TextView mCNH;
 
         public LinearViewHolder (View view)
         {
             super(view);
-            mDescription = (TextView) view.findViewById(R.id.homeDescription);
-            mPlaca = (TextView) view.findViewById(R.id.homePlacaValue);
-            icon = (ImageView) view.findViewById(R.id.homeCarImage);
+            mName = (TextView) view.findViewById(R.id.driverName);
+            mCPF = (TextView) view.findViewById(R.id.driverCPF);
+            mCNH = (TextView) view.findViewById(R.id.driverCNH);
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
         }
@@ -79,17 +72,12 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.LinearView
         @Override
         public void onClick (View view)
         {
-            Intent it = new Intent(mContext, CaptchaActivity.class);
-            it.putExtra(Constants.PLACA_KEY, mList.get(getAdapterPosition()).getPlaca().replaceAll(" - ", ""));
-            mContext.startActivity(it);
+
         }
 
         @Override
         public boolean onLongClick (View v)
         {
-            Intent myIntent = new Intent(mContext, InsertOrEditTicketsActivity.class);
-            myIntent.putExtra(mContext.getString(R.string.carro), mList.get(getAdapterPosition()));
-            ((Activity) mContext).startActivityForResult(myIntent, Constants.REQUEST_FOR_UPDATE_PLATE);
             return true;
         }
     }

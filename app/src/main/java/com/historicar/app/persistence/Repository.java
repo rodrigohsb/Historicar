@@ -18,11 +18,11 @@ public class Repository extends SQLiteOpenHelper
 {
     private static final String SCRIPT_DATABASE_DELETE = "DROP TABLE IF EXISTS CAR";
 
-    private static final String SCRIPT_DATABASE_CREATE = "create table CAR (_id integer primary key autoincrement, DESCRIPTION varchar not null, PLATE varchar not null)";
+    private static final String SCRIPT_DATABASE_CREATE = "create table CAR (_id integer primary key autoincrement, DESCRIPTION varchar not null, PLATE varchar not null, TYPE int null)";
 
     private static final String DATABASE_NAME = "historicar";
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private static final String TABLE_NAME = "CAR";
 
@@ -40,6 +40,7 @@ public class Repository extends SQLiteOpenHelper
 
         values.put(Carro.CarDB.DESCRIPTION, carro.getDescription());
         values.put(Carro.CarDB.PLATE, carro.getPlaca().toUpperCase());
+        values.put(Carro.CarDB.TYPE, carro.getType());
 
         db.insert(TABLE_NAME, null, values);
         close();
@@ -51,17 +52,19 @@ public class Repository extends SQLiteOpenHelper
 
         List<Carro> carros = new ArrayList<>();
 
-        if (c!= null && c.moveToFirst())
+        if (c != null && c.moveToFirst())
         {
             int idxId = c.getColumnIndex(Carro.CarDB._ID);
             int idxDescription = c.getColumnIndex(Carro.CarDB.DESCRIPTION);
             int idxPlate = c.getColumnIndex(Carro.CarDB.PLATE);
+            int idxType = c.getColumnIndex(Carro.CarDB.TYPE);
             do
             {
                 Carro carro = new Carro();
                 carro.setId(c.getLong(idxId));
                 carro.setDescription(c.getString(idxDescription));
                 carro.setPlaca(c.getString(idxPlate).toUpperCase());
+                carro.setType(c.getInt(idxType));
                 carros.add(carro);
 
             } while (c.moveToNext());
@@ -76,6 +79,7 @@ public class Repository extends SQLiteOpenHelper
 
         values.put(Carro.CarDB.DESCRIPTION, carro.getDescription());
         values.put(Carro.CarDB.PLATE, carro.getPlaca().toUpperCase());
+        values.put(Carro.CarDB.TYPE, carro.getType());
 
         db.update(TABLE_NAME, values, "_id " + "=" + carro.getId(), null);
         close();

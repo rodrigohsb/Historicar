@@ -24,7 +24,8 @@ import android.widget.TextView;
 import com.historicar.app.R;
 import com.historicar.app.bean.Carro;
 import com.historicar.app.contants.Constants;
-import com.historicar.app.persistence.Repository;
+import com.historicar.app.repository.VehicleRepository;
+import com.historicar.app.repository.impl.VehicleRepositoryImpl;
 import com.historicar.app.util.AlertUtils;
 import com.historicar.app.util.ValidateUtils;
 
@@ -43,7 +44,7 @@ public class InsertOrEditTicketsActivity extends AppCompatActivity
 
     private Carro carro;
 
-    private Repository repository;
+    private VehicleRepository vehicleRepository;
 
     @Bind(R.id.toolbar)
     protected Toolbar mToolbar;
@@ -74,14 +75,14 @@ public class InsertOrEditTicketsActivity extends AppCompatActivity
     protected void onCreate (Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_insert_or_edit);
+        setContentView(R.layout.activity_insert_or_edit_tickets);
         ButterKnife.bind(this);
 
         initActionBar();
 
         ctx = this;
 
-        repository = new Repository(ctx);
+        vehicleRepository = new VehicleRepositoryImpl(ctx);
 
         descriptionValue.addTextChangedListener(new DescriptionTextWatcher());
 
@@ -93,12 +94,12 @@ public class InsertOrEditTicketsActivity extends AppCompatActivity
 
         if (bundle == null)
         {
-            textView.setText(R.string.newPlateText);
+            textView.setText(R.string.newPlateTitleText);
             deleteButton.setVisibility(View.GONE);
         }
         else
         {
-            saveButton.setText(R.string.updatePlateText);
+            saveButton.setText(R.string.updateTitleText);
 
             carro = (Carro) bundle.getSerializable(getString(R.string.carro));
 
@@ -181,22 +182,17 @@ public class InsertOrEditTicketsActivity extends AppCompatActivity
                     RadioButton selectedButton = (RadioButton) findViewById(radioGroup.getCheckedRadioButtonId());
                     carroAux.setType(radioGroup.indexOfChild(selectedButton));
 
-                    Intent it = new Intent(ctx, HomeActivity2.class);
-
                     if (carro == null)
                     {
-                        repository.save(carroAux);
+                        vehicleRepository.save(carroAux);
                     }
                     else
                     {
                         carroAux.setId(carro.getId());
-                        repository.update(carroAux);
-                        it.putExtra("old", carro);
-                        it.putExtra("update", true);
+                        vehicleRepository.update(carroAux);
                     }
 
-                    it.putExtra(getString(R.string.carro), carroAux);
-                    setResult(RESULT_OK, it);
+                    setResult(RESULT_OK, new Intent(ctx, HomeActivity.class));
                     finish();
                 }
             }
@@ -212,8 +208,8 @@ public class InsertOrEditTicketsActivity extends AppCompatActivity
                     public void onClick (DialogInterface dialog, int id)
                     {
                         dialog.dismiss();
-                        repository.delete(carro);
-                        setResult(RESULT_OK, new Intent(ctx, HomeActivity2.class));
+                        vehicleRepository.delete(carro);
+                        setResult(RESULT_OK, new Intent(ctx, HomeActivity.class));
                         finish();
                     }
                 };
@@ -252,7 +248,7 @@ public class InsertOrEditTicketsActivity extends AppCompatActivity
         @Override
         public void afterTextChanged (Editable s)
         {
-            if (descriptionValue.getText().length() == 10)
+            if (descriptionValue.getText().length() == 15)
             {
                 placaLetras.requestFocus();
             }
@@ -409,11 +405,6 @@ public class InsertOrEditTicketsActivity extends AppCompatActivity
         switch (item.getItemId())
         {
             case android.R.id.home:
-                finish();
-                break;
-
-            case R.id.action_insert_or_edit:
-                startActivity(new Intent(ctx, InsertOrEditTicketsActivity.class));
                 finish();
                 break;
         }

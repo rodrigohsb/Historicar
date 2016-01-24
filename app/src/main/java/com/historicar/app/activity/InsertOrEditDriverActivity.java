@@ -50,7 +50,10 @@ public class InsertOrEditDriverActivity extends AppCompatActivity
     @Bind(R.id.insertOrEditCNHTitle)
     protected TextView title;
 
-    @Bind(R.id.insertOrEditCNHValue)
+    @Bind(R.id.insertOrEditDriverName)
+    protected EditText name;
+
+    @Bind(R.id.insertOrEditCNH)
     protected EditText cnh;
 
     @Bind(R.id.insertOrEditCPFValue)
@@ -74,8 +77,9 @@ public class InsertOrEditDriverActivity extends AppCompatActivity
 
         driverRepository = new DriverRepositoryImpl(ctx);
 
+        name.addTextChangedListener(new NameTextWatcher());
         cnh.addTextChangedListener(new CNHTextWatcher());
-//        cpf.addTextChangedListener(new MaskTextWatcher());
+        cpf.addTextChangedListener(new MaskTextWatcher());
 
         Bundle bundle = getIntent().getExtras();
 
@@ -90,6 +94,7 @@ public class InsertOrEditDriverActivity extends AppCompatActivity
 
             driver = (Driver) bundle.getSerializable(getString(R.string.driver));
 
+            name.setText(driver.getName());
             cnh.setText(String.valueOf(driver.getCnh()));
             cpf.setText(String.valueOf(driver.getCpf()));
         }
@@ -156,7 +161,7 @@ public class InsertOrEditDriverActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    public class CNHTextWatcher implements TextWatcher
+    private class CNHTextWatcher implements TextWatcher
     {
         @Override
         public void onTextChanged (CharSequence s, int start, int before, int count)
@@ -179,7 +184,7 @@ public class InsertOrEditDriverActivity extends AppCompatActivity
         }
     }
 
-    public class MaskTextWatcher implements TextWatcher
+    private class MaskTextWatcher implements TextWatcher
     {
         boolean isUpdating;
         String old = "";
@@ -190,10 +195,9 @@ public class InsertOrEditDriverActivity extends AppCompatActivity
 
         }
 
-        @Override
         public void onTextChanged (CharSequence s, int start, int before, int count)
         {
-            String str = "";
+            String str = this.unmask(s.toString());
             String mascara = "";
             if (isUpdating)
             {
@@ -221,6 +225,33 @@ public class InsertOrEditDriverActivity extends AppCompatActivity
             isUpdating = true;
             cpf.setText(mascara);
             cpf.setSelection(mascara.length());
+        }
+
+        public void afterTextChanged (Editable s)
+        {
+        }
+
+        public String unmask (String s)
+        {
+            return s.replaceAll("[.]", "").replaceAll("[-]", "").replaceAll("[/]", "").replaceAll("[(]", "").replaceAll("[)]", "");
+        }
+    }
+
+    private class NameTextWatcher implements TextWatcher
+    {
+        @Override
+        public void beforeTextChanged (CharSequence s, int start, int count, int after)
+        {
+
+        }
+
+        @Override
+        public void onTextChanged (CharSequence s, int start, int before, int count)
+        {
+            if (name.getText().length() == 15)
+            {
+                cnh.requestFocus();
+            }
         }
 
         @Override

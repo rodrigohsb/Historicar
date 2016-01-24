@@ -4,10 +4,10 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="4dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginLeft="8dp"
     android:layout_marginBottom="4dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="4dp"
     android:elevation="2sp"
     card_view:cardCornerRadius="2dp">
 
@@ -23,43 +23,101 @@
             android:id="@+id/homeCarImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="16dp"
             android:src="@drawable/ic_cnh"/>
 
         <View
             android:id="@+id/homeView"
             android:layout_width="1dp"
-            android:layout_height="56dp"
+            android:layout_height="64dp"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
+            android:layout_toEndOf="@id/homeCarImage"
             android:layout_toRightOf="@id/homeCarImage"
             android:background="#000000"/>
 
-        <TextView
-            android:id="@+id/homeDescription"
+        <LinearLayout
+            android:id="@+id/driverNameLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_toEndOf="@id/homeView"
             android:layout_toRightOf="@id/homeView"
-            android:text="Meu Carro"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"/>
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/homePlacaValue"
+            <TextView
+                android:id="@+id/driverNameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nome: "
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/driverName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rodrigo"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/driverCNHLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/homeDescription"
-            android:layout_alignStart="@id/homeDescription"
-            android:layout_below="@id/homeDescription"
-            android:layout_gravity="center"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:text="@string/hint_plate_value"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@android:color/darker_gray"/>
+            android:layout_alignLeft="@id/driverNameLayout"
+            android:layout_alignStart="@id/driverNameLayout"
+            android:layout_below="@id/driverNameLayout"
+            android:orientation="horizontal"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/driverCNHText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CNH: "
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/driverCNH"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="03827735392"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/driverNameLayout"
+            android:layout_alignStart="@id/driverNameLayout"
+            android:layout_below="@id/driverCNHLayout"
+            android:orientation="horizontal"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/driverCPFText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CPF: "
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/driverCPF"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="104.766.297-30"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
     </RelativeLayout>
 </android.support.v7.widget.CardView>

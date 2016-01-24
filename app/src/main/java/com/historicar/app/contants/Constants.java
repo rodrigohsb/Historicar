@@ -21,9 +21,13 @@ public class Constants
     public static final String WARNING = "Aviso";
 
     public static final int REQUEST_FOR_UPDATE_PLATE = 1000;
-
     public static final int REQUEST_FOR_CREATE_PLATE = 2000;
 
+    public static final int REQUEST_FOR_UPDATE_DRIVER = 3000;
+    public static final int REQUEST_FOR_CREATE_DRIVER = 4000;
+
+
+    public static final String CPF_MASK = "###.###.###-##";
 
 
     public static final int TIME_OUT = 20000;

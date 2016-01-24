@@ -16,6 +16,8 @@ public class Carro implements Serializable
 
     private String description;
 
+    private int type;
+
     public Carro ()
     {
     }
@@ -57,6 +59,16 @@ public class Carro implements Serializable
         this.description = description;
     }
 
+    public int getType ()
+    {
+        return type;
+    }
+
+    public void setType (int type)
+    {
+        this.type = type;
+    }
+
     @Override
     public String toString ()
     {
@@ -64,6 +76,7 @@ public class Carro implements Serializable
                 "id=" + id +
                 ", placa='" + placa + '\'' +
                 ", description='" + description + '\'' +
+                ", type=" + type +
                 '}';
     }
 
@@ -73,6 +86,8 @@ public class Carro implements Serializable
         public static final String DESCRIPTION = "DESCRIPTION";
 
         public static final String PLATE = "PLATE";
+
+        public static final String TYPE = "TYPE";
 
     }
 }

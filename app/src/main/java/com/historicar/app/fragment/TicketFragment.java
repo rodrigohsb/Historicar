@@ -69,23 +69,26 @@ public class TicketFragment extends Fragment
         ButterKnife.bind(this, mView);
 
         carros = new Repository(getActivity()).getAll();
-        adapter = new TicketAdapter(carros, getActivity());
 
-        mRecyclerView.setHasFixedSize(true);
-
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        mRecyclerView.setAdapter(adapter);
-
-        if (carros.isEmpty())
+        if (carros == null || carros.isEmpty())
         {
             newPlateView.setVisibility(View.VISIBLE);
             newPlateView.setOnClickListener(new ImageClickListener());
+            mRecyclerView.setVisibility(View.GONE);
         }
         else
         {
+            newPlateView.setVisibility(View.GONE);
+
             mRecyclerView.setVisibility(View.VISIBLE);
+            adapter = new TicketAdapter(carros, getActivity());
+
+            mRecyclerView.setHasFixedSize(true);
+
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.setLayoutManager(mLayoutManager);
+
+            mRecyclerView.setAdapter(adapter);
         }
 
         return mView;

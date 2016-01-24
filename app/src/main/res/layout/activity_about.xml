@@ -32,7 +32,7 @@
                     android:gravity="center"
                     android:text="@string/aboutActivityTitle"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textColor="@color/actionbar_background"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="24sp"
                     android:textStyle="bold"/>
 
@@ -50,8 +50,7 @@
                     android:layout_marginTop="16dp"
                     android:gravity="center"
                     android:text="@string/aboutActivityDescription"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/actionbar_background"/>
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                 <TextView
                     android:id="@+id/descriptionPS"
@@ -61,7 +60,6 @@
                     android:layout_marginTop="8dp"
                     android:text="@string/aboutActivityDescriptionPS"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/actionbar_background"
                     android:textStyle="italic"/>
 
             </LinearLayout>
@@ -79,7 +77,7 @@
                     android:gravity="center"
                     android:text="@string/aboutActivitySubtitleTitle"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textColor="@color/actionbar_background"/>
+                    android:textColor="?attr/colorPrimary"/>
 
                 <LinearLayout
                     android:id="@+id/green"
@@ -99,8 +97,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/aboutActivityMultaPaga"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/actionbar_background"/>
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
 
                 </LinearLayout>
 
@@ -122,8 +119,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/aboutActivityMultaNaoPaga"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/actionbar_background"/>
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
 
 
                 </LinearLayout>
@@ -143,7 +139,7 @@
                     android:gravity="center"
                     android:text="@string/aboutActivityDevelopertitle"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textColor="@color/actionbar_background"/>
+                    android:textColor="?attr/colorPrimary"/>
 
                 <TextView
                     android:id="@+id/aboutDeveloperValue"
@@ -152,8 +148,7 @@
                     android:layout_marginTop="8dp"
                     android:gravity="center"
                     android:text="@string/aboutActivityDeveloperValue"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/actionbar_background"/>
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
             </LinearLayout>
 
             <LinearLayout
@@ -168,7 +163,6 @@
                     android:gravity="center"
                     android:text="@string/aboutActivityAppVersion"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/actionbar_background"
                     android:textStyle="italic"/>
             </LinearLayout>
 

@@ -14,41 +14,42 @@
         android:paddingTop="?attr/actionBarSize">
 
         <TextView
-            android:id="@+id/insertOrEditTitle"
+            android:id="@+id/insertOrEditCNHTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="24dp"
             android:gravity="center"
             android:text="Edição:"
-            android:textColor="@color/actionbar_background"
+            android:textColor="?attr/colorPrimary"
             android:textSize="24sp"
             android:textStyle="bold"/>
 
         <LinearLayout
-            android:id="@+id/insertOrEditPlacaDescriptionLayout"
+            android:id="@+id/insertOrEditDriverNameLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/insertOrEditTitle"
+            android:layout_below="@id/insertOrEditCNHTitle"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="24dp"
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Descrição:"
+                android:text="Nome:"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/actionbar_background"
+                android:textColor="?attr/colorPrimary"
                 android:textStyle="bold"/>
 
             <EditText
-                android:id="@+id/insertOrEditPlacaDescriptionValue"
+                android:id="@+id/insertOrEditDriverName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="Ex: Meu Carro"
-                android:maxLength="10"
+                android:layout_marginTop="8dp"
+                android:hint="Ex: Rodrigo"
+                android:inputType="text"
+                android:maxLength="15"
                 android:maxLines="1"
                 android:nextFocusDown="@+id/insertOrEditPlacaLetras"
                 android:singleLine="true"/>
@@ -56,100 +57,74 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/insertOrEditRadioButonLayout"
+            android:id="@+id/insertOrEditCNHLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/insertOrEditPlacaDescriptionLayout"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal">
+            android:layout_below="@id/insertOrEditDriverNameLayout"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical">
 
-            <RadioGroup
-                android:id="@+id/insertOrEditRadioGroup"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:text="CNH:"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="?attr/colorPrimary"
+                android:textStyle="bold"/>
 
-                <RadioButton
-                    android:id="@+id/insertOrEditCarRadioButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_car"
-                    android:drawableRight="@drawable/ic_car"/>
+            <EditText
+                android:id="@+id/insertOrEditCNH"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Ex: 02650306461"
+                android:inputType="number"
+                android:maxLength="11"
+                android:maxLines="1"
+                android:nextFocusDown="@+id/insertOrEditPlacaLetras"
+                android:singleLine="true"/>
 
-                <RadioButton
-                    android:id="@+id/insertOrEditMotorcycleRadioButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="48dp"
-                    android:layout_marginStart="48dp"
-                    android:drawableEnd="@drawable/ic_motorcycle"
-                    android:drawableRight="@drawable/ic_motorcycle"/>
-
-            </RadioGroup>
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/insertOrEditPlacaPlateLayout"
+            android:id="@+id/insertOrEditCPFLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/insertOrEditRadioButonLayout"
+            android:layout_below="@id/insertOrEditCNHLayout"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="24dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/insertOrEditPlacaText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Placa:"
+                android:text="CPF:"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/actionbar_background"
+                android:textColor="?attr/colorPrimary"
                 android:textStyle="bold"/>
 
-            <LinearLayout
-                android:id="@+id/insertOrEditPlacaTextLayout"
+            <EditText
+                android:id="@+id/insertOrEditCPFValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:layout_marginTop="8dp"
+                android:hint="Ex: 120.722.792 - 30"
+                android:inputType="number"
+                android:maxLength="14"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textAllCaps="true"/>
 
-                <EditText
-                    android:id="@+id/insertOrEditPlacaLetras"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="Letras"
-                    android:inputType="text"
-                    android:maxLength="3"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textAllCaps="true"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:text="-"/>
-
-                <EditText
-                    android:id="@+id/insertOrEditPlacaNumeros"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:hint="Números"
-                    android:inputType="number"
-                    android:maxLength="4"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textAllCaps="true"/>
-
-            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/insertOrEditPlacaPlateLayout"
+            android:layout_below="@id/insertOrEditCPFLayout"
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:orientation="horizontal">
@@ -158,10 +133,14 @@
                 android:id="@+id/saveButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/custom_shape_save_button"
+                android:background="@drawable/custom_buttom"
                 android:drawableLeft="@drawable/ic_check"
-                android:drawablePadding="7dp"
+                android:drawablePadding="8dp"
                 android:drawableStart="@drawable/ic_check"
+                android:paddingEnd="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingStart="8dp"
                 android:text="Salvar"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="#ffffff"/>
@@ -172,10 +151,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="40dp"
                 android:layout_marginStart="40dp"
-                android:background="@drawable/custom_shape_delete_button"
+                android:background="@drawable/custom_buttom"
                 android:drawableLeft="@drawable/ic_trash"
-                android:drawablePadding="7dp"
+                android:drawablePadding="8dp"
                 android:drawableStart="@drawable/ic_trash"
+                android:paddingEnd="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingStart="8dp"
                 android:text="Deletar"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="#ffffff"/>
