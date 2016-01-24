@@ -1,6 +1,8 @@
 package com.historicar.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +10,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.historicar.app.R;
-import com.historicar.app.bean.Carro;
+import com.historicar.app.activity.InsertOrEditDriverActivity;
 import com.historicar.app.bean.Driver;
+import com.historicar.app.contants.Constants;
 
 import java.util.List;
 
@@ -40,7 +43,7 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.LinearView
         Driver driver = mList.get(position);
 
         holder.mName.setText(driver.getName());
-        holder.mCPF.setText(String.valueOf(driver.getCpf()));
+        holder.mCPF.setText(driver.getCpf());
         holder.mCNH.setText(String.valueOf(driver.getCnh()));
     }
 
@@ -78,8 +81,10 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.LinearView
         @Override
         public boolean onLongClick (View v)
         {
+            Intent myIntent = new Intent(mContext, InsertOrEditDriverActivity.class);
+            myIntent.putExtra(mContext.getString(R.string.driver), mList.get(getAdapterPosition()));
+            ((Activity) mContext).startActivityForResult(myIntent, Constants.REQUEST_FOR_UPDATE_DRIVER);
             return true;
         }
     }
-
 }

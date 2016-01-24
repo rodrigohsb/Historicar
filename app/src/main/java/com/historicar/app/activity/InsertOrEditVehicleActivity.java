@@ -24,8 +24,8 @@ import android.widget.TextView;
 import com.historicar.app.R;
 import com.historicar.app.bean.Carro;
 import com.historicar.app.contants.Constants;
-import com.historicar.app.repository.VehicleRepository;
-import com.historicar.app.repository.impl.VehicleRepositoryImpl;
+import com.historicar.app.service.VehicleService;
+import com.historicar.app.service.impl.VehicleServiceImpl;
 import com.historicar.app.util.AlertUtils;
 import com.historicar.app.util.ValidateUtils;
 
@@ -35,7 +35,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Rodrigo on 29/04/15.
  */
-public class InsertOrEditTicketsActivity extends AppCompatActivity
+public class InsertOrEditVehicleActivity extends AppCompatActivity
 {
 
     private AlertDialog alertDialog;
@@ -44,7 +44,7 @@ public class InsertOrEditTicketsActivity extends AppCompatActivity
 
     private Carro carro;
 
-    private VehicleRepository vehicleRepository;
+    private VehicleService vehicleService;
 
     @Bind(R.id.toolbar)
     protected Toolbar mToolbar;
@@ -75,14 +75,14 @@ public class InsertOrEditTicketsActivity extends AppCompatActivity
     protected void onCreate (Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_insert_or_edit_tickets);
+        setContentView(R.layout.activity_insert_or_edit_vehicle);
         ButterKnife.bind(this);
 
         initActionBar();
 
         ctx = this;
 
-        vehicleRepository = new VehicleRepositoryImpl(ctx);
+        vehicleService = new VehicleServiceImpl(ctx);
 
         descriptionValue.addTextChangedListener(new DescriptionTextWatcher());
 
@@ -184,12 +184,12 @@ public class InsertOrEditTicketsActivity extends AppCompatActivity
 
                     if (carro == null)
                     {
-                        vehicleRepository.save(carroAux);
+                        vehicleService.save(carroAux);
                     }
                     else
                     {
                         carroAux.setId(carro.getId());
-                        vehicleRepository.update(carroAux);
+                        vehicleService.update(carroAux);
                     }
 
                     setResult(RESULT_OK, new Intent(ctx, HomeActivity.class));
@@ -208,7 +208,7 @@ public class InsertOrEditTicketsActivity extends AppCompatActivity
                     public void onClick (DialogInterface dialog, int id)
                     {
                         dialog.dismiss();
-                        vehicleRepository.delete(carro);
+                        vehicleService.delete(carro);
                         setResult(RESULT_OK, new Intent(ctx, HomeActivity.class));
                         finish();
                     }
@@ -371,10 +371,10 @@ public class InsertOrEditTicketsActivity extends AppCompatActivity
                     return false;
                 }
 
-                if (InsertOrEditTicketsActivity.this.getCurrentFocus() != null)
+                if (InsertOrEditVehicleActivity.this.getCurrentFocus() != null)
                 {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(InsertOrEditTicketsActivity.this.getCurrentFocus().getWindowToken(), 0);
+                    imm.hideSoftInputFromWindow(InsertOrEditVehicleActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 
                 Intent myIntent = new Intent(ctx, CaptchaActivity.class);

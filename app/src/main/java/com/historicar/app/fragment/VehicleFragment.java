@@ -23,11 +23,12 @@ import android.widget.ImageView;
 import com.historicar.app.R;
 import com.historicar.app.activity.AboutActivity;
 import com.historicar.app.activity.CaptchaActivity;
-import com.historicar.app.activity.InsertOrEditTicketsActivity;
+import com.historicar.app.activity.InsertOrEditVehicleActivity;
 import com.historicar.app.adapter.TicketAdapter;
 import com.historicar.app.bean.Carro;
 import com.historicar.app.contants.Constants;
-import com.historicar.app.persistence.Repository;
+import com.historicar.app.service.VehicleService;
+import com.historicar.app.service.impl.VehicleServiceImpl;
 import com.historicar.app.util.AlertUtils;
 import com.historicar.app.util.ValidateUtils;
 
@@ -39,7 +40,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Rodrigo on 20/01/16.
  */
-public class TicketFragment extends Fragment
+public class VehicleFragment extends Fragment
 {
     private AlertDialog alertDialog;
 
@@ -53,6 +54,8 @@ public class TicketFragment extends Fragment
     @Bind(R.id.newPlate)
     protected ImageView newPlateView;
 
+    private VehicleService vehicleService;
+
     @Override
     public void onCreate (Bundle savedInstanceState)
     {
@@ -64,11 +67,13 @@ public class TicketFragment extends Fragment
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View mView = inflater.inflate(R.layout.fragment_ticket, container, false);
+        View mView = inflater.inflate(R.layout.fragment_vehicle, container, false);
 
         ButterKnife.bind(this, mView);
 
-        carros = new Repository(getActivity()).getAll();
+        vehicleService = new VehicleServiceImpl(getActivity());
+
+        carros = vehicleService.getAll();
 
         if (carros == null || carros.isEmpty())
         {
@@ -99,7 +104,7 @@ public class TicketFragment extends Fragment
     {
         super.onCreateOptionsMenu(menu, inflater);
 
-        inflater.inflate(R.menu.menu_tickets_fragment, menu);
+        inflater.inflate(R.menu.menu_vehicle_fragment, menu);
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
@@ -159,7 +164,7 @@ public class TicketFragment extends Fragment
                 getActivity().startActivity(new Intent(getActivity(), AboutActivity.class));
                 break;
             case R.id.action_insert_or_edit:
-                getActivity().startActivityForResult(new Intent(getActivity(), InsertOrEditTicketsActivity.class), Constants.REQUEST_FOR_CREATE_PLATE);
+                getActivity().startActivityForResult(new Intent(getActivity(), InsertOrEditVehicleActivity.class), Constants.REQUEST_FOR_CREATE_PLATE);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -168,7 +173,7 @@ public class TicketFragment extends Fragment
     public void updateData ()
     {
 
-        List<Carro> carrosRepo = new Repository(getActivity()).getAll();
+        List<Carro> carrosRepo = vehicleService.getAll();
 
         if (carrosRepo == null || carrosRepo.isEmpty())
         {
@@ -183,6 +188,11 @@ public class TicketFragment extends Fragment
 
             mRecyclerView.setVisibility(View.VISIBLE);
             newPlateView.setVisibility(View.GONE);
+
+            if(adapter == null)
+            {
+                adapter = new TicketAdapter(carros, getActivity());
+            }
             adapter.notifyDataSetChanged();
         }
 
@@ -193,7 +203,7 @@ public class TicketFragment extends Fragment
         @Override
         public void onClick (View v)
         {
-            startActivityForResult(new Intent(getActivity(), InsertOrEditTicketsActivity.class), Constants.REQUEST_FOR_CREATE_PLATE);
+            startActivityForResult(new Intent(getActivity(), InsertOrEditVehicleActivity.class), Constants.REQUEST_FOR_CREATE_PLATE);
         }
     }
 

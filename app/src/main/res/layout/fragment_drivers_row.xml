@@ -73,7 +73,7 @@
             android:layout_alignStart="@id/driverNameLayout"
             android:layout_below="@id/driverNameLayout"
             android:orientation="horizontal"
-            android:paddingTop="8dp">
+            android:paddingTop="4dp">
 
             <TextView
                 android:id="@+id/driverCNHText"
@@ -100,7 +100,7 @@
             android:layout_alignStart="@id/driverNameLayout"
             android:layout_below="@id/driverCNHLayout"
             android:orientation="horizontal"
-            android:paddingTop="8dp">
+            android:paddingTop="4dp">
 
             <TextView
                 android:id="@+id/driverCPFText"

@@ -17,7 +17,6 @@ import java.util.List;
  */
 public class VehicleRepositoryImpl extends SQLiteOpenHelper implements VehicleRepository
 {
-
     private static final String SCRIPT_DATABASE_DELETE = "DROP TABLE IF EXISTS CAR";
 
     private static final String SCRIPT_DATABASE_CREATE = "create table CAR (_id integer primary key autoincrement, DESCRIPTION varchar not null, PLATE varchar not null, TYPE int null)";
@@ -130,8 +129,10 @@ public class VehicleRepositoryImpl extends SQLiteOpenHelper implements VehicleRe
         try
         {
             return db.rawQuery("select * from " + TABLE_NAME, null);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
+            e.printStackTrace();
             return null;
         }
 

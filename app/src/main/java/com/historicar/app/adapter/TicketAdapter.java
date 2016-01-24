@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.historicar.app.R;
 import com.historicar.app.activity.CaptchaActivity;
-import com.historicar.app.activity.InsertOrEditTicketsActivity;
+import com.historicar.app.activity.InsertOrEditVehicleActivity;
 import com.historicar.app.bean.Carro;
 import com.historicar.app.contants.Constants;
 
@@ -36,7 +36,7 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.LinearView
     @Override
     public TicketAdapter.LinearViewHolder onCreateViewHolder (ViewGroup parent, int viewType)
     {
-        return new LinearViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_tickets_row, parent, false));
+        return new LinearViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_vehicles_row, parent, false));
     }
 
     @Override
@@ -87,7 +87,7 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.LinearView
         @Override
         public boolean onLongClick (View v)
         {
-            Intent myIntent = new Intent(mContext, InsertOrEditTicketsActivity.class);
+            Intent myIntent = new Intent(mContext, InsertOrEditVehicleActivity.class);
             myIntent.putExtra(mContext.getString(R.string.carro), mList.get(getAdapterPosition()));
             ((Activity) mContext).startActivityForResult(myIntent, Constants.REQUEST_FOR_UPDATE_PLATE);
             return true;

@@ -55,7 +55,7 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".activity.InsertOrEditTicketsActivity"
+            android:name=".activity.InsertOrEditVehicleActivity"
             android:screenOrientation="portrait"/>
 
         <activity

@@ -18,8 +18,8 @@ import android.widget.TextView;
 import com.historicar.app.R;
 import com.historicar.app.bean.Driver;
 import com.historicar.app.contants.Constants;
-import com.historicar.app.repository.DriverRepository;
-import com.historicar.app.repository.impl.DriverRepositoryImpl;
+import com.historicar.app.service.DriverService;
+import com.historicar.app.service.impl.DriverServiceImpl;
 import com.historicar.app.util.AlertUtils;
 
 import butterknife.Bind;
@@ -33,7 +33,7 @@ public class InsertOrEditDriverActivity extends AppCompatActivity
 
     private AlertDialog alertDialog;
 
-    private DriverRepository driverRepository;
+    private DriverService driverService;
 
     private Driver driver;
 
@@ -63,14 +63,14 @@ public class InsertOrEditDriverActivity extends AppCompatActivity
     protected void onCreate (Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_insert_or_edit_points);
+        setContentView(R.layout.activity_insert_or_edit_driver);
         ButterKnife.bind(this);
 
         initActionBar();
 
         ctx = this;
 
-        driverRepository = new DriverRepositoryImpl(ctx);
+        driverService = new DriverServiceImpl(ctx);
 
         name.addTextChangedListener(new NameTextWatcher());
         cnh.addTextChangedListener(new CNHTextWatcher());
@@ -100,20 +100,20 @@ public class InsertOrEditDriverActivity extends AppCompatActivity
             public void onClick (View v)
             {
                 //Checar os dados
-                driverRepository.save(driver);
 
                 Driver driverAux = new Driver();
+                driverAux.setName(name.getText().toString());
                 driverAux.setCnh(Long.valueOf(cnh.getText().toString()));
-                driverAux.setCpf(Long.valueOf(cpf.getText().toString()));
+                driverAux.setCpf(cpf.getText().toString());
 
                 if (driver == null)
                 {
-                    driverRepository.save(driverAux);
+                    driverService.save(driverAux);
                 }
                 else
                 {
                     driverAux.setId(driver.getId());
-                    driverRepository.update(driverAux);
+                    driverService.update(driverAux);
                 }
 
                 setResult(RESULT_OK, new Intent(ctx, HomeActivity.class));
@@ -131,7 +131,7 @@ public class InsertOrEditDriverActivity extends AppCompatActivity
                     public void onClick (DialogInterface dialog, int id)
                     {
                         dialog.dismiss();
-                        driverRepository.delete(driver);
+                        driverService.delete(driver);
                         setResult(RESULT_OK, new Intent(ctx, HomeActivity.class));
                         finish();
                     }

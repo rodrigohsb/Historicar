@@ -15,7 +15,7 @@ import com.appodeal.ads.InterstitialCallbacks;
 import com.historicar.app.R;
 import com.historicar.app.contants.Constants;
 import com.historicar.app.fragment.DriverFragment;
-import com.historicar.app.fragment.TicketFragment;
+import com.historicar.app.fragment.VehicleFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +61,7 @@ public class HomeActivity extends AppCompatActivity
     private void setupViewPager (ViewPager viewPager)
     {
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        mViewPagerAdapter.addFragment(new TicketFragment(), getString(R.string.homeActivityTicketsTitleTab));
+        mViewPagerAdapter.addFragment(new VehicleFragment(), getString(R.string.homeActivityTicketsTitleTab));
         mViewPagerAdapter.addFragment(new DriverFragment(), getString(R.string.homeActivityPointsTitleTab));
         viewPager.setAdapter(mViewPagerAdapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
@@ -185,12 +185,12 @@ public class HomeActivity extends AppCompatActivity
 
         if ((requestCode == Constants.REQUEST_FOR_CREATE_PLATE || requestCode == Constants.REQUEST_FOR_UPDATE_PLATE) && resultCode == RESULT_OK)
         {
-            TicketFragment mTicketFragment = (TicketFragment) mViewPagerAdapter.getItem(0);
-            mTicketFragment.updateData();
+            VehicleFragment mVehicleFragment = (VehicleFragment) mViewPagerAdapter.getItem(0);
+            mVehicleFragment.updateData();
         }
         else if ((requestCode == Constants.REQUEST_FOR_CREATE_DRIVER || requestCode == Constants.REQUEST_FOR_UPDATE_DRIVER) && resultCode == RESULT_OK)
         {
-            TicketFragment mDriverFragments = (TicketFragment) mViewPagerAdapter.getItem(1);
+            DriverFragment mDriverFragments = (DriverFragment) mViewPagerAdapter.getItem(1);
             mDriverFragments.updateData();
         }
     }

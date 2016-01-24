@@ -141,7 +141,7 @@ public class ResultActivity extends AppCompatActivity
                 break;
 
             case R.id.action_insert_or_edit:
-                startActivity(new Intent(ctx, InsertOrEditTicketsActivity.class));
+                startActivity(new Intent(ctx, InsertOrEditVehicleActivity.class));
                 finish();
                 break;
         }

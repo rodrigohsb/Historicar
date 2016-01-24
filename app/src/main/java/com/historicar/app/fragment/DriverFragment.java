@@ -17,10 +17,13 @@ import android.widget.ImageView;
 import com.historicar.app.R;
 import com.historicar.app.activity.AboutActivity;
 import com.historicar.app.activity.InsertOrEditDriverActivity;
+import com.historicar.app.activity.InsertOrEditVehicleActivity;
 import com.historicar.app.adapter.DriverAdapter;
+import com.historicar.app.adapter.TicketAdapter;
 import com.historicar.app.bean.Driver;
 import com.historicar.app.contants.Constants;
-import com.historicar.app.repository.impl.DriverRepositoryImpl;
+import com.historicar.app.service.DriverService;
+import com.historicar.app.service.impl.DriverServiceImpl;
 
 import java.util.List;
 
@@ -41,7 +44,9 @@ public class DriverFragment extends Fragment
     protected RecyclerView mRecyclerView;
 
     @Bind(R.id.driverNewCNHImage)
-    protected ImageView newPlateView;
+    protected ImageView driverNewCNHImage;
+
+    private DriverService driverService;
 
     @Override
     public void onCreate (Bundle savedInstanceState)
@@ -58,18 +63,20 @@ public class DriverFragment extends Fragment
 
         ButterKnife.bind(this, mView);
 
-        drivers = new DriverRepositoryImpl(getActivity()).getAll();
+        driverService = new DriverServiceImpl(getActivity());
+
+        drivers = driverService.getAll();
 
         if (drivers == null || drivers.isEmpty())
         {
-            newPlateView.setVisibility(View.VISIBLE);
-            newPlateView.setOnClickListener(new ImageClickListener());
+            driverNewCNHImage.setVisibility(View.VISIBLE);
+            driverNewCNHImage.setOnClickListener(new ImageClickListener());
 
             mRecyclerView.setVisibility(View.GONE);
         }
         else
         {
-            newPlateView.setVisibility(View.GONE);
+            driverNewCNHImage.setVisibility(View.GONE);
 
             mRecyclerView.setVisibility(View.VISIBLE);
             adapter = new DriverAdapter(drivers, getActivity());
@@ -85,11 +92,39 @@ public class DriverFragment extends Fragment
         return mView;
     }
 
+    public void updateData ()
+    {
+
+        List<Driver> driversRepo = driverService.getAll();
+
+        if (driversRepo == null || driversRepo.isEmpty())
+        {
+            mRecyclerView.setVisibility(View.GONE);
+            driverNewCNHImage.setVisibility(View.VISIBLE);
+            driverNewCNHImage.setOnClickListener(new ImageClickListener());
+        }
+        else
+        {
+            drivers.clear();
+            drivers.addAll(driversRepo);
+
+            mRecyclerView.setVisibility(View.VISIBLE);
+            driverNewCNHImage.setVisibility(View.GONE);
+
+            if(adapter == null)
+            {
+                adapter = new DriverAdapter(drivers, getActivity());
+            }
+            adapter.notifyDataSetChanged();
+        }
+
+    }
+
     @Override
     public void onCreateOptionsMenu (Menu menu, MenuInflater inflater)
     {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_points_fragment, menu);
+        inflater.inflate(R.menu.menu_driver_fragment, menu);
     }
 
     @Override
@@ -102,7 +137,7 @@ public class DriverFragment extends Fragment
                 break;
 
             case R.id.action_insert_or_edit:
-                startActivityForResult(new Intent(getActivity(), InsertOrEditDriverActivity.class), Constants.REQUEST_FOR_CREATE_DRIVER);
+                getActivity().startActivityForResult(new Intent(getActivity(), InsertOrEditDriverActivity.class), Constants.REQUEST_FOR_CREATE_DRIVER);
                 break;
         }
         return super.onOptionsItemSelected(item);

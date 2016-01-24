@@ -1,5 +1,7 @@
 package com.historicar.app.bean;
 
+import android.provider.BaseColumns;
+
 import java.io.Serializable;
 
 /**
@@ -14,7 +16,7 @@ public class Driver implements Serializable
 
     private long cnh;
 
-    private long cpf;
+    private String cpf;
 
     public long getId ()
     {
@@ -46,12 +48,12 @@ public class Driver implements Serializable
         this.cnh = cnh;
     }
 
-    public long getCpf ()
+    public String getCpf ()
     {
         return cpf;
     }
 
-    public void setCpf (long cpf)
+    public void setCpf (String cpf)
     {
         this.cpf = cpf;
     }
@@ -65,5 +67,16 @@ public class Driver implements Serializable
                 ", cnh=" + cnh +
                 ", cpf=" + cpf +
                 '}';
+    }
+
+    public static final class DriverDB implements BaseColumns
+    {
+
+        public static final String NAME = "NAME";
+
+        public static final String CNH = "CNH";
+
+        public static final String CPF = "CPF";
+
     }
 }

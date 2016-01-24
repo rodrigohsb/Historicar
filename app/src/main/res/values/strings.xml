@@ -27,7 +27,7 @@
     <!-- InsertOrEdit Points Activity-->
     <string name="newDriverTitlerText">Novo Motorista</string>
 
-    <string name="updateTitleText">Edição</string>
+    <string name="updateTitleText">Atualizar</string>
 
     <string name="invalid_description">Por favor, digite a descrição corretamente.</string>
     <string name="invalid_plate">Por favor, digite a placa no padrão: ABC1234</string>
