@@ -37,8 +37,6 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:enabled="false"
-                android:inputType="number"
-                android:maxLength="4"
                 android:maxLines="1"
                 android:textSize="24sp"
                 android:visibility="gone"/>
