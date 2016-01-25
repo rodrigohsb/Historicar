@@ -20,6 +20,7 @@ import com.historicar.app.activity.InsertOrEditDriverActivity;
 import com.historicar.app.activity.InsertOrEditVehicleActivity;
 import com.historicar.app.adapter.DriverAdapter;
 import com.historicar.app.adapter.TicketAdapter;
+import com.historicar.app.bean.Carro;
 import com.historicar.app.bean.Driver;
 import com.historicar.app.contants.Constants;
 import com.historicar.app.service.DriverService;
@@ -67,27 +68,7 @@ public class DriverFragment extends Fragment
 
         drivers = driverService.getAll();
 
-        if (drivers == null || drivers.isEmpty())
-        {
-            driverNewCNHImage.setVisibility(View.VISIBLE);
-            driverNewCNHImage.setOnClickListener(new ImageClickListener());
-
-            mRecyclerView.setVisibility(View.GONE);
-        }
-        else
-        {
-            driverNewCNHImage.setVisibility(View.GONE);
-
-            mRecyclerView.setVisibility(View.VISIBLE);
-            adapter = new DriverAdapter(drivers, getActivity());
-
-            mRecyclerView.setHasFixedSize(true);
-
-            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-            mRecyclerView.setLayoutManager(mLayoutManager);
-
-            mRecyclerView.setAdapter(adapter);
-        }
+        updateUI(drivers);
 
         return mView;
     }
@@ -97,7 +78,21 @@ public class DriverFragment extends Fragment
 
         List<Driver> driversRepo = driverService.getAll();
 
-        if (driversRepo == null || driversRepo.isEmpty())
+        if(!drivers.isEmpty())
+        {
+            drivers.clear();
+            drivers.addAll(driversRepo);
+        }
+        else
+        {
+            drivers = driversRepo;
+        }
+        updateUI(drivers);
+    }
+
+    private void updateUI(List<Driver> drivers)
+    {
+        if (drivers == null || drivers.isEmpty())
         {
             mRecyclerView.setVisibility(View.GONE);
             driverNewCNHImage.setVisibility(View.VISIBLE);
@@ -105,9 +100,6 @@ public class DriverFragment extends Fragment
         }
         else
         {
-            drivers.clear();
-            drivers.addAll(driversRepo);
-
             mRecyclerView.setVisibility(View.VISIBLE);
             driverNewCNHImage.setVisibility(View.GONE);
 
@@ -119,13 +111,13 @@ public class DriverFragment extends Fragment
                 mRecyclerView.setLayoutManager(mLayoutManager);
 
                 adapter = new DriverAdapter(drivers, getActivity());
+                mRecyclerView.setAdapter(adapter);
             }
             else
             {
                 adapter.notifyDataSetChanged();
             }
         }
-
     }
 
     @Override

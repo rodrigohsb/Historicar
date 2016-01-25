@@ -46,7 +46,7 @@ public class VehicleFragment extends Fragment
 
     private RecyclerView.Adapter adapter;
 
-    private List<Carro> carros;
+    private List<Carro> vehicles;
 
     @Bind(R.id.homeRecyclerView)
     protected RecyclerView mRecyclerView;
@@ -73,28 +73,9 @@ public class VehicleFragment extends Fragment
 
         vehicleService = new VehicleServiceImpl(getActivity());
 
-        carros = vehicleService.getAll();
+        vehicles = vehicleService.getAll();
 
-        if (carros == null || carros.isEmpty())
-        {
-            newPlateView.setVisibility(View.VISIBLE);
-            newPlateView.setOnClickListener(new ImageClickListener());
-            mRecyclerView.setVisibility(View.GONE);
-        }
-        else
-        {
-            newPlateView.setVisibility(View.GONE);
-
-            mRecyclerView.setVisibility(View.VISIBLE);
-            adapter = new TicketAdapter(carros, getActivity());
-
-            mRecyclerView.setHasFixedSize(true);
-
-            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-            mRecyclerView.setLayoutManager(mLayoutManager);
-
-            mRecyclerView.setAdapter(adapter);
-        }
+        updateUI(vehicles);
 
         return mView;
     }
@@ -173,9 +154,24 @@ public class VehicleFragment extends Fragment
     public void updateData ()
     {
 
-        List<Carro> carrosRepo = vehicleService.getAll();
+        List<Carro> vehiclesRepo = vehicleService.getAll();
 
-        if (carrosRepo == null || carrosRepo.isEmpty())
+        if(!vehicles.isEmpty())
+        {
+            vehicles.clear();
+            vehicles.addAll(vehiclesRepo);
+        }
+        else
+        {
+            vehicles = vehiclesRepo;
+        }
+
+        updateUI(vehicles);
+    }
+
+    private void updateUI(List<Carro> vehicles)
+    {
+        if (vehicles == null || vehicles.isEmpty())
         {
             mRecyclerView.setVisibility(View.GONE);
             newPlateView.setVisibility(View.VISIBLE);
@@ -183,9 +179,6 @@ public class VehicleFragment extends Fragment
         }
         else
         {
-            carros.clear();
-            carros.addAll(carrosRepo);
-
             mRecyclerView.setVisibility(View.VISIBLE);
             newPlateView.setVisibility(View.GONE);
 
@@ -196,7 +189,7 @@ public class VehicleFragment extends Fragment
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
 
-                adapter = new TicketAdapter(carros, getActivity());
+                adapter = new TicketAdapter(vehicles, getActivity());
                 mRecyclerView.setAdapter(adapter);
             }
             else
