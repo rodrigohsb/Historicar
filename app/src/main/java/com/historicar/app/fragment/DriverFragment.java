@@ -113,9 +113,17 @@ public class DriverFragment extends Fragment
 
             if(adapter == null)
             {
+                mRecyclerView.setHasFixedSize(true);
+
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+                mRecyclerView.setLayoutManager(mLayoutManager);
+
                 adapter = new DriverAdapter(drivers, getActivity());
             }
-            adapter.notifyDataSetChanged();
+            else
+            {
+                adapter.notifyDataSetChanged();
+            }
         }
 
     }
@@ -148,7 +156,7 @@ public class DriverFragment extends Fragment
         @Override
         public void onClick (View v)
         {
-            startActivityForResult(new Intent(getActivity(), InsertOrEditDriverActivity.class), Constants.REQUEST_FOR_CREATE_DRIVER);
+            getActivity().startActivityForResult(new Intent(getActivity(), InsertOrEditDriverActivity.class), Constants.REQUEST_FOR_CREATE_DRIVER);
         }
     }
 }

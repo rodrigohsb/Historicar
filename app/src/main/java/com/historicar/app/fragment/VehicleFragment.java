@@ -191,11 +191,19 @@ public class VehicleFragment extends Fragment
 
             if(adapter == null)
             {
-                adapter = new TicketAdapter(carros, getActivity());
-            }
-            adapter.notifyDataSetChanged();
-        }
+                mRecyclerView.setHasFixedSize(true);
 
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+                mRecyclerView.setLayoutManager(mLayoutManager);
+
+                adapter = new TicketAdapter(carros, getActivity());
+                mRecyclerView.setAdapter(adapter);
+            }
+            else
+            {
+                adapter.notifyDataSetChanged();
+            }
+        }
     }
 
     private class ImageClickListener implements View.OnClickListener
@@ -203,7 +211,7 @@ public class VehicleFragment extends Fragment
         @Override
         public void onClick (View v)
         {
-            startActivityForResult(new Intent(getActivity(), InsertOrEditVehicleActivity.class), Constants.REQUEST_FOR_CREATE_PLATE);
+            getActivity().startActivityForResult(new Intent(getActivity(), InsertOrEditVehicleActivity.class), Constants.REQUEST_FOR_CREATE_PLATE);
         }
     }
 
