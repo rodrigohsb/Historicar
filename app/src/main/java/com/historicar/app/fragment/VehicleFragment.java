@@ -138,7 +138,7 @@ public class VehicleFragment extends Fragment
 
                 Intent myIntent = new Intent(getActivity(), CaptchaActivity.class);
                 myIntent.putExtra(Constants.PLACA_KEY, s);
-                startActivity(myIntent);
+                getActivity().startActivity(myIntent);
                 return true;
 
             }
