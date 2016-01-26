@@ -32,7 +32,6 @@ public class Connection
                 .header("Host", "www2.rio.rj.gov.br")
                 .header("Referer", "http://www2.rio.rj.gov.br/multas/index.asp")
                 .header("User-Agent", Constants.USER_AGENT)
-                .header("Content-Length", "81")
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .header("Origin", "http://www2.rio.rj.gov.br")
                 .header("Upgrade-Insecure-Requests", "1")

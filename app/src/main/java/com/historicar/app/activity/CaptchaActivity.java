@@ -85,21 +85,15 @@ public class CaptchaActivity extends AppCompatActivity
                     imm.hideSoftInputFromWindow(CaptchaActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 
-                if (text.getText() == null)
+                if (text.getText() == null || "".equalsIgnoreCase(text.getText().toString().trim()))
                 {
                     Toast.makeText(CaptchaActivity.this, "O código não pode ser vazio!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if (text.getText().length() < 4)
-                {
-                    Toast.makeText(CaptchaActivity.this, "Por favor, digite o código corretamente!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
                 Intent myIntent = new Intent(CaptchaActivity.this, ResultActivity.class);
                 myIntent.putExtra(Constants.PLACA_KEY, getIntent().getExtras().getString(Constants.PLACA_KEY));
-                myIntent.putExtra(Constants.CAPTCHA, text.getText().toString());
+                myIntent.putExtra(Constants.CAPTCHA, text.getText().toString().trim());
                 startActivity(myIntent);
                 finish();
             }
@@ -141,7 +135,7 @@ public class CaptchaActivity extends AppCompatActivity
         @Override
         public void afterTextChanged (Editable s)
         {
-            if (text.getText().length() == 4)
+            if (text.getText() != null && (!"".equalsIgnoreCase(text.getText().toString().trim())))
             {
                 button.setEnabled(true);
             }
