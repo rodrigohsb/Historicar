@@ -21,26 +21,26 @@ import java.util.List;
 /**
  * Created by Rodrigo on 23/01/16.
  */
-public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.LinearViewHolder>
+public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.LinearViewHolder>
 {
 
     private final List<Carro> mList;
     private final Context mContext;
 
-    public TicketAdapter (List<Carro> mList, Context mContext)
+    public VehicleAdapter (List<Carro> mList, Context mContext)
     {
         this.mList = mList;
         this.mContext = mContext;
     }
 
     @Override
-    public TicketAdapter.LinearViewHolder onCreateViewHolder (ViewGroup parent, int viewType)
+    public VehicleAdapter.LinearViewHolder onCreateViewHolder (ViewGroup parent, int viewType)
     {
         return new LinearViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_vehicles_row, parent, false));
     }
 
     @Override
-    public void onBindViewHolder (TicketAdapter.LinearViewHolder holder, int position)
+    public void onBindViewHolder (VehicleAdapter.LinearViewHolder holder, int position)
     {
         Carro carro = mList.get(position);
 

@@ -24,7 +24,7 @@ import com.historicar.app.R;
 import com.historicar.app.activity.AboutActivity;
 import com.historicar.app.activity.CaptchaActivity;
 import com.historicar.app.activity.InsertOrEditVehicleActivity;
-import com.historicar.app.adapter.TicketAdapter;
+import com.historicar.app.adapter.VehicleAdapter;
 import com.historicar.app.bean.Carro;
 import com.historicar.app.contants.Constants;
 import com.historicar.app.service.VehicleService;
@@ -189,7 +189,7 @@ public class VehicleFragment extends Fragment
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
 
-                adapter = new TicketAdapter(vehicles, getActivity());
+                adapter = new VehicleAdapter(vehicles, getActivity());
                 mRecyclerView.setAdapter(adapter);
             }
             else
