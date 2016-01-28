@@ -38,12 +38,10 @@ import com.historicar.app.util.ValidateUtils;
 import com.historicar.app.webservice.WebServiceAPi;
 import com.squareup.otto.Subscribe;
 
-import java.io.InputStream;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.GsonConverterFactory;
@@ -101,14 +99,17 @@ public class ResultActivity extends AppCompatActivity
         dialog.setCancelable(false);
         dialog.show();
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constants.BACKEND_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
         WebServiceAPi wsAPI = retrofit.create(WebServiceAPi.class);
-        Call<ResponseBody> multas = wsAPI.getTicketList(placa, captcha, cookie);
-        multas.enqueue(new Callback<ResponseBody>()
+        Call<List<Multa>> multas = wsAPI.getTickets(placa, captcha, cookie);
+        multas.enqueue(new Callback<List<Multa>>()
         {
             @Override
-            public void onResponse (Response<ResponseBody> response)
+            public void onResponse (Response<List<Multa>> response)
             {
 
                 int httpResponseCode = response.code();
@@ -117,10 +118,12 @@ public class ResultActivity extends AppCompatActivity
 
                 if (response.isSuccess())
                 {
-                    InputStream is = response.body().byteStream();
+                    List multas = response.body();
 
-                    //TODO Transformar em lista
+                    BusProvider.getInstance().post(new LoadTicketSuccessEvent(multas));
+                    return;
                 }
+                BusProvider.getInstance().post(new LoadTicketErrorEvent());
             }
 
             @Override

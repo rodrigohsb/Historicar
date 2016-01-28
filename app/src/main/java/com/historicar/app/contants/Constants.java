@@ -24,7 +24,7 @@ public class Constants
 
     public static final int REQUEST_FOR_CREATE_PLATE = 2000;
 
-    public static final String BASE_URL = "http://192.168.0.13:8090/historicar/";
+    public static final String BACKEND_BASE_URL = "http://192.168.0.13:8090/historicar";
 
     public static final String APP_ACCESS_TOKEN = "X-APP-ACCESS-TOKEN";
 
