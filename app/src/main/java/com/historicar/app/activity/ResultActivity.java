@@ -38,11 +38,12 @@ import com.historicar.app.util.ValidateUtils;
 import com.historicar.app.webservice.WebServiceAPi;
 import com.squareup.otto.Subscribe;
 
-import java.util.ArrayList;
+import java.io.InputStream;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.GsonConverterFactory;
@@ -67,7 +68,7 @@ public class ResultActivity extends AppCompatActivity
 
     private ProgressDialog dialog;
 
-    public static void start(Activity activity, String placa, String captcha, String cookie)
+    public static void start (Activity activity, String placa, String captcha, String cookie)
     {
         Intent intent = new Intent(activity.getApplicationContext(), ResultActivity.class);
         intent.putExtra(Constants.PLACA_KEY, placa);
@@ -100,71 +101,33 @@ public class ResultActivity extends AppCompatActivity
         dialog.setCancelable(false);
         dialog.show();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         WebServiceAPi wsAPI = retrofit.create(WebServiceAPi.class);
-        Call<List<Multa>> multas = wsAPI.getTickets(placa, captcha, cookie);
-        multas.enqueue(new Callback<List<Multa>>()
+        Call<ResponseBody> multas = wsAPI.getTicketList(placa, captcha, cookie);
+        multas.enqueue(new Callback<ResponseBody>()
         {
             @Override
-            public void onResponse (Response<List<Multa>> response)
+            public void onResponse (Response<ResponseBody> response)
             {
 
                 int httpResponseCode = response.code();
 
-                Log.d(TAG,"[getTickets] StatusCode [" + httpResponseCode + "]");
+                Log.d(TAG, "[getTickets] StatusCode [" + httpResponseCode + "]");
 
-                if(response.isSuccess())
+                if (response.isSuccess())
                 {
-                    List<Multa> multas = response.body();
+                    InputStream is = response.body().byteStream();
 
-                    if (multas != null && !multas.isEmpty())
-                    {
-                        BusProvider.getInstance().post(new LoadTicketSuccessEvent(multas));
-                        return;
-                    }
-                    //NO_CONTENT
-                    if(httpResponseCode == 204)
-                    {
-                        BusProvider.getInstance().post(new LoadTicketSuccessEvent(new ArrayList<Multa>()));
-                        return;
-                    }
-                }
-                //BAD_REQUEST
-                if(httpResponseCode == 400)
-                {
-                    BusProvider.getInstance().post(new LoadTicketRetryEvent(true));
-                    return;
-                }
-                //UNAUTHORIZED
-                if(httpResponseCode == 401)
-                {
-//                    String newUserToken = (String) response.body();
-
-                    //TODO Pegar novo usertoken e chamar de novo
-
-                    return;
-                }
-                //NOT_ACCEPTABLE
-                if(httpResponseCode == 406)
-                {
-                    BusProvider.getInstance().post(new LoadTicketRetryEvent(false));
-                    return;
-                }
-                //INTERNAL_SERVER_ERROR
-                if(httpResponseCode == 500)
-                {
-                    BusProvider.getInstance().post(new LoadTicketErrorEvent());
+                    //TODO Transformar em lista
                 }
             }
 
             @Override
             public void onFailure (Throwable t)
             {
-                Log.d(TAG,"[getTickets] Error [" + t.getMessage() + "]");
+                Log.d(TAG, "[getTickets] Error [" + t.getMessage() + "]");
+                t.printStackTrace();
                 BusProvider.getInstance().post(new LoadTicketErrorEvent());
             }
         });
@@ -173,11 +136,11 @@ public class ResultActivity extends AppCompatActivity
     }
 
     @Subscribe
-    public void onLoadTicketRetryEvent(LoadTicketRetryEvent event)
+    public void onLoadTicketRetryEvent (LoadTicketRetryEvent event)
     {
         dialog.dismiss();
 
-        if(event.isInvalidCode())
+        if (event.isInvalidCode())
         {
             Toast.makeText(ctx, getString(R.string.invalid_code), Toast.LENGTH_SHORT).show();
         }
@@ -191,7 +154,7 @@ public class ResultActivity extends AppCompatActivity
     }
 
     @Subscribe
-    public void onLoadTicketErrorEvent(LoadTicketErrorEvent event)
+    public void onLoadTicketErrorEvent (LoadTicketErrorEvent event)
     {
         dialog.dismiss();
 
@@ -199,13 +162,13 @@ public class ResultActivity extends AppCompatActivity
     }
 
     @Subscribe
-    public void onLoadTicketSuccessEvent(LoadTicketSuccessEvent event)
+    public void onLoadTicketSuccessEvent (LoadTicketSuccessEvent event)
     {
         dialog.dismiss();
 
         List<Multa> multas = event.getMultas();
 
-        if(multas.isEmpty())
+        if (multas.isEmpty())
         {
             NoMultaActivity.start(ResultActivity.this, getIntent().getExtras().getString(Constants.PLACA_KEY));
         }
@@ -216,10 +179,9 @@ public class ResultActivity extends AppCompatActivity
     }
 
     /**
-     *
      * @param multaList
      */
-    private void drawList(List<Multa> multaList)
+    private void drawList (List<Multa> multaList)
     {
         Appodeal.hide(((Activity) ctx), Appodeal.BANNER_BOTTOM);
 
@@ -233,7 +195,7 @@ public class ResultActivity extends AppCompatActivity
 
         Snackbar snackbar;
 
-        if(multaList.size() == 1)
+        if (multaList.size() == 1)
         {
             snackbar = Snackbar.make(coordinatorLayout, ctx.getString(R.string.snackbar_singular, multaList.size()), Snackbar.LENGTH_LONG);
         }
@@ -302,9 +264,9 @@ public class ResultActivity extends AppCompatActivity
                     return false;
                 }
 
-                if(ResultActivity.this.getCurrentFocus() != null)
+                if (ResultActivity.this.getCurrentFocus() != null)
                 {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(ResultActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 
@@ -329,7 +291,7 @@ public class ResultActivity extends AppCompatActivity
     }
 
     @Override
-    public void onPause()
+    public void onPause ()
     {
         super.onPause();
         BusProvider.getInstance().unregister(this);

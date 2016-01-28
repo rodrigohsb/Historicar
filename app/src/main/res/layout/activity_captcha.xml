@@ -43,8 +43,6 @@
             android:layout_below="@id/captchaImage"
             android:layout_centerHorizontal="true"
             android:enabled="false"
-            android:inputType="number"
-            android:maxLength="4"
             android:maxLines="1"
             android:textSize="24sp"
             android:visibility="visible"/>

@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -20,10 +20,7 @@ import android.widget.Toast;
 
 import com.appodeal.ads.Appodeal;
 import com.historicar.app.R;
-import com.historicar.app.connection.Connection;
 import com.historicar.app.contants.Constants;
-import com.historicar.app.event.LoadTicketErrorEvent;
-import com.historicar.app.event.LoadTicketSuccessEvent;
 import com.historicar.app.event.captcha.LoadCaptchaErrorEvent;
 import com.historicar.app.event.captcha.LoadCaptchaRetryEvent;
 import com.historicar.app.event.captcha.LoadCaptchaSuccessEvent;
@@ -32,8 +29,11 @@ import com.historicar.app.util.ValidateUtils;
 import com.historicar.app.webservice.WebServiceAPi;
 import com.squareup.otto.Subscribe;
 
+import java.io.InputStream;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.GsonConverterFactory;
@@ -64,7 +64,9 @@ public class CaptchaActivity extends AppCompatActivity
 
     private Context ctx;
 
-    public static void start(Activity activity, String placa)
+    String cookie;
+
+    public static void start (Activity activity, String placa)
     {
         Intent intent = new Intent(activity.getApplicationContext(), CaptchaActivity.class);
         intent.putExtra(Constants.PLACA_KEY, placa);
@@ -113,90 +115,91 @@ public class CaptchaActivity extends AppCompatActivity
                     imm.hideSoftInputFromWindow(CaptchaActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 
-                if (text.getText() == null)
+                if (text.getText() == null || "".equalsIgnoreCase(text.getText().toString().trim()))
                 {
                     Toast.makeText(ctx, "O código não pode ser vazio!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if (text.getText().length() < 4)
-                {
-                    Toast.makeText(ctx, "Por favor, digite o código corretamente!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                ResultActivity.start(CaptchaActivity.this, getIntent().getExtras().getString(Constants.PLACA_KEY), text.getText().toString(), Constants.COOKIE);
+                ResultActivity.start(CaptchaActivity.this, getIntent().getExtras().getString(Constants.PLACA_KEY), text.getText().toString().trim(), cookie);
             }
         });
     }
 
     private void getCaptcha ()
     {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        getCookie();
+    }
+
+    private void getCookie ()
+    {
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.SMTR_BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         WebServiceAPi wsAPI = retrofit.create(WebServiceAPi.class);
-        Call<Drawable> captcha = wsAPI.getCaptcha();
-        captcha.enqueue(new Callback<Drawable>()
+        Call<ResponseBody> cookieRequest = wsAPI.getCookie();
+
+        cookieRequest.enqueue(new Callback<ResponseBody>()
         {
             @Override
-            public void onResponse (Response<Drawable> response)
+            public void onResponse (Response<ResponseBody> response)
             {
 
-                int httpResponseCode = response.code();
+                cookie = "";
 
-                Log.d(TAG, "[getCaptcha] StatusCode [" + httpResponseCode + "]");
-
-                if (response.isSuccess())
+                if (response.headers() != null && response.headers().get("Set-Cookie") != null)
                 {
-                    Drawable captchaImage = response.body();
+                    String[] cookies = response.headers().get("Set-Cookie").split(";");
 
-                    if (captchaImage != null)
+                    for (String c : cookies)
                     {
-                        BusProvider.getInstance().post(new LoadCaptchaSuccessEvent(captchaImage));
-                        return;
-                    }
-                    //NO_CONTENT
-                    if (httpResponseCode == 204)
-                    {
-                        BusProvider.getInstance().post(new LoadCaptchaErrorEvent());
-                        return;
+                        if (c.contains("ASPSESSIONID"))
+                        {
+                            cookie = cookie.concat(c);
+                        }
                     }
                 }
-                //BAD_REQUEST
-                if (httpResponseCode == 400)
-                {
-                    BusProvider.getInstance().post(new LoadCaptchaRetryEvent());
-                    return;
-                }
-                //UNAUTHORIZED
-                if (httpResponseCode == 401)
-                {
-                    //TODO Pegar novo usertoken e chamar de novo
-                    BusProvider.getInstance().post(new LoadCaptchaRetryEvent());
-                    return;
-                }
-                //INTERNAL_SERVER_ERROR
-                if (httpResponseCode == 500)
-                {
-                    BusProvider.getInstance().post(new LoadCaptchaErrorEvent());
-                }
+
+                Log.i(TAG, "Cookie recebido foi = " + cookie);
+                getCaptcha(cookie);
             }
 
             @Override
             public void onFailure (Throwable t)
             {
-                Log.d(TAG, "[getCaptcha] Error [" + t.getMessage() + "]");
-                BusProvider.getInstance().post(new LoadCaptchaErrorEvent());
+                t.printStackTrace();
             }
         });
     }
 
+    private void getCaptcha (String cookie)
+    {
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.SMTR_BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
+        WebServiceAPi wsAPI = retrofit.create(WebServiceAPi.class);
+        Call<ResponseBody> captcha = wsAPI.getCaptcha(cookie);
+
+        captcha.enqueue(new Callback<ResponseBody>()
+        {
+            @Override
+            public void onResponse (Response<ResponseBody> response)
+            {
+                InputStream is = response.body().byteStream();
+
+                Drawable drawable = BitmapDrawable.createFromStream(is, "");
+
+                BusProvider.getInstance().post(new LoadCaptchaSuccessEvent(drawable));
+            }
+
+            @Override
+            public void onFailure (Throwable t)
+            {
+
+            }
+        });
+    }
 
     @Subscribe
-    public void onLoadCaptchaErrorEvent(LoadCaptchaErrorEvent event)
+    public void onLoadCaptchaErrorEvent (LoadCaptchaErrorEvent event)
     {
         dialog.dismiss();
 
@@ -212,7 +215,7 @@ public class CaptchaActivity extends AppCompatActivity
     }
 
     @Subscribe
-    public void onLoadCaptchaSuccessEvent(LoadCaptchaSuccessEvent event)
+    public void onLoadCaptchaSuccessEvent (LoadCaptchaSuccessEvent event)
     {
         dialog.dismiss();
 
@@ -228,7 +231,7 @@ public class CaptchaActivity extends AppCompatActivity
     }
 
     @Subscribe
-    public void onLoadCaptchaRetryEvent(LoadCaptchaRetryEvent event)
+    public void onLoadCaptchaRetryEvent (LoadCaptchaRetryEvent event)
     {
         getCaptcha();
     }
@@ -249,7 +252,7 @@ public class CaptchaActivity extends AppCompatActivity
         @Override
         public void afterTextChanged (Editable s)
         {
-            if (text.getText().length() == 4)
+            if (text.getText() != null && (!"".equalsIgnoreCase(text.getText().toString().trim())))
             {
                 button.setEnabled(true);
             }
@@ -262,9 +265,17 @@ public class CaptchaActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onPause ()
+    {
+        super.onPause();
+        BusProvider.getInstance().unregister(this);
+    }
+
+    @Override
     protected void onResume ()
     {
         super.onResume();
         Appodeal.onResume(this, Appodeal.BANNER);
+        BusProvider.getInstance().register(this);
     }
 }
