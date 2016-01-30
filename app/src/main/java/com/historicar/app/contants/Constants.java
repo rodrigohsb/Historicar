@@ -24,7 +24,7 @@ public class Constants
 
     public static final int REQUEST_FOR_CREATE_PLATE = 2000;
 
-    public static final String BACKEND_BASE_URL = "http://192.168.0.13:8090/historicar";
+    public static final String BACKEND_BASE_URL = "http://192.168.0.13:8090/historicar/";
 
     public static final String APP_ACCESS_TOKEN = "X-APP-ACCESS-TOKEN";
 
@@ -34,7 +34,7 @@ public class Constants
 
     public static final String X_USER_ACCESS_TOKEN_VALUE = "DCFA8506-4F3D-4BEE-A007-322E0BCB2C12";
 
-    public static String COOKIE = "COOKIE";
+    public static final String COOKIE = "COOKIE";
 
     public static final String SMTR_BASE_URL = "http://www2.rio.rj.gov.br";
 
@@ -63,10 +63,6 @@ public class Constants
     public static final String UPGRADE_INSECURE_REQUESTS_HEADER = "Upgrade-Insecure-Requests";
     public static final String UPGRADE_INSECURE_REQUESTS_VALUE_HEADER = "1";
 
-    public static final String CACHE_CONTROL_HEADER = "Cache-Control";
-    public static final String CACHE_CONTROL_VALUE_HEADER = "1";
-
     public static final String USER_AGENT_HEADER = "User-Agent";
     public static final String USER_AGENT_VALUE_HEADER = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36";
-
 }

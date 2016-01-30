@@ -48,4 +48,7 @@
     <string name="snackbar_singular">Foi encontrada %s multa.</string>
     <string name="snackbar_plural">Foram encontradas %s multas.</string>
 
+
+    <string name="x_user_access_token">X-USER-ACCESS-TOKEN</string>
+
 </resources>

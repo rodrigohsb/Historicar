@@ -9,6 +9,7 @@
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
     android:layout_marginTop="16dp"
+    android:focusableInTouchMode="true"
     android:elevation="2sp"
     card_view:cardCornerRadius="2dp">
 
@@ -38,7 +39,7 @@
 
         <EditText
             android:id="@+id/captchaTextView"
-            android:layout_width="100dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/captchaImage"
             android:layout_centerHorizontal="true"

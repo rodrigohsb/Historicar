@@ -34,14 +34,17 @@ import com.historicar.app.event.LoadTicketRetryEvent;
 import com.historicar.app.event.LoadTicketSuccessEvent;
 import com.historicar.app.provider.BusProvider;
 import com.historicar.app.util.AlertUtils;
+import com.historicar.app.util.PreferenceUtils;
 import com.historicar.app.util.ValidateUtils;
 import com.historicar.app.webservice.WebServiceAPi;
 import com.squareup.otto.Subscribe;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.GsonConverterFactory;
@@ -95,17 +98,27 @@ public class ResultActivity extends AppCompatActivity
         String cookie = getIntent().getExtras().getString(Constants.COOKIE);
 
         dialog = new ProgressDialog(ctx);
-        dialog.setMessage("Buscando informações...");
+        dialog.setMessage(getString(R.string.captchaActivityrecoveringImage));
         dialog.setCancelable(false);
         dialog.show();
 
+        String token = PreferenceUtils.getInstance(this).recoverString(getString(R.string.x_user_access_token));
+
+        if(token == null)
+        {
+            token = Constants.X_USER_ACCESS_TOKEN_VALUE;
+        }
+
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder().readTimeout(30, TimeUnit.SECONDS).build();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BACKEND_BASE_URL)
+                .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         WebServiceAPi wsAPI = retrofit.create(WebServiceAPi.class);
-        Call<List<Multa>> multas = wsAPI.getTickets(placa, captcha, cookie);
+        Call<List<Multa>> multas = wsAPI.getTickets(token, placa, captcha, cookie);
         multas.enqueue(new Callback<List<Multa>>()
         {
             @Override
@@ -118,7 +131,7 @@ public class ResultActivity extends AppCompatActivity
 
                 if (response.isSuccess())
                 {
-                    List multas = response.body();
+                    List<Multa> multas = response.body();
 
                     BusProvider.getInstance().post(new LoadTicketSuccessEvent(multas));
                     return;
