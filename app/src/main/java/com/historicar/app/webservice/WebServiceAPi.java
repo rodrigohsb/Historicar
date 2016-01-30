@@ -29,7 +29,7 @@ public interface WebServiceAPi
 
     @Headers({Constants.APP_ACCESS_TOKEN + ": " + Constants.APP_ACCESS_TOKEN_VALUE , Constants.X_USER_ACCESS_TOKEN + ": " + Constants.X_USER_ACCESS_TOKEN_VALUE})
     @GET("/ticket/{placa}/{captcha}/{cookie}")
-    Call<List<Multa>> getTickets (@Path(Constants.PLACA_KEY) String placa, @Path(Constants.CAPTCHA) String captcha, @Path("cookie") String cookie);
+    Call<List<Multa>> getTickets (@Path(Constants.PLACA_KEY) String placa, @Path(Constants.CAPTCHA) String captcha, @Header("cookie") String cookie);
 
 
     @Headers({Constants.APP_ACCESS_TOKEN + ": " + Constants.APP_ACCESS_TOKEN_VALUE , Constants.X_USER_ACCESS_TOKEN + ": " + Constants.X_USER_ACCESS_TOKEN_VALUE})
