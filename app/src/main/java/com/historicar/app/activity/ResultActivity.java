@@ -90,6 +90,7 @@ public class ResultActivity extends AppCompatActivity
 
         Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.BANNER);
         Appodeal.show(this, Appodeal.BANNER_BOTTOM);
+        Appodeal.setTesting(true);
 
         ctx = this;
 
@@ -118,7 +119,7 @@ public class ResultActivity extends AppCompatActivity
                 .build();
 
         WebServiceAPi wsAPI = retrofit.create(WebServiceAPi.class);
-        Call<List<Multa>> multas = wsAPI.getTickets(token, placa, captcha, cookie);
+        Call<List<Multa>> multas = wsAPI.getTickets(token, captcha, cookie, placa);
         multas.enqueue(new Callback<List<Multa>>()
         {
             @Override
