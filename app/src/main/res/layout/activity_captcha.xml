@@ -46,6 +46,7 @@
             android:enabled="false"
             android:maxLines="1"
             android:textSize="24sp"
+            android:inputType="textCapCharacters"
             android:visibility="visible"/>
 
         <Button

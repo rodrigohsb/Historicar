@@ -104,7 +104,7 @@ public class ResultActivity extends AppCompatActivity
 
         String token = PreferenceUtils.getInstance(this).recoverString(getString(R.string.x_user_access_token));
 
-        if(token == null)
+        if("".equalsIgnoreCase(token))
         {
             token = Constants.X_USER_ACCESS_TOKEN_VALUE;
         }
