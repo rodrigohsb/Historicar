@@ -177,8 +177,8 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
         if (!item.get(19).text().contains("---"))
         {
             String[] velocidade = EncodeUtils.formatter(item.get(19).text()).split(" ");
-            multa.setVelocidadeMax(velocidade[1].concat(" ").concat(velocidade[2]));
-            multa.setVelocidadeAferida(velocidade[4].concat(" ").concat(velocidade[5]));
+            multa.setVelocidadeAferida(velocidade[1].concat(" ").concat(velocidade[2]));
+            multa.setVelocidadeMax(velocidade[4].concat(" ").concat(velocidade[5]));
         }
 
         multa.setStatus(item.get(22).text().contains("---") ? null : EncodeUtils.formatter(item.get(22).text().split("-")[item.get(22).text().split("-").length - 1]));
