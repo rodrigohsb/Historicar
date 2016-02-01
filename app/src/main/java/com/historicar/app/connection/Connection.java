@@ -94,7 +94,7 @@ public class Connection
                 connection.setRequestProperty("Cookie", cookies);
                 connection.setRequestProperty("Host", "www2.rio.rj.gov.br");
                 connection.setRequestProperty("Referer", "http://www2.rio.rj.gov.br/multas/index.asp");
-                connection.setRequestProperty("User-Agent", Constants.USER_AGENT);
+                connection.setRequestProperty("User-Agent", Constants.USER_AGENT_VALUE_HEADER);
 
                 InputStream is = (InputStream) connection.getContent();
                 return Drawable.createFromStream(is, "src name");

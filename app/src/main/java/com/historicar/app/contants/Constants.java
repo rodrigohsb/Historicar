@@ -36,15 +36,11 @@ public class Constants
 
     public static final String COOKIE = "COOKIE";
 
-    public static final String SMTR_BASE_URL = "http://www2.rio.rj.gov.br";
-
     public static final int RETRIES = 3;
 
     public static final String COOKIE_ULR = "http://www2.rio.rj.gov.br/multas/index.asp";
 
     public static final String CAPTCHA_ULR = "http://www2.rio.rj.gov.br/multas/include/captcha.asp";
-
-    public static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36";
 
     public static final String ACCEPT_HEADER = "Accept";
     public static final String ACCEPT_VALUE_HEADER = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
