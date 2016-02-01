@@ -89,28 +89,6 @@ public class CaptchaActivity extends AppCompatActivity
                 Appodeal.hide(CaptchaActivity.this, Appodeal.BANNER_BOTTOM);
             }
         });
-
-        button.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick (View v)
-            {
-
-                if (CaptchaActivity.this.getCurrentFocus() != null)
-                {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(CaptchaActivity.this.getCurrentFocus().getWindowToken(), 0);
-                }
-
-                if (text.getText() == null || "".equalsIgnoreCase(text.getText().toString().trim()))
-                {
-                    Toast.makeText(ctx, "O código não pode ser vazio!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                ResultActivity.start(CaptchaActivity.this, getIntent().getExtras().getString(Constants.PLACA_KEY), text.getText().toString().trim(), cookies);
-            }
-        });
     }
 
     @Subscribe
@@ -144,13 +122,33 @@ public class CaptchaActivity extends AppCompatActivity
         text.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick (View v)
-            {
+            public void onClick(View v) {
                 Appodeal.hide(CaptchaActivity.this, Appodeal.BANNER_BOTTOM);
             }
         });
 
         button.setVisibility(View.VISIBLE);
+        button.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+
+                if (CaptchaActivity.this.getCurrentFocus() != null)
+                {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(CaptchaActivity.this.getCurrentFocus().getWindowToken(), 0);
+                }
+
+                if (text.getText() == null || "".equalsIgnoreCase(text.getText().toString().trim()))
+                {
+                    Toast.makeText(ctx, "O código não pode ser vazio!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                ResultActivity.start(CaptchaActivity.this, getIntent().getExtras().getString(Constants.PLACA_KEY), text.getText().toString().trim(), cookies);
+            }
+        });
     }
 
     @Subscribe
