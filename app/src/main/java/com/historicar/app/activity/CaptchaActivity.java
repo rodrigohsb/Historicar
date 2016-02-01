@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -74,6 +73,7 @@ public class CaptchaActivity extends AppCompatActivity
 
         Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.BANNER);
         Appodeal.show(this, Appodeal.BANNER_BOTTOM);
+        Appodeal.setTesting(true);
 
         ctx = this;
 
@@ -108,26 +108,13 @@ public class CaptchaActivity extends AppCompatActivity
                     return;
                 }
 
-                ResultActivity.start(CaptchaActivity.this, getIntent().getExtras().getString(Constants.PLACA_KEY), text.getText().toString(), cookies);
-
+                ResultActivity.start(CaptchaActivity.this, getIntent().getExtras().getString(Constants.PLACA_KEY), text.getText().toString().trim(), cookies);
             }
         });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        BusProvider.getInstance().register(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        BusProvider.getInstance().unregister(this);
-    }
-
     @Subscribe
-    public void onLoadCaptchaErrorEvent(LoadCaptchaErrorEvent event)
+    public void onLoadCaptchaErrorEvent (LoadCaptchaErrorEvent event)
     {
         dialog.dismiss();
 
@@ -143,7 +130,7 @@ public class CaptchaActivity extends AppCompatActivity
     }
 
     @Subscribe
-    public void onLoadCaptchaSuccessEvent(LoadCaptchaSuccessEvent event)
+    public void onLoadCaptchaSuccessEvent (LoadCaptchaSuccessEvent event)
     {
         dialog.dismiss();
 
@@ -154,12 +141,20 @@ public class CaptchaActivity extends AppCompatActivity
 
         text.setVisibility(View.VISIBLE);
         text.setEnabled(true);
+        text.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick (View v)
+            {
+                Appodeal.hide(CaptchaActivity.this, Appodeal.BANNER_BOTTOM);
+            }
+        });
 
         button.setVisibility(View.VISIBLE);
     }
 
     @Subscribe
-    public void onLoadCaptchaRetryEvent(LoadCaptchaRetryEvent event)
+    public void onLoadCaptchaRetryEvent (LoadCaptchaRetryEvent event)
     {
         new CaptchaAsyncTask(ctx).execute();
     }
@@ -193,16 +188,22 @@ public class CaptchaActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onPause ()
+    {
+        super.onPause();
+        BusProvider.getInstance().unregister(this);
+    }
+
+    @Override
     protected void onResume ()
     {
         super.onResume();
         Appodeal.onResume(this, Appodeal.BANNER);
+        BusProvider.getInstance().register(this);
     }
 
     private class CaptchaAsyncTask extends AsyncTask<String, String, Drawable>
     {
-
-        private final String TAG = CaptchaAsyncTask.class.getSimpleName();
 
         private final Context ctx;
 
@@ -236,12 +237,9 @@ public class CaptchaActivity extends AppCompatActivity
 
             if(drawable != null)
             {
-                Log.d(TAG,"Chamando LoadCaptchaSuccessEvent");
-
                 BusProvider.getInstance().post(new LoadCaptchaSuccessEvent(drawable));
                 return;
             }
-            Log.d(TAG,"Chamando LoadCaptchaErrorEvent");
             BusProvider.getInstance().post(new LoadCaptchaErrorEvent());
         }
     }

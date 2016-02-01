@@ -61,7 +61,6 @@ public class Connection
                         }
                     }
 
-                    Constants.COOKIE = cookie;
                     return cookie;
                 }
 

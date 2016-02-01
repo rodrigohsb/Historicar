@@ -51,6 +51,7 @@ public class NoMultaActivity extends AppCompatActivity
 
         Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.BANNER);
         Appodeal.show(this, Appodeal.BANNER_BOTTOM);
+        Appodeal.setTesting(true);
 
         ctx = this;
 
