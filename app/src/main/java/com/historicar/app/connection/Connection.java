@@ -19,20 +19,7 @@ import java.util.List;
 public class Connection
 {
 
-    public static Drawable getCaptcha()
-    {
-        String cookies = getCookies();
-
-        Constants.COOKIE = cookies;
-
-        if(cookies != null)
-        {
-            return getCaptcha(cookies);
-        }
-        return null;
-    }
-
-    private static String getCookies()
+    public static String getCookies()
     {
 
         int i = 0;
@@ -89,7 +76,7 @@ public class Connection
         return null;
     }
 
-    private static Drawable getCaptcha(String cookies)
+    public static Drawable getCaptcha(String cookies)
     {
 
         int i = 0;

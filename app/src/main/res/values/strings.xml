@@ -17,7 +17,6 @@
     <string name="aboutActivityDeveloperValue">Rodrigo Haus Bacellar - rodrigo.haus@gmail.com</string>
     <string name="aboutActivityAppVersion">Versão 1.3.0</string>
 
-
     <!-- Catcha Activity -->
     <string name="captchaActivityrecoveringImage">Buscando imagem...</string>
 

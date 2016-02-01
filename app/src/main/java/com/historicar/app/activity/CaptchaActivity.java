@@ -22,23 +22,15 @@ import com.appodeal.ads.Appodeal;
 import com.historicar.app.R;
 import com.historicar.app.connection.Connection;
 import com.historicar.app.contants.Constants;
-import com.historicar.app.event.LoadTicketErrorEvent;
-import com.historicar.app.event.LoadTicketSuccessEvent;
 import com.historicar.app.event.captcha.LoadCaptchaErrorEvent;
 import com.historicar.app.event.captcha.LoadCaptchaRetryEvent;
 import com.historicar.app.event.captcha.LoadCaptchaSuccessEvent;
 import com.historicar.app.provider.BusProvider;
 import com.historicar.app.util.ValidateUtils;
-import com.historicar.app.webservice.WebServiceAPi;
 import com.squareup.otto.Subscribe;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.GsonConverterFactory;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
 /**
  * Created by Rodrigo on 10/01/16.
@@ -46,7 +38,7 @@ import retrofit2.Retrofit;
 public class CaptchaActivity extends AppCompatActivity
 {
 
-    protected static final String TAG = CaptchaActivity.class.getSimpleName();
+    private static final String TAG = CaptchaActivity.class.getSimpleName();
 
     private ProgressDialog dialog;
 
@@ -63,6 +55,8 @@ public class CaptchaActivity extends AppCompatActivity
     protected Button button;
 
     private Context ctx;
+
+    private String cookies;
 
     public static void start(Activity activity, String placa)
     {
@@ -83,12 +77,7 @@ public class CaptchaActivity extends AppCompatActivity
 
         ctx = this;
 
-        dialog = new ProgressDialog(ctx);
-        dialog.setMessage(getString(R.string.captchaActivityrecoveringImage));
-        dialog.setCancelable(false);
-        dialog.show();
-
-        getCaptcha();
+        new CaptchaAsyncTask(ctx).execute();
 
         text.addTextChangedListener(new NumberTextWatcher());
 
@@ -113,87 +102,29 @@ public class CaptchaActivity extends AppCompatActivity
                     imm.hideSoftInputFromWindow(CaptchaActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 
-                if (text.getText() == null)
+                if (text.getText() == null || "".equalsIgnoreCase(text.getText().toString().trim()))
                 {
                     Toast.makeText(ctx, "O código não pode ser vazio!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if (text.getText().length() < 4)
-                {
-                    Toast.makeText(ctx, "Por favor, digite o código corretamente!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                ResultActivity.start(CaptchaActivity.this, getIntent().getExtras().getString(Constants.PLACA_KEY), text.getText().toString(), cookies);
 
-                ResultActivity.start(CaptchaActivity.this, getIntent().getExtras().getString(Constants.PLACA_KEY), text.getText().toString(), Constants.COOKIE);
             }
         });
     }
 
-    private void getCaptcha ()
-    {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        WebServiceAPi wsAPI = retrofit.create(WebServiceAPi.class);
-        Call<Drawable> captcha = wsAPI.getCaptcha();
-        captcha.enqueue(new Callback<Drawable>()
-        {
-            @Override
-            public void onResponse (Response<Drawable> response)
-            {
-
-                int httpResponseCode = response.code();
-
-                Log.d(TAG, "[getCaptcha] StatusCode [" + httpResponseCode + "]");
-
-                if (response.isSuccess())
-                {
-                    Drawable captchaImage = response.body();
-
-                    if (captchaImage != null)
-                    {
-                        BusProvider.getInstance().post(new LoadCaptchaSuccessEvent(captchaImage));
-                        return;
-                    }
-                    //NO_CONTENT
-                    if (httpResponseCode == 204)
-                    {
-                        BusProvider.getInstance().post(new LoadCaptchaErrorEvent());
-                        return;
-                    }
-                }
-                //BAD_REQUEST
-                if (httpResponseCode == 400)
-                {
-                    BusProvider.getInstance().post(new LoadCaptchaRetryEvent());
-                    return;
-                }
-                //UNAUTHORIZED
-                if (httpResponseCode == 401)
-                {
-                    //TODO Pegar novo usertoken e chamar de novo
-                    BusProvider.getInstance().post(new LoadCaptchaRetryEvent());
-                    return;
-                }
-                //INTERNAL_SERVER_ERROR
-                if (httpResponseCode == 500)
-                {
-                    BusProvider.getInstance().post(new LoadCaptchaErrorEvent());
-                }
-            }
-
-            @Override
-            public void onFailure (Throwable t)
-            {
-                Log.d(TAG, "[getCaptcha] Error [" + t.getMessage() + "]");
-                BusProvider.getInstance().post(new LoadCaptchaErrorEvent());
-            }
-        });
+    @Override
+    protected void onStart() {
+        super.onStart();
+        BusProvider.getInstance().register(this);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        BusProvider.getInstance().unregister(this);
+    }
 
     @Subscribe
     public void onLoadCaptchaErrorEvent(LoadCaptchaErrorEvent event)
@@ -230,7 +161,7 @@ public class CaptchaActivity extends AppCompatActivity
     @Subscribe
     public void onLoadCaptchaRetryEvent(LoadCaptchaRetryEvent event)
     {
-        getCaptcha();
+        new CaptchaAsyncTask(ctx).execute();
     }
 
     public class NumberTextWatcher implements TextWatcher
@@ -249,7 +180,7 @@ public class CaptchaActivity extends AppCompatActivity
         @Override
         public void afterTextChanged (Editable s)
         {
-            if (text.getText().length() == 4)
+            if (text.getText() != null && (!"".equalsIgnoreCase(text.getText().toString().trim())))
             {
                 button.setEnabled(true);
             }
@@ -267,4 +198,52 @@ public class CaptchaActivity extends AppCompatActivity
         super.onResume();
         Appodeal.onResume(this, Appodeal.BANNER);
     }
+
+    private class CaptchaAsyncTask extends AsyncTask<String, String, Drawable>
+    {
+
+        private final String TAG = CaptchaAsyncTask.class.getSimpleName();
+
+        private final Context ctx;
+
+        public CaptchaAsyncTask (Context ctx)
+        {
+            this.ctx = ctx;
+        }
+
+        @Override
+        protected void onPreExecute ()
+        {
+            super.onPreExecute();
+
+            dialog = new ProgressDialog(ctx);
+            dialog.setMessage(getString(R.string.captchaActivityrecoveringImage));
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+
+        @Override
+        protected Drawable doInBackground (String... params)
+        {
+            cookies = Connection.getCookies();
+            return Connection.getCaptcha(cookies);
+        }
+
+        @Override
+        protected void onPostExecute (Drawable drawable)
+        {
+            super.onPostExecute(drawable);
+
+            if(drawable != null)
+            {
+                Log.d(TAG,"Chamando LoadCaptchaSuccessEvent");
+
+                BusProvider.getInstance().post(new LoadCaptchaSuccessEvent(drawable));
+                return;
+            }
+            Log.d(TAG,"Chamando LoadCaptchaErrorEvent");
+            BusProvider.getInstance().post(new LoadCaptchaErrorEvent());
+        }
+    }
+
 }
