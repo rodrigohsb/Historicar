@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.appodeal.ads.Appodeal;
 import com.historicar.app.R;
 import com.historicar.app.bean.Carro;
 import com.historicar.app.contants.Constants;
@@ -56,9 +55,6 @@ public class InsertOrEditActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert_or_edit);
         ButterKnife.bind(this);
-
-        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.INTERSTITIAL | Appodeal.BANNER);
-        Appodeal.show(this, Appodeal.BANNER_BOTTOM);
 
         ctx = this;
 
@@ -367,12 +363,5 @@ public class InsertOrEditActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onResume ()
-    {
-        super.onResume();
-        Appodeal.onResume(this, Appodeal.BANNER);
     }
 }

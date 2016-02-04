@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 
-import com.appodeal.ads.Appodeal;
 import com.historicar.app.R;
 import com.historicar.app.async.ParseAsync;
 import com.historicar.app.contants.Constants;
@@ -36,9 +35,6 @@ public class ResultActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
         ButterKnife.bind(this);
-
-        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.INTERSTITIAL | Appodeal.BANNER);
-        Appodeal.show(this, Appodeal.BANNER_BOTTOM);
 
         ctx = this;
 
@@ -130,12 +126,5 @@ public class ResultActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onResume ()
-    {
-        super.onResume();
-        Appodeal.onResume(this, Appodeal.BANNER);
     }
 }

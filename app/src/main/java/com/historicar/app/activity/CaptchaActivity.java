@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.appodeal.ads.Appodeal;
 import com.historicar.app.R;
 import com.historicar.app.connection.Connection;
 import com.historicar.app.contants.Constants;
@@ -54,21 +53,9 @@ public class CaptchaActivity extends AppCompatActivity
 
         new CaptchaAsyncTask(this).execute();
 
-        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.INTERSTITIAL | Appodeal.BANNER);
-        Appodeal.show(this, Appodeal.BANNER_BOTTOM);
-
         ctx = this;
 
         text.addTextChangedListener(new NumberTextWatcher());
-
-        text.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick (View v)
-            {
-                Appodeal.hide(CaptchaActivity.this, Appodeal.BANNER_BOTTOM);
-            }
-        });
 
         button.setOnClickListener(new View.OnClickListener()
         {
@@ -124,14 +111,6 @@ public class CaptchaActivity extends AppCompatActivity
                 button.setEnabled(false);
             }
         }
-    }
-
-
-    @Override
-    protected void onResume ()
-    {
-        super.onResume();
-        Appodeal.onResume(this, Appodeal.BANNER);
     }
 
 

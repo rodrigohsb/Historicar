@@ -17,8 +17,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.appodeal.ads.Appodeal;
-import com.appodeal.ads.InterstitialCallbacks;
 import com.historicar.app.R;
 import com.historicar.app.adapter.HomeAdapter;
 import com.historicar.app.bean.Carro;
@@ -68,9 +66,6 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
-        Appodeal.initialize(this, getString(R.string.appodeal_key), Appodeal.INTERSTITIAL | Appodeal.BANNER);
-        Appodeal.show(this, Appodeal.BANNER_BOTTOM);
-
         ctx = this;
 
         carros = new Repository(ctx).getAll();
@@ -115,59 +110,10 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onResume ()
-    {
-        super.onResume();
-        Appodeal.onResume(this, Appodeal.BANNER);
-    }
-
-    @Override
     public void onBackPressed ()
     {
-
-        if(leaving)
-        {
-            super.onBackPressed();
-            finish();
-        }
-        else
-        {
-            leaving = true;
-            Appodeal.show(this, Appodeal.INTERSTITIAL);
-            Appodeal.setInterstitialCallbacks(new InterstitialCallbacks()
-            {
-                @Override
-                public void onInterstitialLoaded (boolean b)
-                {
-
-                }
-
-                @Override
-                public void onInterstitialFailedToLoad ()
-                {
-
-                }
-
-                @Override
-                public void onInterstitialShown ()
-                {
-
-                }
-
-                @Override
-                public void onInterstitialClicked ()
-                {
-
-                }
-
-                @Override
-                public void onInterstitialClosed ()
-                {
-                    onBackPressed();
-                }
-            });
-        }
-
+        super.onBackPressed();
+        finish();
     }
 
     @Override
@@ -229,9 +175,9 @@ public class HomeActivity extends AppCompatActivity
                     return false;
                 }
 
-                if(HomeActivity.this.getCurrentFocus() != null)
+                if (HomeActivity.this.getCurrentFocus() != null)
                 {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(HomeActivity.this.getCurrentFocus().getWindowToken(), 0);
                 }
 

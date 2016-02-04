@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.appodeal.ads.Appodeal;
 import com.historicar.app.R;
 import com.historicar.app.activity.CaptchaActivity;
 import com.historicar.app.activity.ErrorActivity;
@@ -337,8 +336,6 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
      */
     private void drawList(List<Multa> multaList)
     {
-        Appodeal.hide(((Activity) ctx), Appodeal.BANNER_BOTTOM);
-
         RecyclerView mRecyclerView = (RecyclerView) ((Activity) ctx).findViewById(R.id.recyclerView);
 
         mRecyclerView.setHasFixedSize(true);
@@ -370,15 +367,5 @@ public class ParseAsync extends AsyncTask<String, String, List<Multa>>
         textView.setTextColor(ctx.getResources().getColor(android.R.color.white));
 
         snackbar.show();
-
-        snackbar.setCallback(new Snackbar.Callback()
-        {
-            @Override
-            public void onDismissed (Snackbar snackbar, int event)
-            {
-                Appodeal.show(((Activity) ctx), Appodeal.BANNER_BOTTOM);
-            }
-        });
     }
-
 }
